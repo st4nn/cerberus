@@ -1,0 +1,28 @@
+  <!-- Page -->
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnPoda_VolverAlPanel">Volver al Panel</button>
+  <input id="txtPoda_Circuito" type="hidden">
+  <div class="panel-body">
+    <div class="col-md-12">
+      <div class="col-md-3">
+        <div id="cntPoda_CapaForestal_Capas">
+          <button class="btn btn-danger btn-block" id="btnPoda_CapaForestal_LimpiarMapa"><i class="icon fa-eraser"></i> Limpiar Mapa</button>
+        </div>
+      </div>      
+      <div class="col-md-9 bg-teal-600 padding-3">
+        <div class="height-500" id="cntPoda_CapaForestal_Mapa"></div>
+      </div>
+      <div>
+        <input type="file" class="btn btn-success">
+      </div>      
+    </div>
+  </div>
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnPoda_VolverAlPanel">Volver al Panel</button>
+</div>
+    <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+        poda_capaForestal();
+      });
+
+</script>

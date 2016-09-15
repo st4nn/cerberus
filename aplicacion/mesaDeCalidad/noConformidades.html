@@ -1,0 +1,297 @@
+<div class="panel" id="cntMesaDeCalidad">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnVolverAlPanel">Volver al Panel</button>
+  <div class="panel-heading">
+    <h3 class="panel-title">Mesa de Calidad</h3>
+  </div>
+  <div class="panel-body">
+    <!-- Steps -->
+    <div class="pearls row">
+      <div class="pearl current col-xs-2">
+        <div class="pearl-icon"><i class="icon fa-users" aria-hidden="true"></i></div>
+        <span class="pearl-title">Asistentes</span>
+      </div>
+      <div class="pearl col-xs-2">
+        <div class="pearl-icon"><i class="icon fa-newspaper-o" aria-hidden="true"></i></div>
+        <span class="pearl-title">Desarrollo</span>
+      </div>
+      <div class="pearl col-xs-2">
+        <div class="pearl-icon"><i class="icon fa-beer" aria-hidden="true"></i></div>
+        <span class="pearl-title">Compromisos</span>
+      </div>
+      <!--
+      <div class="pearl col-xs-2">
+        <div class="pearl-icon"><i class="icon fa-list-alt" aria-hidden="true"></i></div>
+        <span class="pearl-title">Formato</span>
+      </div>
+      -->
+      <div class="pearl col-xs-2">
+        <div class="pearl-icon"><i class="icon fa-thumbs-o-up" aria-hidden="true"></i></div>
+        <span class="pearl-title">Cierre</span>
+      </div>
+    </div>
+    <div id="cntMesaDeCalidad_Navegacion"></div><br><br>
+    <div class="wizard-content">
+      <div class="wizard-pane" role="tabpanel">
+        <form id="frmNoConformidades_Asistentes">
+          <div class="form-group col-md-12">
+            <h4 class="example-title">Lugar</h4>
+            <textarea class="form-control guardar" rows="2" id="txtNoConformidades_Asistentes_Lugar" placeholder="Lugar"></textarea>
+          </div>
+          <div class="form-group col-md-6">
+            <h4 class="example-title">Fecha</h4>
+            <input class="form-control guardar" id="txtNoConformidades_Asistentes_Fecha" placeholder="Fecha" data-plugin="datepicker">
+          </div>
+          <div class="form-group col-md-6">
+            <h4 class="example-title">Hora</h4>
+            <input class="form-control guardar" id="txtNoConformidades_Asistentes_Hora" placeholder="Hora">
+          </div>
+          <h3 class="example-title">
+          <button type="button" id="btnNoConformidades_AgregarContacto" class="btn btn-warning"><i class="icon wb-plus" aria-hidden="true"></i> Agregar</button> Asistentes</h3> 
+          <br>
+          <div id="cntNoConformidades_Contactos"></div>
+        </form>
+      </div>
+      <div class="wizard-pane" role="tabpanel">
+        <div id="listadoNC">
+          <div id="cntNoConformidades_Encabezado">
+            <div class="col-md-6">
+              <div class="widget">
+                <div class="widget-content padding-35 bg-blue-300 clearfix">
+                  <div class="pull-left white">
+                    <i class="icon icon-circle icon-2x fa-briefcase bg-blue-600" aria-hidden="true"></i>
+                  </div>
+                  <div class="counter counter-md counter text-right pull-right">
+                    <div class="counter-number-group">
+                      <span class="counter-number" id="lblNoConformidades_ItemsEvaluados">0</span>
+                      <span class="counter-number"> Elementos</span>
+                    </div>
+                    <div class="counter-label text-capitalize font-size-16"> Revisados</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="widget">
+                <div class="widget-content padding-35 bg-green-300 clearfix">
+                  <div class="pull-left white">
+                    <i class="icon icon-circle icon-2x fa-check bg-green-600" aria-hidden="true"></i>
+                  </div>
+                  <div class="counter counter-md counter text-right pull-right">
+                    <div class="counter-number-group">
+                      <span class="counter-number" id="lblNoConformidades_ItemsConformes">0</span>
+                      <span class="counter-number"> Elementos</span>
+                    </div>
+                    <div class="counter-label text-capitalize font-size-16">estan Conformes</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="widget">
+                <div class="widget-content padding-35 bg-orange-300 clearfix">
+                  <div class="pull-left white">
+                    <i class="icon icon-circle icon-2x fa-search bg-orange-600" aria-hidden="true"></i>
+                  </div>
+                  <div class="counter counter-md counter text-left pull-right">
+                    <div class="counter-number-group">
+                      <span class="counter-number" id="lblNoConformidades_ItemsNoConformes">0</span>
+                      <span class="counter-number"> Elementos</span>
+                    </div>
+                    <div class="counter-label text-capitalize font-size-16">Con defectos</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="widget">
+                <div class="widget-content padding-35 bg-red-300 clearfix">
+                  <div class="pull-left white">
+                    <i class="icon icon-circle icon-2x fa-close bg-red-600" aria-hidden="true"></i>
+                  </div>
+                  <div class="counter counter-md counter text-left pull-right">
+                    <div class="counter-number-group">
+                      <span class="counter-number" id="lblNoConformidades_AspectosNoConformes">0</span>
+                      <span class="counter-number"> Aspectos</span>
+                    </div>
+                    <div class="counter-label text-capitalize font-size-16">No fueron aprobados</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="" id="lstListadoNC">
+            
+          </div>
+        </div>
+        <div id="MESA" class="noMostrar">
+          <button type="button" class="btn btn-round btn-primary btn-pill-left" id="btnAuditoria_VolverNC">Volver al listado</button>
+          <div class="col-md-12 margin-top-10">
+            <h4><small>Aspecto Evaluado: </small><span id="lblNoConformidades_AspectoEvaluadoCodigo"></span></h4>
+            <h4><small>Criterio: </small><span id="lblNoConformidades_Criterio"></span></h4>
+            <h3 id="lblNoConformidades_AspectoEvaluadoDesc"></h3>
+          </div>
+          <div class="col-md-12 margin-20" id="cntNoCoformidades_ContenedorPostes">
+            <h4>Items clasificados</h4>
+
+          </div>
+
+          <div>
+            <h4><small>Item en pantalla: </small><span id="lblNoConformidades_NodoEnPantalla"></span></h4>
+            <div class="col-md-8">
+              <div class="slider bg-blue-grey-100 padding-5" id="cntMesa_Imagenes">
+
+              </div>
+            </div>
+              <!-- End Example Default -->
+            <div class="col-md-4 pull-right">
+              <div class="col-md-12">
+                <h4 class="example-title">Observaciones</h4>
+                <p id="lblMesa_Observaciones">
+                  
+                </p>
+              </div>
+              <div class="col-md-12" id="cntNoConformidades_Ubicacion">
+                <h4 class="example-title">Ubicación</h4>
+                  <div class="height-200" id="customGmap"></div>
+                <h4 class="example-title"><small>Coordenadas: </small><a id="lnkNoConformidades_Coordenadas" target="_blank" href=""></a></h4>
+                <h4 class="example-title"><small>Dirección: </small><a id="lnkNoConformidades_Direccion" target="_blank" href=""></a></h4>
+              </div>
+            </div>
+          </div>
+          <br><br>
+          <form id="frmNoConformidades_Clasificacion">
+            <div class="col-md-12">
+              <div class="col-md-6">
+                <div class="example-wrap">
+                  <h4 class="example-title">Justificación:</h4>
+                  <textarea class="form-control" id="txtNoConformidades_justificacion" rows="3"></textarea>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="example-wrap">
+                  <h4 class="example-title">Clasificación de la Justificación:</h4>
+                  <textarea class="form-control" id="txtNoConformidades_justificacionClasificacion" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 example-wrap" id="cntNoConfomidades_Compromisos">
+              <h3>Compromisos</h3>
+              <button class="btn btn-warning" id="btnNoConformidades_AgregarCompromiso"><i class="icon fa-plus"></i> Agregar Compromiso</button>
+              <table id="tblNoConformidades_Compromisos" class="table">
+                <thead>
+                  <th>Compromiso</th>
+                  <th>Fecha Limite</th>
+                  <th>Responsable</th>
+                  <th></th>
+                  <th></th>
+                </thead>
+                <tbody>
+                  
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-12">
+              <div class="example-wrap">
+                <h4 class="example-title">Clasificación Final:</h4>
+                <select id="cboNoConformidades_ClasificacionFinal" class="form-control">
+                  <option value="No Conforme">No Conforme</option>
+                  <option value="No Aplica">No Aplica</option>
+                  <option value="Defecto de Terceros">Defecto de Terceros</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions col-sm-12">
+              <button class="btn btn-success btn-block btn-lg" type="submit"><i class="icon fa-floppy-o"></i> Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="wizard-pane" role="tabpanel">
+        <div class="col-md-12 example-wrap" id="cntNoConfomidades_Compromisos">
+          <h3>Resumen de Compromisos</h3>
+          <button class="btn btn-warning" id="btnNoConformidades_AgregarCompromisoResumen"><i class="icon fa-plus"></i> Agregar Compromiso</button>
+          <table id="tblNoConformidades_CompromisosResumen" class="table">
+            <thead>
+              <th>Compromiso</th>
+              <th>Fecha Limite</th>
+              <th>Responsable</th>
+              <th></th>
+              <th></th>
+            </thead>
+            <tbody>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!--
+      <div class="wizard-pane" role="tabpanel">
+        Formato
+      </div>
+      -->
+      <div class="wizard-pane" role="tabpanel">
+        <button class="btn btn-warning btn-lg btn-block" id="btnNoConformidades_VerActa"><i class="icon fa-file-pdf-o"></i> Ver Acta</button>
+        <br>
+        <div class="col-md-6">
+          <button class="btn btn-info btn-lg btn-block" id="btnNoConformidades_VerRSeguridad"><i class="icon fa-file-pdf-o"></i> Reporte Seguridad</button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-info btn-lg btn-block" id="btnNoConformidades_VerRCalidad"><i class="icon fa-file-pdf-o"></i> Reporte Calidad</button>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="modal fade" id="cntNoConformidades_AgregarCompromiso" aria-hidden="true" aria-labelledby="cntNoConformidades_AgregarCompromiso" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-sidebar modal-sm">
+        <form id="frmNoCoformidades_AgregarCompromiso" class="modal-content" etapa="">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="lblNoConformidades_AgregarCompromiso">Agregar Compromiso</h4>
+          </div>
+          <div class="modal-body">
+              <h4 class="example-title">Compromiso:</h4>
+              <textarea class="form-control" id="txtNoConformidades_Compromiso" rows="3" required></textarea>
+            
+              <h4 class="example-title">Responsable:</h4>
+              <input class="form-control" id="txtNoConformidades_CompromisoResponsable" required>
+            
+              <h4 class="example-title">Fecha Límite:</h4>
+              <input class="form-control" id="txtNoConformidades_CompromisoFecha" data-plugin="datepicker" required>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" id="btnNoConformidades_GuardarCompromiso" idSQL="" class="btn btn-primary btn-block">Guardar</button>
+            <button type="button" class="btn btn-default btn-block" data-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+    <!--
+    <div class="checkbox-custom checkbox-primary">
+      <input type="checkbox" id="inputUnchecked">
+      <label for="inputUnchecked">Incluir como observación en el Informe</label>
+    </div>
+    
+    <div class="checkbox-custom checkbox-primary">
+      <input type="checkbox" id="inputUnchecked">
+      <label for="inputUnchecked">Incluir en el Informe</label>
+    </div>
+    -->
+
+  </div>
+    <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnVolverAlPanel">Volver al Panel</button>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($) 
+  {
+    mesaDeCalidad();
+  });
+  
+</script>
+<!-- End Panel Floating Lables -->

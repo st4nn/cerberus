@@ -1,0 +1,114 @@
+  <!-- Page -->
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnPoda_VolverAlPanelPoda">Volver al Panel</button>
+  <input id="txtPoda_Circuito" type="hidden">
+  <input id="txtPoda_CircuitoNombre" type="hidden">
+  <div class="panel-body">
+    <div class="col-md-12">
+      <div class="col-md-3 pull-right">
+        <br>
+        <button type="button" id="btnPoda_PanelVisitaPrevia_CrearOT" class="btn btn-warning btn-pill-left btn-block text-right margin-bottom-5">
+          Crear Nueva Visita
+          <i class="icon wb-add-file"></i>
+        </button>
+      </div>
+      <div class="col-md-12">
+        <h3>Visitas Realizadas</h3>
+        <table id="tblPoda_PanelVisitaPrevia_Ot" class="table" style="display: block;overflow-x: auto;"> 
+          <thead>
+            <tr>
+              <th></th>
+              <th>Codigo Interno</th>
+              <th>Fecha</th>
+              <th>Subestacion Origen</th>
+              <th>Nombre Brigada</th>
+              <th>Descargo</th>
+              <th>Ref Inicio</th>
+              <th>Ref Fin</th>
+            </tr>
+          </thead>
+          <tbody class="table-hover table-striped">
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="modal fade modal-3d-sign" id="cntPoda_PanelVisitaPrevia_CrearOt" aria-hidden="true" aria-labelledby="cntPoda_PanelVisitaPrevia_CrearOt" role="dialog" tabindex="-1">
+      <div class="modal-dialog">
+      <form id="frmPodaVisitaPrevia_CrearOT" class="modal-content form-horizontal" action="#" method="post" role="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+          <h4 class="modal-title">Crear Visita</h4>
+        </div>
+        <div class="modal-body">
+          <div class="example-wrap margin-sm-0 col-md-12">
+            <h4 class="example-title">Numero Interno</h4>
+            <div class="form-group">
+              <div id="lblPoda_PanelVisitaPrevia_NumeroInterno" class="well well-sm well-info"></div>
+              <input id="txtPoda_PanelVisitaPrevia_CrearOt_NumeroInterno" type="hidden" class="form-control guardar">
+              <input id="txtPoda_PanelVisitaPrevia_CrearOt_id" type="hidden" class="form-control guardar">
+            </div>
+          </div>
+          <h1>Datos de Ubicación</h1>
+          <div class="example-wrap margin-sm-0 col-md-4">
+            <h4 class="example-title">Fecha</h4>
+            <div class="form-group">
+              <input type="text" class="form-control guardar" id="txtPoda_PanelVisitaPrevia_CrearOt_Fecha">
+            </div>
+          </div>
+          <br><br>
+          <br><br>
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <h4 class="example-title">Subestacion Origen</h4>
+            <div class="form-group">
+              <input type="text" class="form-control guardar" id="txtPoda_PanelVisitaPrevia_CrearOt_Subestacion">
+            </div>
+          </div>
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <h4 class="example-title">Nombre Brigada</h4>
+            <div class="form-group">
+              <input type="text" class="form-control guardar" id="txtPoda_PanelVisitaPrevia_CrearOt_Brigada">
+            </div>
+          </div>
+          <h1>Información de los Trabajos</h1>
+          <div class="example-wrap margin-sm-0 col-md-12">
+            <h4 class="example-title">Descargo</h4>
+            <div class="form-group">
+              <input type="text" class="form-control guardar" id="txtPoda_PanelVisitaPrevia_CrearOt_Descargo">
+            </div>
+          </div>
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <h4 class="example-title">Referencia Inicio</h4>
+            <div class="form-group">
+              <input type="text" class="form-control guardar" id="txtPoda_PanelVisitaPrevia_CrearOt_RefInicio">
+            </div>
+          </div>
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <h4 class="example-title">Referencia Final</h4>
+            <div class="form-group">
+              <input type="text" class="form-control guardar" id="txtPoda_PanelVisitaPrevia_CrearOt_RefFin">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success btn-lg btn-blockren"><i class="icon glyphicon glyphicon-floppy-disk"></i> Guardar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  </div>
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnPoda_VolverAlPanelPoda">Volver al Panel</button>
+</div>
+    <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+        poda_PanelVisita();
+      });
+
+</script>

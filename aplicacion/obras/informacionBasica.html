@@ -1,0 +1,114 @@
+  <!-- Page -->
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnVolverAlPanel">Volver al Panel</button>
+  <div class="panel-body">
+    <form id="frmInformacionBasica">
+      <div class="col-md-2 pull-right">
+    	<button type="submit" class="btn btn-floating btn-success btnInformacionBasica_Guardar"><i class="icon glyphicon glyphicon-floppy-disk" aria-hidden="true"></i></button>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group form-material col-md-4">
+          <label class="control-label" for="objInformacionBasica_FechaIni">Fecha de Inicio</label>
+            <div id="objInformacionBasica_FechaIni" data-autoclose="false" ></div>
+            <div class="form-group form-material floating">
+              <input type="text" id="txtInformacionBasica_FechaIni" class="form-control empty guardar" readonly="true">
+            </div>
+        </div>
+        <div class="form-group form-material col-md-4">
+          <label class="control-label" for="objInformacionBasica_FechaFin">Fecha de Finalización</label>
+            <div id="objInformacionBasica_FechaFin" data-autoclose="false" ></div>
+            <div class="form-group form-material floating">
+              <input type="text" id="txtInformacionBasica_FechaFin" class="form-control empty guardar" readonly="true">
+            </div>
+        </div>
+      </div>
+      <div class="example-wrap margin-sm-0 col-md-12">
+        <h4 class="example-title">Contratista</h4>
+        <div class="form-group">
+        	<input type="text" class="form-control guardar" id="txtInformacionBasica_Contratista">
+        </div>
+      </div>
+      
+      <div class="example-wrap margin-sm-0 col-md-12">
+        <h4 class="example-title">Tipo</h4>
+        <div class="form-group">
+          <select class="form-control guardar" id="txtInformacionBasica_Tipo">
+          	<option value="0">Selccione uno</option>
+            <option value="1">REDES</option>
+            <option value="2">MANTENIMIENTO</option>
+            <option value="3">DESARROLLO</option>
+            <option value="4">PODA</option>
+            <option value="5">LAVADO</option>
+          </select>
+        </div>
+      </div>
+      <div class="example-wrap margin-sm-0 col-md-12">
+        <h4 class="example-title">Estado</h4>
+        <div class="form-group">
+          <select class="form-control guardar" id="txtInformacionBasica_Estado">
+            <option value="0">Selccione uno</option>
+            <option value="1">EN EJECUCIÓN</option>
+            <option value="2">YA EJECUTADA</option>
+          </select>
+        </div>
+      </div>
+  
+      <div class="form-group form-material floating col-md-12">
+        <textarea class="form-control guardar" rows="3" id="txtInformacionBasica_Alcances" name="txtInformacionBasica_Descripcion"></textarea>
+        <label class="floating-label">Alcances</label>
+      </div>
+      <div class="form-group form-material floating col-md-12">
+        <textarea class="form-control guardar" rows="3" id="txtInformacionBasica_Direccion"></textarea>
+        <label class="floating-label">Dirección</label>
+      </div>
+      <div class="example-wrap margin-sm-0 col-md-12">
+        <h4 class="example-title">Vigilante Obra/SGT</h4>
+        <div class="form-group">
+        	<input type="text" class="form-control guardar" id="txtInformacionBasica_Vigilante">
+        </div>
+      </div>
+      
+      <div class="form-group form-material floating col-md-12">
+        <textarea class="form-control guardar" rows="3" id="txtInformacionBasica_Comentarios"></textarea>
+        <label class="floating-label">Observaciones:</label>
+      </div>
+      <div class="form-group col-md-12">
+          <h4>Contactos</h4>
+          <button type="button" id="btnInformacionBasica_AgregarContacto" class="btn btn-warning"><i class="icon wb-plus" aria-hidden="true"></i> Agregar</button>
+          <div id="cntInformacionBasica_Contactos">
+            <br>
+            <!--
+            <div class="col-md-12 row">
+              <div class="form-group col-md-10 form-material">
+                <input type="text" class="form-control guardar">
+                <label class="floating-label">Nombre</label>
+              </div>
+              <div class="form-group col-md-2 form-material">
+                <button class="btn btn-danger btn-icon btn btn-round btnInformacionBasica_BorrarContacto"><i class="icon wb-trash"></i></button>
+              </div>
+              <div class="form-group col-md-6 form-material">
+                <input type="email" class="form-control guardar">
+                <label class="floating-label">Correo</label>
+              </div>
+              <div class="form-group col-md-6 form-material">
+                <input type="text" class="form-control guardar">
+                <label class="floating-label">Cargo</label>
+              </div>
+            </div>
+            -->
+          </div>
+      </div>
+      <div class="col-md-2 pull-left">
+      	<button class="btn btn-success btn-lg btn-block btnInformacionBasica_Guardar"><i class="icon glyphicon glyphicon-floppy-disk"></i>Guardar</button>
+      </div>
+    </form>
+  </div>
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnVolverAlPanel">Volver al Panel</button>
+</div>
+    <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+        informacionBasica();
+      });
+
+</script>

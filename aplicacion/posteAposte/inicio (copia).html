@@ -1,0 +1,160 @@
+  <!-- Page -->
+    <div class="panel" id="cntPAP_Wizard">
+      <div class="panel-heading">
+        <h3 class="panel-title"></h3>
+      </div>
+      <div class="panel-body">
+        <!-- Steps -->
+        <div class="steps steps-sm row" data-plugin="matchHeight" data-by-row="true" role="tablist" id="cntPAP_Pasos">
+          <div class="step col-xs-3"  data-target="#cntPAP_Paso1" role="tab">
+            <span class="step-number"><i class="icon wb-briefcase" aria-hidden="true"></i></span>
+            <div class="step-desc">
+              <p>Seleccionar Obra</p>
+            </div>
+          </div>
+          <div class="step col-xs-3"  data-target="#cntPAP_Paso2" role="tab">
+            <span class="step-number"><i class="icon wb-edit" aria-hidden="true"></i></span>
+            <div class="step-desc">
+              <p> Información de la Obra</p>
+            </div>
+          </div>
+          <div class="step col-xs-3"  data-target="#cntPAP_Paso3" role="tab">
+            <span class="step-number"><i class="icon wb-list-numbered" aria-hidden="true"></i></span>
+            <div class="step-desc">
+              <p> Seleccionar Postes </p>
+            </div>
+          </div>
+          <div class="step col-xs-3"  data-target="#cntPAP_Paso4" role="tab">
+            <span class="step-number"><i class="icon wb-check" aria-hidden="true"></i></span>
+            <div class="step-desc">
+              <p> Confirmar </p>
+            </div>
+          </div>
+        </div>
+        <!-- End Steps -->
+
+        <!-- Wizard Content -->
+        <div class="wizard-content" id="cntPAP_Contenido">
+          <div class="wizard-pane active" id="cntPAP_Paso1" role="tabpanel">
+            <form id="frmPAP_Paso1">
+              <ul class="list-unstyled radio-custom radio-primary" id="cntPAP_Obras">
+
+              </ul>
+            </form>
+          </div>
+          <div class="wizard-pane active" id="cntPAP_Paso2" role="tabpanel">
+            <form id="frmPAP_Paso2">
+              <div class="form-group col-md-12 form-material floating">
+                <input type="text" class="form-control guardar" id="txtPAP_Contratista">
+                <label class="floating-label">Contratista</label>
+              </div>
+              <div class="example-wrap margin-sm-0">
+                <h4 class="example-title">Tipo</h4>
+                <div class="form-group">
+                  <select class="form-control" id="txtPAP_Tipo">
+                    <option value="1">REDES</option>
+                    <option value="2">MANTENIMIENTO</option>
+                    <option value="3">DESARROLLO</option>
+                    <option value="4">PODA</option>
+                    <option value="5">LAVADO</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group form-material floating col-md-12">
+                <textarea class="form-control guardar" rows="3" id="txtPAP_Alcances" name="txtPAP_Descripcion"></textarea>
+                <label class="floating-label">Alcances</label>
+              </div>
+              <div class="form-group form-material floating col-md-12">
+                <textarea class="form-control guardar" rows="3" id="txtPAP_Direccion"></textarea>
+                <label class="floating-label">Dirección</label>
+              </div>
+              <div class="form-group col-md-12 form-material floating">
+                <input type="text" class="form-control guardar" id="txtPAP_Vigilante">
+                <label class="floating-label">Vigilante Obra/SGT</label>
+              </div>
+              <div class="form-group form-material floating col-md-12">
+                <textarea class="form-control guardar" rows="3" id="txtPAP_Comentarios"></textarea>
+                <label class="floating-label">Comentarios de encargado de obra:</label>
+              </div>
+              <div>
+                  <h4>Contactos</h4>
+                  <button type="button" id="btnPAP_AgregarContacto" class="btn btn-warning"><i class="icon wb-plus" aria-hidden="true"></i> Agregar</button>
+                  <div id="cntPAP_Contactos">
+                    <div class="col-md-12">
+                     <div class="form-group col-md-6 form-material floating">
+                        <input type="text" class="form-control guardar">
+                        <label class="floating-label">Correo</label>
+                      </div>
+                      <div class="form-group col-md-6 form-material floating">
+                        <input type="text" class="form-control guardar">
+                        <label class="floating-label">Cargo</label>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </form>
+          </div>
+          <div class="wizard-pane active" id="cntPAP_Paso3" role="tabpanel">
+            <form id="frmPAP_Paso3">
+              Paso 3
+            </form>
+          </div>
+          <div class="wizard-pane active" id="cntPAP_Paso4" role="tabpanel">
+            <form id="frmPAP_Paso4">
+              Paso 4
+            </form>
+          </div>
+        </div>
+        <!-- End Wizard Content -->
+
+      </div>
+    </div>
+    <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+        iniciarWizardPostePoste();
+        
+        function iniciarWizardPostePoste()
+         {  
+            var options = 
+            {
+               buttonLabels: {
+                  next: 'Siguiente',
+                  back: 'Anterior',
+                  finish: 'Cerrar Hito'
+              }, buttonsAppendTo: '.panel-body'
+            };
+
+            var defaults = $.components.getDefaults("wizard");
+            options = $.extend(true, {}, defaults, options);
+            $("#cntPAP_Wizard").wizard(options).data('wizard');
+
+            cargarObras();
+            $("#btnPAP_AgregarContacto").on("click", function(evento)
+              {
+                evento.preventDefault();
+                var tds = '<div class="col-md-12"><div class="form-group col-md-6 form-material floating"><input type="text" class="form-control guardar"><label class="floating-label">Correo</label></div><div class="form-group col-md-6 form-material floating"><input type="text" class="form-control guardar"><label class="floating-label">Cargo</label></div></div>';
+                $("#cntPAP_Contactos").append(tds);
+              });
+           
+         }
+
+         function cargarObras()
+         {
+          $("#cntPAP_Obras li").remove();
+          $.post('../server/php/proyectos/buscarProyecto.php', {param1: 'value1'}, function(data, textStatus, xhr) 
+          {
+            var tds = "";
+            $.each(data, function(index, val) 
+            {
+              tds += '<li class="margin-bottom-15">';
+                tds += '<input type="radio" class="icheckbox-primary" id="chkPAP_Obra' + val.idObra + '" name="chkPAP_Obras" />';
+                tds += '<label for="chkPAP_Obra' + val.idObra + '"> ' + val.Nombre + '</label>';
+              tds += '</li>';
+            });
+            $("#cntPAP_Obras").append(tds);
+          }, "json");
+         }
+      });
+
+</script>

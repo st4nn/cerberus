@@ -1,0 +1,49 @@
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnVolverAlPanel">Volver al Panel</button>
+  <div class="panel-body">
+    <div class="col-md-4 pull-right">
+      <button class="btn btn-warning btn-lg btn-block" id="btnInforme_VerActa"><i class="icon fa-file-pdf-o"></i> Ver Acta</button>
+        <br>
+      <button class="btn btn-info btn-lg btn-block" id="btnInforme_VerRSeguridad"><i class="icon fa-file-pdf-o"></i> Reporte Seguridad</button>
+          <br>
+      <button class="btn btn-info btn-lg btn-block" id="btnInforme_VerRCalidad"><i class="icon fa-file-pdf-o"></i> Reporte Calidad</button>
+    </div>
+    <div class="col-md-8 margin-top-50">
+      <h4 class="example-title">Agregar Archivos</h4>
+      <div class="col-md-8">
+          <h5 class="example-title">Cargar Archivo</h5>
+          <form class="form-group" id="frmDocumental_Archivos" action="" method="post" enctype="multipart/form-data">
+            <div class="input-group input-group-file">
+              <input type="text" class="form-control inputText" readonly="">
+              <span class="input-group-btn">
+                <span class="btn btn-success btn-file">
+                  <i class="icon wb-more-horizontal" aria-hidden="true"></i>
+                  Buscar
+                  <input type="file" name="archivo" class="inputControl">
+                </span>
+                <button type="submit" class="btn btn-success">
+                  <i class="icon wb-upload" aria-hidden="true"></i> Subir
+                </button>
+              </span>
+            </div>
+            <div class="progress progress-lg">
+              <div id="txtDocumental_ArchivoProgreso" class="progress-bar progress-bar-success" style="width: 0%;" role="progressbar"></div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-10">
+          <ul id="cntDocumental_Archivos" class="list-group list-group-dividered list-group-full">
+                
+              </ul>
+        </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnVolverAlPanel">Volver al Panel</button>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function() 
+    {       
+        documental();
+    });
+//cntSoporte_PuntosDeControlNC
+</script>

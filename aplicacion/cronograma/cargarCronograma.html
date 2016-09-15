@@ -1,0 +1,123 @@
+  <!-- Page -->
+  <div class="panel">
+    <div class="panel-body">
+      <div class="col-md-4 pull-right">
+        <h5 class="example-title">Cargar Archivo</h5>
+        <form class="form-group" id="frmCargarCronograma_CargarArchivo" action="../server/php/subir/subirArchivo.php?Ruta=Obras" method="post" enctype="multipart/form-data">
+          <div class="input-group input-group-file">
+            <input type="text" class="form-control inputText" readonly="">
+            <span class="input-group-btn">
+              <span class="btn btn-success btn-file">
+                <i class="icon wb-more-horizontal" aria-hidden="true"></i>
+                Buscar
+                <input type="file" name="archivo" class="inputControl">
+              </span>
+              <button type="submit" class="btn btn-success">
+                <i class="icon wb-upload" aria-hidden="true"></i> Subir
+              </button>
+            </span>
+          </div>
+          <div class="progress progress-lg">
+            <div id="txtCargarCronograma_ArchivoProgreso" class="progress-bar progress-bar-success" style="width: 0%;" role="progressbar"></div>
+          </div>
+        </form>
+      </div>
+    
+      <div class="widget">
+        <div class="widget-content padding-30 bg-blue-600 white">
+          <div class="counter counter-lg counter-inverse text-left">
+            <div class="">
+              <div class="counter-label margin-bottom-20">
+                <div>TOTAL OBRAS IDENTIFICADAS</div>
+              </div>
+              <div class="counter-number-group margin-bottom-10">
+                <span class="counter-number-related" id="lblCargarCronograma_TotalObrasIdentificadas">0</span>
+              </div>
+            </div>
+            <div class="">
+              <div class="counter-label margin-bottom-20">
+                <div>TOTAL OBRAS CREADAS</div>
+              </div>
+              <div class="counter-number-group margin-bottom-10">
+                <span class="counter-number-related" id="lblCargarCronograma_TotalObrasCreadas">0</span>
+              </div>
+            </div>
+            <div class="">
+                <div class="counter-label margin-bottom-20">
+                  <div>TOTAL OBRAS ACTUALIZADAS</div>
+                </div>
+                <div class="counter-number-group margin-bottom-10">
+                  <span class="counter-number-related" id="lblCargarCronograma_TotalObrasActualizadas">0</span>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+  <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+         cargarCronograma();
+
+         function cargarCronograma()
+         {
+            $("#frmCargarCronograma_CargarArchivo").ajaxForm(
+              {
+                beforeSend: function() 
+                {
+
+                    var percentVal = '0%';
+                    $("#txtCargarCronograma_ArchivoProgreso").width(percentVal);
+                    $("#txtCargarCronograma_ArchivoProgreso").text(percentVal);
+                },
+                uploadProgress: function(event, position, total, percentComplete) {
+                    
+                    var percentVal = percentComplete + '%';
+                    $("#txtCargarCronograma_ArchivoProgreso").width(percentVal);
+                    $("#txtCargarCronograma_ArchivoProgreso").text(percentVal);
+                },
+                success: function() {
+                    var percentVal = '100%';
+                    $("#txtCargarCronograma_ArchivoProgreso").width(percentVal);
+                    $("#txtCargarCronograma_ArchivoProgreso").text(percentVal);
+                },
+              complete: function(xhr) {
+                  var respuesta = xhr.responseText;
+                  if (respuesta.substring(0, 6) == "../../")
+                  {
+                    $.post("../server/php/manejoArchivos/obras.php", 
+                    {
+                      archivo : respuesta
+                    },
+                    function(data)
+                    {
+                      if (data != 0)
+                      {
+                        var idx = 0;
+                        if (typeof data == "object")
+                        {
+                          $("#lblCargarCronograma_TotalObrasIdentificadas").text(data.Identificadas);
+                          $("#lblCargarCronograma_TotalObrasCreadas").text(data.Creadas);
+                          $("#lblCargarCronograma_TotalObrasActualizadas").text(data.Actualizadas);
+                          Mensaje("Hey", "Las obras han sido cargadas");
+                        } else
+                        {
+                          Mensaje("Error", data);
+                        }
+                      } 
+                    }, "json").fail(function()
+                    {
+                      //Mensaje("Error", "No hay conexión con el Servidor SI");
+                    });
+                  } else
+                  {
+                    Mensaje("Error","Hubo un Error, " + respuesta, "danger");
+                  }
+                }
+            }); 
+         }
+
+      });
+</script>

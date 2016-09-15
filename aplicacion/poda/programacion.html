@@ -1,0 +1,61 @@
+  <!-- Page -->
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnPoda_VolverAlPanelOT">Volver al Panel</button>
+  <input id="txtPoda_Circuito" type="hidden">
+  <div class="panel-body">
+    
+    <div class="col-md-12">
+      <div class="col-md-3">
+        <div class="col-md-12">
+          <div id="cntPoda_Programacion_Capas" class="height-450" style="display: block;overflow-y: auto;">
+          </div>
+          <button class="btn btn-danger btn-block" id="btnPoda_Programacion_LimpiarMapa"><i class="icon fa-eraser"></i> Limpiar Mapa</button>
+        </div>     
+      </div>
+      <div class="col-md-9">
+        <div class="col-md-12 bg-teal-600 padding-3">
+          <div class="height-500" id="cntPoda_Programacion_Mapa"></div>
+        </div>
+      </div>
+      <input id="txtPoda_Programacion_Programados" type="hidden">
+
+      <div class="col-md-12 margin-top-30">
+        <button id="btnPoda_Programacion_ProgramarTodos" class="btn btn-warning"><i class="icon wb-check"></i> Programar Toda la Página</button>
+        <button id="btnPoda_Programacion_DescartarTodos" class="btn btn-danger"><i class="icon wb-close"></i> Descartar Toda la Página</button>
+        <button id="btnPoda_Programacion_Guardar" class="btn btn-success"><i class="icon fa-floppy-o"></i> Guardar Programación</button>
+      </div>
+      <div class="col-md-12 margin-top-20">
+        <table id="tblPoda_Programacion" class="table table-hover dataTable table-striped width-full dtr-inline" style="display: block;overflow-x: auto;">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th></th>
+              <th>fecha_levanta</th>
+              <th>matricula</th>
+              <th>nombre_comun</th>
+              <th>especie</th>
+              <th>familia</th>
+              <th>longitud</th>
+              <th>latitud</th>
+              <th>diametro_ap</th>
+              <th>diametro_copa</th>
+              <th>altura</th>
+              <th>estado_fisico</th>
+              <th>estado_fito</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+
+        </table>
+      </div>      
+    </div>
+  </div>
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnPoda_VolverAlPanelOT">Volver al Panel</button>
+</div>
+    <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+        poda_Programacion();
+      });
+
+</script>

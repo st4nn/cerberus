@@ -1,0 +1,167 @@
+<!-- Panel Floating Lables -->
+  <input type="hidden" id="txtIdObra">
+  <input type="hidden" id="txtTituloObra">
+  <input type="hidden" id="txtEstadoObra">
+  <input type="hidden" id="txtTipoObra">
+  <div class="panel" id="cntPanelObra">
+    <div class="panel-body">
+      <div class="col-md-6" id="btnPanelObra_InfBasica">
+        <div class="btn btn-primary btn-block margin-5">
+          <div class="step current">
+            <span class="step-number"><i class="icon wb-briefcase"></i></span>
+            <div class="step-desc">
+              <span class="step-title">Información Básica</span>
+              <p></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6" id="btnPanelObra_Postes">
+        <div class="btn btn-primary btn-block margin-5">
+          <div class="step current">
+            <span class="step-number"><i class="icon wb-hammer"></i></span>
+            <div class="step-desc">
+              <span class="step-title">Postes</span>
+              <p></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6" id="btnPanelObra_Auditoria">
+        <div class="btn btn-primary btn-block margin-5">
+          <div class="step current">
+            <span class="step-number"><i class="icon wb-search"></i></span>
+            <div class="step-desc">
+              <span class="step-title">Auditoría</span>
+              <p></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6" id="btnPanelObra_MesaDeCalidad">
+        <div class="btn btn-primary btn-block margin-5">
+          <div class="step current">
+            <span class="step-number"><i class="icon fa-institution"></i></span>
+            <div class="step-desc">
+              <span class="step-title">Mesa de ASC</span>
+              <p></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6" id="btnPanelObra_Informe">
+        <div class="btn btn-primary btn-block margin-5">
+          <div class="step current">
+            <span class="step-number"><i class="icon fa-file-text-o"></i></span>
+            <div class="step-desc">
+              <span class="step-title">Informe</span>
+              <p></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6" id="btnPanelObra_Documental">
+        <div class="btn btn-primary btn-block margin-5">
+          <div class="step current">
+            <span class="step-number"><i class="icon fa-book"></i></span>
+            <div class="step-desc">
+              <span class="step-title">Documental</span>
+              <p></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($) 
+  {
+  	panelDeObra();
+	function panelDeObra()
+	{
+		$("#btnPanelObra_InfBasica").on("click", function(evento)
+			{
+				evento.preventDefault();
+				cargarModulo("obras/informacionBasica.html", "Información Básica de " + $("#txtTituloObra").val(),
+          function()
+          {
+            infBasica_CargarDatos();
+          });
+			});
+    
+    $("#btnPanelObra_Postes").on("click", function(evento)
+      {
+        evento.preventDefault();
+        cargarModulo("obras/postes.html", "Postes de " + $("#txtTituloObra").val(), 
+          function()
+          {
+            $("#lstPostes_Postes li").remove();
+            cargarPostes();
+          });
+
+      });
+
+    $("#btnPanelObra_Auditoria").on("click", function(evento)
+      {
+        evento.preventDefault();
+        cargarModulo("obras/auditoria.html", "Auditoria de " + $("#txtTituloObra").val(), 
+          function()
+          {
+            $("#lstAuditoria_Postes li").remove();
+            cargarPostesAuditoria("1");
+            if ($("#txtEstadoObra").val() == "")
+            {
+              cargarEstadoObra(function()
+                {
+                  $("#txtTipoObra").val(val.idTipoObra);
+                  $("#txtEstadoObra").val(val.Estado);
+                });
+            }
+          });
+
+      });
+
+    $("#btnPanelObra_MesaDeCalidad").on("click", function(evento)
+      {
+        evento.preventDefault();
+        cargarModulo("mesaDeCalidad/noConformidades.html", "ASC de " + $("#txtTituloObra").val(), 
+          function()
+          {
+            cargarNCC();            
+          });
+
+      });
+
+    $("#btnPanelObra_Informe").on("click", function(evento)
+      {
+        evento.preventDefault();
+        cargarModulo("obras/informe.html", "ASC de " + $("#txtTituloObra").val(), 
+          function()
+          {
+            informe_TraerDatos();  
+          });
+
+      });
+
+    $("#btnPanelObra_Documental").on("click", function(evento)
+      {
+        evento.preventDefault();
+        cargarModulo("mesaDeCalidad/documental.html", "ASC de " + $("#txtTituloObra").val(), 
+          function()
+          {            
+            
+          });
+
+      });
+	}
+  });
+  
+</script>
+<!-- End Panel Floating Lables -->

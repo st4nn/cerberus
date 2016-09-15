@@ -1,0 +1,266 @@
+  <!-- Page -->
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnPoda_VolverAlPanelOT">Volver al Panel</button>
+  <input id="txtPoda_Circuito" type="hidden">
+  <div class="panel-body">
+    
+    <div class="col-md-12">
+      <div class="col-md-12">
+        <div class="col-md-12 bg-teal-600 padding-3">
+          <div class="height-500" id="cntPoda_Visitaprevia_Programacion_Mapa"></div>
+        </div>
+      </div>
+      <input id="txtPoda_Visitaprevia_Programacion_Seleccionado" type="hidden">
+
+      <div class="col-md-12 margin-top-20">
+        <table id="tblPoda_VisitaPrevia_Programacion" class="table table-hover dataTable table-striped width-full dtr-inline" style="display: block;overflow-x: auto;">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th></th>
+              <th>fecha_levanta</th>
+              <th>matricula</th>
+              <th>nombre_comun</th>
+              <th>especie</th>
+              <th>familia</th>
+              <th>longitud</th>
+              <th>latitud</th>
+              <th>diametro_ap</th>
+              <th>diametro_copa</th>
+              <th>altura</th>
+              <th>estado_fisico</th>
+              <th>estado_fito</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+
+        </table>
+      </div>      
+    </div>
+  </div>
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnPoda_VolverAlPanelOT">Volver al Panel</button>
+</div>
+
+    <!--
+    <div class="modal fade modal-3d-sign" id="cntPoda_VisitaPrevia_Programacion_Formato" aria-hidden="true" aria-labelledby="cntPoda_VisitaPrevia_Programacion_Formato" role="dialog" tabindex="-1">
+      <div class="modal-dialog">
+    -->
+      <form id="frmPoda_VisitaPrevia_Programacion_Formato" class="modal-content form-horizontal" action="#" method="post" role="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+          <h4 class="modal-title">Crear Visita</h4>
+        </div>
+        <div class="modal-body">
+          <div class="example-wrap margin-sm-0 col-md-12">
+            <h4 class="example-title">Numero Interno</h4>
+            <div class="form-group">
+              <div id="lblPoda_VisitaPrevia_Programacion_NumeroInterno" class="well well-sm well-info"></div>
+              <input id="txtPoda_VisitaPrevia_Programacion_NumeroInterno" type="hidden" class="form-control guardar">
+              <input id="txtPoda_VisitaPrevia_Programacion_idVisita" type="hidden" class="form-control guardar">
+            </div>
+          </div>
+          <div class="example-wrap margin-sm-0 col-md-12">
+            <h4 class="example-title">Aviso <small>Diligenciar el campo con el aviso para casos de poda no planificada, para el caso de planificada colocar no aplica NA</small></h4>
+            <div class="form-group">
+              <input type="text" class="form-control guardar" id="txtPoda_PanelVisitaPrevia_CrearOt_Fecha">
+            </div>
+          </div>
+          <br><br>
+          <br><br>
+          <div class="example-wrap margin-sm-0 col-md-12">
+            <h4 class="example-title">Dirección o Referencia</h4>
+            <div class="form-group">
+              <input type="text" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Direccion">
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <h4 class="example-title">Tipo Especie</h4>
+              <div class="form-group">
+                <select class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_TipoEspecie">
+                  <option value="1">Almendro</option>
+                </select>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <h4 class="example-title">Análisis de Trabajo Seguro</h4>
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_AnalisisTrabajoSeguro">
+                <label for="txtPoda_VisitaPrevia_Programacion_AnalisisTrabajoSeguro"></label>
+              </div>
+            </div>
+          </div>
+          <br><br>
+          <br><br>
+          <br><br>
+
+          <h1>Estado Fitosanitario</h1>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Comejen">
+                <label for="txtPoda_VisitaPrevia_Programacion_Comejen">Comejen</label>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_RamasPodridas">
+                <label for="txtPoda_VisitaPrevia_Programacion_RamasPodridas">Ramas PP Podridas</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Gusanos">
+                <label for="txtPoda_VisitaPrevia_Programacion_Gusanos">Gusanos</label>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Abejas">
+                <label for="txtPoda_VisitaPrevia_Programacion_Abejas">Abejas</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Correcto">
+                <label for="txtPoda_VisitaPrevia_Programacion_Correcto">Correcto</label>
+              </div>
+            </div>
+          </div>
+
+          <h1>Elementos Red</h1>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_RedMT">
+                <label for="txtPoda_VisitaPrevia_Programacion_RedMT">Red MT</label>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_RedBT">
+                <label for="txtPoda_VisitaPrevia_Programacion_RedBT">Red BT</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Transformador">
+                <label for="txtPoda_VisitaPrevia_Programacion_Transformador">Transformador</label>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_EquipManiobra">
+                <label for="txtPoda_VisitaPrevia_Programacion_EquipManiobra">Equip de Maniobra</label>
+              </div>
+            </div>
+          </div>
+
+          <h1>Tipo Actividad</h1>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_PodaLigera">
+                <label for="txtPoda_VisitaPrevia_Programacion_PodaLigera">Poda Ligera</label>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_PodaExhaustiva">
+                <label for="txtPoda_VisitaPrevia_Programacion_PodaExhaustiva">Poda Exhasutiva</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Tala">
+                <label for="txtPoda_VisitaPrevia_Programacion_Tala">Tala</label>
+              </div>
+            </div>
+          </div>
+          <br><br>
+          <br><br>
+
+          <h1>Suspensión de Poda</h1>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Nido">
+                <label for="txtPoda_VisitaPrevia_Programacion_Nido">Nido</label>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Cliente">
+                <label for="txtPoda_VisitaPrevia_Programacion_Cliente">Cliente</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Tet">
+                <label for="txtPoda_VisitaPrevia_Programacion_Tet">TET</label>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="checkbox-custom checkbox-primary">
+                <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Otros">
+                <label for="txtPoda_VisitaPrevia_Programacion_Otros">Otros</label>
+              </div>
+            </div>
+          </div>
+          
+          <h1>Registro Camara</h1>
+          <div class="example-wrap margin-sm-0 col-md-12">
+            <div class="col-md-6 col-xs-6">
+              <button class="btn btn-success"><i class="icon fa-camera"></i> Antes</button>
+            </div>
+            <div class="col-md-6 col-xs-6">
+              <button class="btn btn-success"><i class="icon fa-camera"></i> Después</button>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-12">
+            <h4 class="example-title">Observaciones</h4>
+            <div class="form-group">
+              <textarea class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Observaciones"></textarea>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="checkbox-custom checkbox-primary">
+              <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Conforme">
+              <label for="txtPoda_VisitaPrevia_Programacion_Conforme">Conforme</label>
+            </div>
+          </div>
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="checkbox-custom checkbox-primary">
+              <input type="checkbox" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_NoConforme">
+              <label for="txtPoda_VisitaPrevia_Programacion_NoConforme">No Conforme</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success btn-lg btn-blockren"><i class="icon glyphicon glyphicon-floppy-disk"></i> Guardar</button>
+          </div>
+        </div>
+      </form>
+    <!--
+    </div>
+  </div>-->
+    <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+        poda_VisitaPrevia_Programacion();
+      });
+
+</script>

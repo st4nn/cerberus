@@ -1,0 +1,134 @@
+<!-- Panel Floating Lables -->
+<div class="panel">
+  <div class="panel-body container-fluid">
+    <form autocomplete="off" id="frmCrearProyecto">
+      <input type="hidden" id="txtCrearProyecto_idProyecto" class="guardar">
+      <div class="summary-errors alert alert-danger alert-dismissible">
+        <button type="button" class="close" aria-label="Close" data-dismiss="alert">
+          <span aria-hidden="true">×</span>
+        </button>
+        <p>Hey: </p>
+        <ul></ul>
+      </div>
+      <div class="form-group col-md-4 form-material floating">
+        <input type="text" class="form-control guardar" id="txtCrearProyecto_Nombre" name="txtCrearProyecto_Nombre">
+        <label class="floating-label">Nombre de la Obra</label>
+      </div>
+      
+      <div class="form-group form-material floating col-md-12">
+        <input class="form-control guardar" rows="3" id="txtCrearProyecto_Descripcion" name="txtCrearProyecto_Descripcion">
+        <label class="floating-label">Responsable</label>
+      </div>
+      <div class="text-right">
+        <button type="submit" class="btn btn-primary" id="btnCrearProyecto_Guardar">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($) {
+    $('#objCrearProyecto_Datepicker').datepicker();
+    $("#objCrearProyecto_Datepicker").on("changeDate", function(event) {
+      $("#txtCrearProyecto_FechaIni").val(
+        $("#objCrearProyecto_Datepicker").datepicker('getFormattedDate')
+      );
+    });
+
+    $('#objCrearProyecto_Datepicker2').datepicker();
+    $("#objCrearProyecto_Datepicker2").on("changeDate", function(event) {
+      $("#txtCrearProyecto_FechaFin").val(
+        $("#objCrearProyecto_Datepicker2").datepicker('getFormattedDate')
+      );
+    });
+
+    validarFormulario();
+
+    function validarFormulario()
+    {
+      $('.summary-errors').hide();
+
+      $('#frmCrearProyecto').formValidation({
+        framework: "bootstrap",
+        button: {
+          selector: '#btnCrearProyecto_Guardar',
+          disabled: 'disabled'
+        },
+        icon: null,
+        fields: {
+          txtCrearProyecto_Nombre: {
+            validators: {
+              notEmpty: {
+                message: 'El nombre es Importante y no debe estar vació'
+              }
+            }
+          },
+          txtCrearProyecto_Descripcion: {
+            validators: {
+              notEmpty: {
+                message: 'El Responsable es Importante y no puede quedar vacía'
+              }
+            }
+          }
+        }
+      }).on('success.form.fv', function(e) {
+        $('.summary-errors').html('');
+        e.preventDefault();
+        $("#frmCrearProyecto").generarDatosEnvio("txtCrearProyecto_", function(datos)
+        {
+          $.post("../server/php/proyectos/crearProyecto.php",{datos:datos},
+            function(data)
+            {
+              if (parseInt(data) == 1)
+              {
+                Mensaje("Ok", "Proyecto Creado");
+              }
+            });
+        });
+      }).on('err.field.fv', function(e, data) {
+        // data.fv     --> The FormValidation instance
+        // data.field  --> The field name
+        // data.element --> The field element
+        $('.summary-errors').show();
+
+        // Get the messages of field
+        var messages = data.fv.getMessages(data.element);
+
+        // Remove the field messages if they're already available
+        $('.summary-errors').find('li[data-field="' + data.field + '"]').remove();
+
+        // Loop over the messages
+        for (var i in messages) {
+          // Create new 'li' element to show the message
+          $('<li/>')
+            .attr('data-field', data.field)
+            .wrapInner(
+              $('<a/>')
+              .attr('href', 'javascript: void(0);')
+              // .addClass('alert alert-danger alert-dismissible')
+              .html(messages[i])
+              .on('click', function(e) {
+                // Focus on the invalid field
+                data.element.focus();
+              })
+            ).appendTo('.summary-errors > ul');
+        }
+        // Hide the default message
+        // $field.data('fv.messages') returns the default element containing the messages
+        data.element
+          .data('fv.messages')
+          .find('.help-block[data-fv-for="' + data.field + '"]')
+          .hide();
+      })
+      .on('success.field.fv', function(e, data) {
+        // Remove the field messages
+        $('.summary-errors > ul').find('li[data-field="' + data.field + '"]').remove();
+        if ($('#frmCrearProyecto').data('formValidation').isValid()) {
+          $('.summary-errors').hide();
+        }
+      });
+    }
+  });
+  
+</script>
+<!-- End Panel Floating Lables -->

@@ -1,0 +1,46 @@
+  <!-- Page -->
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnVolverAlPanel">Volver al Panel</button>
+  <div class="panel-body">
+    <form id="frmInformacionBasica">
+      <div class="col-md-2 pull-right">
+    	<button type="submit" class="btn btn-floating btn-success btnInformacionBasica_Guardar"><i class="icon glyphicon glyphicon-floppy-disk" aria-hidden="true"></i></button>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group form-material col-md-4">
+          <label class="control-label" for="objInformacionBasica_FechaIni">Fecha de Inicio</label>
+            <div id="objInformacionBasica_FechaIni" data-autoclose="false" ></div>
+            <div class="form-group form-material floating">
+              <input type="text" id="txtInformacionBasica_FechaIni" class="form-control empty guardar" readonly="true">
+            </div>
+        </div>
+        <div class="form-group form-material col-md-4">
+          <label class="control-label" for="objInformacionBasica_FechaFin">Fecha de Finalización</label>
+            <div id="objInformacionBasica_FechaFin" data-autoclose="false" ></div>
+            <div class="form-group form-material floating">
+              <input type="text" id="txtInformacionBasica_FechaFin" class="form-control empty guardar" readonly="true">
+            </div>
+        </div>
+      </div>
+      <div class="col-md-2 pull-left">
+      	<a href="http://localhost/cerberus/server/archivos/052015Calidad%20Obras%20.pdf" class="btn btn-success btn-lg btn-block btnInformacionBasica_Guardar"><i class="icon wb-search"></i>Descargar</a>
+      </div>
+    </form>
+  </div>
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnVolverAlPanel">Volver al Panel</button>
+</div>
+    <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+        $('#objInformacionBasica_FechaIni').datepicker();
+        $("#objInformacionBasica_FechaIni").on("changeDate", function(event) {
+        $("#txtInformacionBasica_FechaIni").val($("#objInformacionBasica_FechaIni").datepicker('getFormattedDate'));
+        
+        $('#objInformacionBasica_FechaFin').datepicker();
+        $("#objInformacionBasica_FechaFin").on("changeDate", function(event) {
+        $("#txtInformacionBasica_FechaFin").val($("#objInformacionBasica_FechaFin").datepicker('getFormattedDate'));
+        });
+  });
+      });
+
+</script>

@@ -1,0 +1,296 @@
+  <!-- Page -->
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnVolverAlPanel">Volver al Panel</button>
+  <div class="panel-body">
+    <div class="col-md-4 pull-right">
+      <h5 class="example-title">Cargar Archivo</h5>
+      <form class="form-group" id="frmPostes_CargarArchivo" action="../server/php/subir/subirArchivo.php?Ruta=Postes" method="post" enctype="multipart/form-data">
+        <div class="input-group input-group-file">
+          <input type="text" class="form-control inputText" readonly="">
+          <span class="input-group-btn">
+            <span class="btn btn-success btn-file">
+              <i class="icon wb-more-horizontal" aria-hidden="true"></i>
+              Buscar
+              <input type="file" name="archivo" class="inputControl" name="">
+            </span>
+            <button type="submit" class="btn btn-success">
+              <i class="icon wb-upload" aria-hidden="true"></i> Subir
+            </button>
+          </span>
+        </div>
+        <div class="progress progress-lg">
+          <div id="txtPostes_ArchivoProgreso" class="progress-bar progress-bar-success" style="width: 0%;" role="progressbar"></div>
+        </div>
+      </form>
+      <form class="form-group" id="frmPostes_CrearPoste">
+        <h4 class="example-title">Crear Nodo</h4>
+        <div class="form-group">
+          <h4 class="example-title">Nombre del Nodo</h4>
+          <input id="txtPostes_CrearPoste_Nombre" type="text" class="form-control guardar" placeholder="Nombre" required>
+        </div>
+        <div class="form-group">
+          <h4 class="example-title">Dirección</h4>
+          <input id="txtPostes_CrearPoste_Direccion" type="text" class="form-control guardar" placeholder="Dirección" required>
+        </div>
+        <button type="submit" class="btn btn-success"><i class="icon fa-floppy-o"></i>Crear</button>
+        
+      </form>
+    </div>
+    
+    <div id="cntPostes_Header" class="col-md-8 form-horizontal">
+      <div class="form-group">
+        Hay <span class="badge badge-radius badge-info" id="lblPostes_NoNodos">0</span> Nodos
+      </div>      
+      <div class="form-group">
+        <div class="input-group input-group-icon">
+          <input type="number" class="form-control" id="txtPostes_TamanioMuestra" placeholder="Tamaño de la Muestra (%)">
+          <span class="input-group-btn">
+            <button type="button" class="btn" id="btnPostes_TomarMuestra">
+              <i>%</i>
+              Tomar Muestra
+            </button>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="col-md-6">
+          <div class="form-group">
+            Debe seleccionar <span class="badge badge-radius badge-danger" id="lblPostes_NoSeleccionables">0</span> Nodos
+          </div>
+          <div class="form-group">
+            Ha seleccionado <span class="badge badge-radius badge-danger" id="lblPostes_Seleccionados">0</span> Nodos
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="col-md-12">
+            <button class="btn btn-success btn-lg btn-block disabled" id="btnPostes_Confirmar">Confimar</button>
+            <br>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-warning" id="btnPostes_SeleccionTodos">Seleccionar Todos</button>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-danger" id="btnPostes_BorrarSeleccion">Borrar Selección</button>
+          </div>
+          <br>
+        </div>
+        
+      </div>
+
+    </div>
+    <form id="frmPostes" >
+      <ul class="list-group list-group-full col-md-12" id="lstPostes_Postes">
+        <h5 id="lblPostes_NoHayPostes">No hay datos de nodos asociados a la Obra</h5>
+      </ul>
+    </form>
+  </div>
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnVolverAlPanel">Volver al Panel</button>
+</div>
+    <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+        postes();
+
+        function contarSeleccionados()
+        {
+          var cantidad = $("#lstPostes_Postes input:checked");
+          cantidad = $(cantidad).length
+          $("#lblPostes_Seleccionados").text();
+          
+          $("#lblPostes_Seleccionados").removeClass('badge-danger');
+          $("#lblPostes_Seleccionados").removeClass('badge-warning');
+          $("#lblPostes_Seleccionados").removeClass('badge-success');
+          $("#lblPostes_Seleccionados").removeClass('badge-info');
+
+          var total = parseInt($("#lblPostes_NoSeleccionables").text());
+          var porcentaje = parseInt((cantidad*100)/total);
+          $("#btnPostes_Confirmar").addClass('disabled');
+          if (porcentaje < 50)
+          {
+            $("#lblPostes_Seleccionados").addClass('badge-danger');
+          }
+          if (porcentaje >= 50 && porcentaje < 80)
+          {
+            $("#lblPostes_Seleccionados").addClass('badge-warning');
+          }
+          if (porcentaje >= 80 && porcentaje < 100)
+          {
+            $("#lblPostes_Seleccionados").addClass('badge-info');
+          }
+          if (porcentaje >= 100)
+          {
+            $("#lblPostes_Seleccionados").addClass('badge-success');
+            $("#btnPostes_Confirmar").removeClass('disabled');
+          }
+
+          $("#lblPostes_Seleccionados").text(cantidad);
+        }
+
+        function calcularPostesSeleccionables()
+        {
+          var tamanio = parseInt($("#lstPostes_Postes li").size());
+          var porcentaje = parseInt($("#txtPostes_TamanioMuestra").val());
+          $("#lblPostes_NoSeleccionables").text(parseInt((tamanio*porcentaje/100)));
+          contarSeleccionados();
+        }
+        function postes()
+         {
+            $("#frmPostes_CrearPoste").on("submit", function(evento)
+              {
+                evento.preventDefault();
+
+                $("#frmPostes_CrearPoste").generarDatosEnvio("txtPostes_CrearPoste_", function(datos)
+                  {
+                    $.post('../server/php/proyectos/crearNodo.php', {idObra : $("#txtIdObra").val(), datos: datos}, function(data, textStatus, xhr) 
+                    {
+                      if (data == 1)
+                      {
+                        Mensaje("Hey", "Nodo agregado");
+                        agregarPoste($("#txtPostes_CrearPoste_Nombre").val(), $("#txtPostes_CrearPoste_Direccion").val(), "");
+                        $("#txtPostes_CrearPoste_Nombre").val("");
+                        $("#txtPostes_CrearPoste_Direccion").val("");
+                      } else
+                      {
+                        Mensaje("Error", data);
+                      }
+                    });
+                  });
+
+
+              });
+            $("#btnPostes_Confirmar").on("click", function(evento)
+              {
+                evento.preventDefault();
+                var datos = [];
+                var obj = $("#lstPostes_Postes input:checked");
+                $.each(obj, function(index, val) 
+                {
+                   datos[index] = $(val).parent("div").find("label").text();
+                });
+                $.post('../server/php/proyectos/confirmarPostes.php', {datos: datos, idObra : $("#txtIdObra").val()}, function(data, textStatus, xhr) {
+                    Mensaje("Ok", "La selección ha sido confirmada", "info");
+                  });
+              });
+            $("#btnPostes_SeleccionTodos").on("click", function(evento)
+              {
+                evento.preventDefault();
+                $("#lstPostes_Postes input").prop("checked", true);
+                contarSeleccionados();
+              });
+
+            $("#btnPostes_BorrarSeleccion").on("click", function(evento)
+              {
+                evento.preventDefault();
+                $("#lstPostes_Postes input").prop("checked", false);
+                contarSeleccionados();
+              });
+
+            $("#btnPostes_TomarMuestra").on("click", function(evento)
+              {
+                evento.preventDefault();
+                if ($("#txtPostes_TamanioMuestra").val() == "")
+                {
+                  Mensaje("Hey", "El valor debe estar entre 1 y 100", "danger");
+                  $("#txtPostes_TamanioMuestra").focus();
+                } else
+                {
+                  $("#lstPostes_Postes input").prop("checked", false);
+                  var cantidad = parseInt($("#lblPostes_NoSeleccionables").text());
+                  var total = parseInt($("#lblPostes_NoNodos").text());
+                  var id = 0;
+                  while ($("#lstPostes_Postes input:checked").length < cantidad)
+                  {
+                    id = parseInt(Math.random()*total);
+                    $("#chkPoste_" + id).prop("checked", true);
+                  }
+                  contarSeleccionados();
+                }
+
+              });
+            $(document).delegate('#lstPostes_Postes input', 'change', function(event) 
+            {
+              contarSeleccionados();
+            });
+            $("#txtPostes_TamanioMuestra").on("change", function()
+            {
+              if ($("#txtPostes_TamanioMuestra").val() > 0 && $("#txtPostes_TamanioMuestra").val() < 101)
+              {
+                calcularPostesSeleccionables();
+              } else
+              {
+                Mensaje("Hey", "El valor debe estar entre 1 y 100", "danger");
+                $("#txtPostes_TamanioMuestra").focus();
+              }
+            });
+
+            $("#frmPostes_CargarArchivo").ajaxForm({
+                  beforeSend: function() {
+
+                      var percentVal = '0%';
+                      $("#txtPostes_ArchivoProgreso").width(percentVal);
+                      $("#txtPostes_ArchivoProgreso").text(percentVal);
+                  },
+                  uploadProgress: function(event, position, total, percentComplete) {
+                      
+                      var percentVal = percentComplete + '%';
+                      $("#txtPostes_ArchivoProgreso").width(percentVal);
+                      $("#txtPostes_ArchivoProgreso").text(percentVal);
+                  },
+                  success: function() {
+                      var percentVal = '100%';
+                      $("#txtPostes_ArchivoProgreso").width(percentVal);
+                      $("#txtPostes_ArchivoProgreso").text(percentVal);
+                  },
+                complete: function(xhr) {
+                  var respuesta = xhr.responseText;
+                  if (respuesta.substring(0, 6) == "../../")
+                  {
+                    $.post("../server/php/manejoArchivos/postes.php", 
+                    {
+                      archivo : respuesta, idObra :  $("#txtIdObra").val()
+                    },
+                      function(data)
+                      {
+                        if (data != 0)
+                        {
+                          cargarPostes();
+                        }
+                        
+                      }, "json").fail(function()
+                      {
+                        //Mensaje("Error", "No hay conexión con el Servidor");
+                        cargarPostes();
+                      });
+                  } else
+                  {
+                    Mensaje("Hey","Hubo un Error, " + respuesta, "danger");
+                  }
+                }
+              }); 
+            $(document).delegate(".btnPostes_BorrarPoste", "click", function(evento)
+            {
+              evento.preventDefault();
+              var obj = $(this).parent("div").parent("div").parent("li");
+              $(obj).remove();
+              $("#lblPostes_NoNodos").text($("#lstPostes_Postes li").size());
+              calcularPostesSeleccionables();
+            });
+
+            $("#btnPostes_TomarMuestra").on("click", function(evento)
+              {
+                evento.preventDefault();
+              });
+
+            $("#btnPostes_AgregarPoste").on("click", function(evento)
+              {
+                evento.preventDefault();
+                agregarPoste($("#txtPostes_Codigo").val(), $("#txtPostes_Direccion").val());
+                $("#txtPostes_Codigo").val("");
+                $("#txtPostes_Direccion").val("");
+
+              });
+            //
+         }
+      });
+
+</script>

@@ -1,0 +1,111 @@
+<!-- Panel Floating Lables -->
+<div class="panel">
+  <div class="panel-body container-fluid">
+    <form autocomplete="off" id="frmReporte">
+      <div class="col-md-2">
+        <i> desde </i>
+      </div>
+      <div class="col-md-4">
+        <div class="input-group">
+          <span class="input-group-addon">
+            <i class="icon wb-calendar" aria-hidden="true"></i>
+          </span>
+          <input type="text" class="form-control" id="txtReporte_FechaIni" data-plugin="datepicker" autocomplete="off">
+        </div>
+      </div>
+      <div class="col-md-2">
+        <i> hasta </i>
+      </div>
+      <div class="col-md-4">
+        <div class="input-group">
+          <span class="input-group-addon">
+            <i class="icon wb-calendar" aria-hidden="true"></i>
+          </span>
+          <input type="text" class="form-control" id="txtReporte_FechaFin" data-plugin="datepicker" autocomplete="off">
+        </div>
+      </div>
+    </form>
+    <div class="col-md-12 margin-5">
+      <div class="col-xs-4">
+        <div class="clearfix pull-left">
+          <button class="btn btn-warning" id="btnReportes_Opciones"><i class="icon fa-th-list"></i> Opciones</button>
+        </div>
+      </div>
+      <!--
+      <div class="col-xs-4">
+        <div class="clearfix">
+          <button class="btn btn-info"><i class="icon fa-filter" id="btnReportes_Filtros"></i> Filtros</button>
+        </div>
+      </div>
+      <div class="col-xs-4">
+        <div class="clearfix pull-right">
+          <button class="btn btn-success"><i class="icon fa-bar-chart"></i> Gráficas</button>
+        </div>
+      </div>
+      -->
+    </div>
+    <div id="cntReportes_Opciones" class="clearfix hide">
+      <div class="">
+        <h4 class="example-title">Reportes Disponibles:</h4>
+        <ul class="list-group list-group-full">
+        <li class="list-group-item"><a idOpcion="9" class="lnkReporte_Opcion" href="#">Inspecciones por Delegaciones</a></li>
+        <li class="list-group-item"><a idOpcion="10" class="lnkReporte_Opcion" href="#">Avance del Plan de Trabajo</a></li>
+          <li class="list-group-item"><a idOpcion="1" class="lnkReporte_Opcion" href="#">Inspecciones de Seguridad en Obras</a></li>
+          <li class="list-group-item"><a idOpcion="2" class="lnkReporte_Opcion" href="#">Inspecciones de Calidad en Obras</a></li>
+          <li class="list-group-item"><a idOpcion="3" class="lnkReporte_Opcion" href="#">Resumen Obras Inspeccionadas Seguridad</a></li>
+          <li class="list-group-item"><a idOpcion="4" class="lnkReporte_Opcion" href="#">Resumen Obras Inspeccionadas Seguridad</a></li>
+         <li class="list-group-item"><a idOpcion="5" class="lnkReporte_Opcion" href="#">Total Inspecciones de Seguridad</a></li>
+          <li class="list-group-item"><a idOpcion="6" class="lnkReporte_Opcion" href="#">Total Inspecciones de Calidad</a></li>
+          <li class="list-group-item"><a idOpcion="7" class="lnkReporte_Opcion" href="#">Inspecciones de Seguridad por Aspecto</a></li>
+          <li class="list-group-item"><a idOpcion="8" class="lnkReporte_Opcion" href="#">Inspecciones de Calidad por Aspecto</a></li>
+
+
+          <li class="list-group-item"><a idOpcion="5" class="lnkReporte_Opcion" href="#">Encargados Desarrollo Inspecciones de Seguridad</a></li>
+          <li class="list-group-item"><a idOpcion="6" class="lnkReporte_Opcion" href="#">Encargados Mantenimiento Inspecciones de Seguridad</a></li>
+          <li class="list-group-item"><a idOpcion="7" class="lnkReporte_Opcion" href="#">Encargados Desarrollo Inspecciones de Calidad</a></li>
+          <li class="list-group-item"><a idOpcion="8" class="lnkReporte_Opcion" href="#">Encargados Mantenimiento Inspecciones de Calidad</a></li>
+
+          <li class="list-group-item"><a idOpcion="11" class="lnkReporte_Opcion" href="#">Estadistica de Tipología de Defectos Inspecciones de Seguridad</a></li>
+          <li class="list-group-item"><a idOpcion="12" class="lnkReporte_Opcion" href="#">Estadistica de Tipología de Defectos Inspecciones de Calidad</a></li>
+
+          <li class="list-group-item"><a idOpcion="13" class="lnkReporte_Opcion" href="#">Inspecciones de Seguridad - Encargados de Desarrollo</a></li>
+
+          <li class="list-group-item"><a idOpcion="14" class="lnkReporte_Opcion" href="#">Inspecciones de Seguridad - Encargados de Mantenimiento</a></li>
+
+          <li class="list-group-item"><a idOpcion="15" class="lnkReporte_Opcion" href="#">Inspecciones de Calidad - Encargados de Desarrollo</a></li>
+
+          <li class="list-group-item"><a idOpcion="16" class="lnkReporte_Opcion" href="#">Inspecciones de Calidad - Encargados de Mantenimiento</a></li>
+
+          <li class="list-group-item"><a idOpcion="17" class="lnkReporte_Opcion" href="#">Defectos  en las obras originados por incidencia en los materiales</a></li>
+
+          
+
+        </ul>
+      </div>
+    </div>
+
+    <div id="cntReportes_Filtros" class="clearfix hide">
+      <div class="height-300 bg-blue-600">
+        
+      </div>
+    </div>
+
+    <div id="cntReportes_Tablas" class="clearfix">
+      <h4 id="lblReportes_Titulo">Inspecciones por Delegaciones</h4>
+      <table id="tblReportes" class="table table-hover dataTable table-striped width-full dtr-inline" style="display: block;overflow-x: auto;">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    
+  </div>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($) 
+  {
+    reportes();
+  });
+  
+</script>
+<!-- End Panel Floating Lables -->

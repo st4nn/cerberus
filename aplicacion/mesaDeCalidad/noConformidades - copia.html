@@ -1,0 +1,172 @@
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnVolverAlPanel">Volver al Panel</button>
+  <div class="panel-body">
+    <div id="listadoNC">
+      <div id="cntNoConformidades_Encabezado">
+        <div class="col-md-6">
+          <div class="widget">
+            <div class="widget-content padding-35 bg-blue-300 clearfix">
+              <div class="pull-left white">
+                <i class="icon icon-circle icon-2x fa-briefcase bg-blue-600" aria-hidden="true"></i>
+              </div>
+              <div class="counter counter-md counter text-right pull-right">
+                <div class="counter-number-group">
+                  <span class="counter-number" id="lblNoConformidades_ItemsEvaluados">0</span>
+                  <span class="counter-number"> Elementos</span>
+                </div>
+                <div class="counter-label text-capitalize font-size-16"> Revisados</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="widget">
+            <div class="widget-content padding-35 bg-green-300 clearfix">
+              <div class="pull-left white">
+                <i class="icon icon-circle icon-2x fa-check bg-green-600" aria-hidden="true"></i>
+              </div>
+              <div class="counter counter-md counter text-right pull-right">
+                <div class="counter-number-group">
+                  <span class="counter-number" id="lblNoConformidades_ItemsConformes">0</span>
+                  <span class="counter-number"> Elementos</span>
+                </div>
+                <div class="counter-label text-capitalize font-size-16">estan Conformes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="widget">
+            <div class="widget-content padding-35 bg-orange-300 clearfix">
+              <div class="pull-left white">
+                <i class="icon icon-circle icon-2x fa-search bg-orange-600" aria-hidden="true"></i>
+              </div>
+              <div class="counter counter-md counter text-left pull-right">
+                <div class="counter-number-group">
+                  <span class="counter-number" id="lblNoConformidades_ItemsNoConformes">0</span>
+                  <span class="counter-number"> Elementos</span>
+                </div>
+                <div class="counter-label text-capitalize font-size-16">No fueron conformes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="widget">
+            <div class="widget-content padding-35 bg-red-300 clearfix">
+              <div class="pull-left white">
+                <i class="icon icon-circle icon-2x fa-close bg-red-600" aria-hidden="true"></i>
+              </div>
+              <div class="counter counter-md counter text-left pull-right">
+                <div class="counter-number-group">
+                  <span class="counter-number" id="lblNoConformidades_AspectosNoConformes">0</span>
+                  <span class="counter-number"> Aspectos</span>
+                </div>
+                <div class="counter-label text-capitalize font-size-16">No fueron aprobados</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="" id="lstListadoNC">
+        
+      </div>
+    </div>
+    <div id="MESA" class="noMostrar">
+      <button type="button" class="btn btn-round btn-primary btn-pill-left" id="btnAuditoria_VolverNC">Volver al listado</button>
+      <div class="col-md-12 margin-top-10">
+        <h4><small>Aspecto Evaluado: </small><span id="lblNoConformidades_AspectoEvaluadoCodigo"></span></h4>
+        <h4><small>Criterio: </small><span id="lblNoConformidades_Criterio"></span></h4>
+        <h3 id="lblNoConformidades_AspectoEvaluadoDesc"></h3>
+      </div>
+      <div class="col-md-12 margin-20" id="cntNoCoformidades_ContenedorPostes">
+        <h4>Items clasificados</h4>
+
+      </div>
+
+      <div>
+        <h4><small>Item en pantalla: </small><span id="lblNoConformidades_NodoEnPantalla"></span></h4>
+        <div class="col-md-8">
+          <div class="slider bg-blue-grey-100 padding-5" id="cntMesa_Imagenes">
+
+          </div>
+        </div>
+          <!-- End Example Default -->
+        <div class="col-md-4 pull-right">
+          <div class="col-md-12">
+            <h4 class="example-title">Observaciones</h4>
+            <p id="lblMesa_Observaciones">
+              
+            </p>
+          </div>
+          <div class="col-md-12" id="cntNoConformidades_Ubicacion">
+            <h4 class="example-title">Ubicación</h4>
+              <div class="height-200" id="customGmap"></div>
+            <h4 class="example-title"><small>Coordenadas: </small><a id="lnkNoConformidades_Coordenadas" target="_blank" href=""></a></h4>
+            <h4 class="example-title"><small>Dirección: </small><a id="lnkNoConformidades_Direccion" target="_blank" href=""></a></h4>
+          </div>
+        </div>
+      </div>
+      <br><br>
+      <form id="frmNoConformidades_Clasificacion">
+        <div class="col-md-12">
+          <div class="col-sm-6">
+            <div class="example-wrap">
+              <h4 class="example-title">Justificación:</h4>
+              <textarea class="form-control" id="txtNoConformidades_justificacion" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="example-wrap">
+              <h4 class="example-title">Clasificación de la Justificación:</h4>
+              <textarea class="form-control" id="txtNoConformidades_justificacionClasificacion" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="col-sm-6">
+            <div class="example-wrap">
+              <h4 class="example-title">Compromiso:</h4>
+              <textarea class="form-control" id="txtNoConformidades_Compromiso" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="example-wrap">
+              <h4 class="example-title">Clasificación Final:</h4>
+              <select id="cboNoConformidades_ClasificacionFinal" class="form-control">
+                <option value="No Conforme">No Conforme</option>
+                <option value="No Aplica">No Aplica</option>
+                <option value="Defecto de Terceros">Defecto de Terceros</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions col-sm-12">
+          <button class="btn btn-primary" type="submit"><i class="icon fa-floppy-o"></i> Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!--
+  <div class="checkbox-custom checkbox-primary">
+    <input type="checkbox" id="inputUnchecked">
+    <label for="inputUnchecked">Incluir como observación en el Informe</label>
+  </div>
+  
+  <div class="checkbox-custom checkbox-primary">
+    <input type="checkbox" id="inputUnchecked">
+    <label for="inputUnchecked">Incluir en el Informe</label>
+  </div>
+  -->
+
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnVolverAlPanel">Volver al Panel</button>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($) 
+  {
+    mesaDeCalidad();
+  });
+  
+</script>
+<!-- End Panel Floating Lables -->

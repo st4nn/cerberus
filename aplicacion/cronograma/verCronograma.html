@@ -1,0 +1,95 @@
+<div class="panel-body">
+  <h1 class="page-search-title">Obras Cargadas</h1>
+      <div class="input-search input-search-dark">
+        <button type="button" class="input-search-close icon wb-refresh" id="btnVerCronograma_Actualizar"> </button>
+      </div>
+      
+    
+    <p class="page-search-count">
+      <span>Resultados desde</span>
+            <input type="text" id="txtVerCronograma_Fecha" value="2015-10-27" class="">
+    </p>
+
+    <p class="">
+      <span>Buscar</span>
+      <div class="col-sm-10">
+        <input type="text" id="txtVerCronograma_Parametro" class="form-control">
+      </div>
+      <button class="btn btn-success" id="btnVerCronograma_Buscar"><i class="icon wb-search"></i>Buscar</button>
+    </p>
+    <div id="cntVerCronograma"></div>
+</div>
+
+  <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {      
+          var f = new Date();
+            f = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-01";
+          $("#txtVerCronograma_Fecha").val(f);
+          $("#txtVerCronograma_Fecha").datepicker();
+
+          verCronograma(); 
+
+          $("#btnVerCronograma_Actualizar").on("click", function(evento)
+            {
+              evento.preventDefault();
+              verCronograma();
+            });
+
+          $("#btnVerCronograma_Buscar").on("click", function(evento)
+            {
+              evento.preventDefault();
+              verCronograma();
+            });
+
+         function verCronograma()
+         {
+           
+          $("#cntVerCronograma div").remove();
+          $.post('../server/php/proyectos/buscarProyecto.php', {Parametro: $("#txtVerCronograma_Parametro").val(), Fecha : $("#txtVerCronograma_Fecha").val(), Usuario : Usuario.id}, function(data, textStatus, xhr) 
+          {
+            var tds = "";
+            if (data != 0)
+            {
+              $.each(data, function(index, val) 
+              {
+                tds += '<div class="col-md-6">';
+                  tds += '<div class="content well padding-5" idObra="' + val.idObra + '">';
+                    tds += '<h3><small>Codigo: </small><strong>' + val.codigoObra + '</strong></h3>';
+                    tds += '<h4>' + val.Nombre +'</h4>';
+                    tds += '<span>Mes: <i>' + val.mesInfo + '</i></span><br>';
+                    tds += '<span><small>Tipo de Obra: </small><i><strong>' + val.tipoObra + '</strong></i></span>';
+                    tds += '<h6><small>Delegación: </small><strong>' + val.Delegacion + '</strong></h6>';
+                    tds +='<div class="text-right">';
+                      tds += '<button type="button" class="btn btn-icon btn-success margin-horizontal-20 btnVerCronograma_Abrir"><i class="icon wb-eye" aria-hidden="true"></i> Abrir</button>';
+                      tds += '<button type="button" class="btn btn-icon btn-danger btnVerCronograma_Borrar"><i class="icon wb-trash" aria-hidden="true"></i> Borrar</button>';
+                    tds +='</div>';
+                  tds += '</div>';
+                tds += '</div>';
+              });
+              
+              $("#cntVerCronograma").append(tds);
+              
+              $(".btnVerCronograma_Abrir").on("click", function(evento)
+                {
+                  evento.preventDefault();
+                  var idObra = $(this).parent("div").parent("div");
+                  idObra = $(idObra).attr("idObra");
+                  var titulo = $(this).parent("div").parent("div").find("h4");
+                  titulo = $(titulo).text();
+                  
+                  cargarModulo("obras/panel.html", "Panel de " + titulo, function()
+                    {
+                      $("#txtIdObra").val(idObra);
+                      $("#txtTituloObra").val(titulo);
+                      $("#txtEstadoObra").val("");
+                      $("#txtTipoObra").val("");
+                    });
+                });
+            }
+
+
+          }, "json");
+         }
+      });
+</script>
