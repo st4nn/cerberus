@@ -36,9 +36,7 @@
                           <span class="icon fa-user-secret" aria-hidden="true"></span>
                         </span>
                         <select id="txtCrearUsuario_perfil" class="form-control guardar" placeholder="Cargo" required>
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
+                          
                         </select>
                       </div>
             </div>
@@ -51,6 +49,7 @@
                             <button type="button" id="btnCrearUsuario_ZonasNinguna" class="btn btn-outline btn-default">Ninguna</button>
                           </div>
                         </div>
+                      <input id="txtCrearUsuario_Zonas" type="hidden" class="form-control guardar" placeholder="Zonas">
                       <div id="cntCrearUsuario_Zonas"></div>  
             </div>
             <div class="col-md-6">
@@ -89,9 +88,7 @@
                             <span class="icon fa-truck" aria-hidden="true"></span>
                           </span>
                           <select id="txtCrearUsuario_empresa" class="form-control guardar" placeholder="Empresa" required>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
+                            <option>WSP COLOMBIA SAS</option>
                           </select>
               </div>
                     </div>
@@ -112,13 +109,21 @@
   //$(document).on("ready", informacionEstructual);
 crearUsuario();
 
+jsCrearUsuario();
+
 function crearUsuario()
 {
   $("#btnCrearUsuario_Nuevo").on("click", btnCrearUsuario_Nuevo_Click);
 
   $("#frmCrearUsuario").on("submit", function(evento)
   {
+    $("#txtCrearUsuario_Zonas").val("");
     evento.preventDefault();
+    var objZonas = $("#cntCrearUsuario_Zonas input[type=checkbox]:checked");
+    $.each(objZonas, function(index, val) 
+    {
+       $("#txtCrearUsuario_Zonas").val($("#txtCrearUsuario_Zonas").val() + $(val).attr("idDelegacion") +",");
+    });
     $("#frmCrearUsuario").generarDatosEnvio("txtCrearUsuario_", function(datos)
     {
       if ($("#txtCrearUsuario_perfil").val() == "")
@@ -139,25 +144,33 @@ function crearUsuario()
             $("#txtCrearUsuario_clave").focus();
           } else
           {
+            if ($("#txtCrearUsuario_Zonas").val() == "")
+            {
+              Mensaje("Error", "Debe seleccionar por lo menos una zona", "danger");
+            } else
+            {
+              Mensaje("Ok", "Ahi va el post", "success");
+            
+              $.post("../server/php/proyectos/crearUsuario.php",
+              {datos: datos}, function(data, textStatus, xhr)
+              {
+                if (data == 1)
+                {
+                  Mensaje("Ok", "El Usuario ha sido almacenado.");    
+                  $("#frmCrearUsuario")[0].reset();
+                  
+                } else
+                {
+                  Mensaje("Error", data);    
+                }
+              }).always(function() 
+              {
+                //Cuando Finaliza
+              }).fail(function() {
+                Mensaje("Error", "No fue posible almacenar el Usuario, por favor intenta nuevamente.");
+              });
+            }
 
-            $.post("../server/php/proyectos/crearUsuario.php",
-            {datos: datos}, function(data, textStatus, xhr)
-            {
-              if (data == 1)
-              {
-                Mensaje("Ok", "El Usuario ha sido almacenado.");    
-                $("#frmCrearUsuario")[0].reset();
-                
-              } else
-              {
-                Mensaje("Error", data);    
-              }
-            }).always(function() 
-            {
-              //Cuando Finaliza
-            }).fail(function() {
-              Mensaje("Error", "No fue posible almacenar el Usuario, por favor intenta nuevamente.");
-            });
           }
         }
       }

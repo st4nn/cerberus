@@ -121,7 +121,7 @@
 	$pdf->Ln();
 
 	$pdf->SetFillColor(177, 189, 195);
-	$pdf->Cell(0,6,'* REVISIÓN DEL ACTA ANTERIOR COMPOMISO 2014',0,1,'L', 1);
+	$pdf->Cell(0,6,'* REVISIÓN DEL ACTA ANTERIOR',0,1,'L', 1);
 
 	$pdf->SetFont('Arial','',$tamanioFuente);
 
@@ -142,6 +142,18 @@
 	$pdf->Cell(0,5,'DESARROLLO DE LA REUNIÓN',0,1,'C');
 
 	$pdf->SetFont('Arial','',$tamanioFuente);
+	$pdf->Ln();
+
+	$sql = "SELECT ActaAnterior FROM msc_CompInforme WHERE idObra = '$idObra' ";
+	$ActaAnterior = $link->query($sql);
+	while ($rowActa = mysqli_fetch_assoc($ActaAnterior))
+	{
+		$DesarrolloReunion = $rowActa['ActaAnterior'];
+	}
+
+
+	$pdf->SetFillColor(220, 225, 228);
+	$pdf->MultiCell(0, 4, $DesarrolloReunion, 0,'J', 1);
 	$pdf->Ln();
 
 	$DesarrolloReunion = "Se revisaron los trabajos realizados por medio del poste a poste y la evidencia tomada por auditoria de la obra " . $row['codigoObra'] . " " . $row['Descripcion'] . ", el resultado fue de obra conforme en proceso de corrección de producto no conforme, no conformidades detectadas por el ingeniero encargado de obra. Se encontraron " . $row['noConformes'] . " productos no conforme con cronograma de corrección de estas; cabe anotar que los trabajos que queden pendiente por ejecutar después de la fecha límite de programación de corrección de producto no conforme pasaran a ser no conformidades.";
@@ -187,6 +199,8 @@
 		
 		$pdf->MultiCell(0, 5,$Texto ,0,'J', 1);
 	}
+
+	$pdf->AddPage();
 
 	$pdf->SetFont('Arial','B',$tamanioFuente);
 	$pdf->Ln();

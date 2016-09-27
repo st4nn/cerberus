@@ -1,0 +1,135 @@
+  <div class="panel">
+    <div class="panel-body">
+      <table id="tblVerUsuarios" class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>id</th>
+            <th>Usuario</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Perfil</th>
+            <th>Zonas</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>    
+    </div>
+  </div>
+
+<div class="modal fade modal-3d-sign" id="cntVerUsuarios_CambiarClave" role="dialog" tabindex="-1">
+  <div class="modal-dialog">
+    <form id="frmVerUsuarios_CambiarClave" class="modal-content form-horizontal" action="#" method="post" role="form">
+      <div class="modal-header">
+        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+        <h4 class="modal-title">Cambiar Clave</h4>
+      </div>
+      <div class="modal-body">
+        <div class="example-wrap margin-sm-0 col-md-12">
+          <h4 id="lblVerUsuarios_CambiarClave_Nombre" class="example-title"></h4>
+          <div class="form-group">
+            <input type="hidden" class="form-control guardar" id="txtVerUsuarios_CambiarClave_id">
+          </div>
+        </div>
+        <div class="example-wrap margin-sm-0 col-md-12">
+          <h4 class="example-title">Nueva Clave</h4>
+          <div class="form-group">
+            <input type="password" class="form-control guardar" id="txtVerUsuarios_CambiarClave_Clave">
+          </div>
+        </div>
+        <div class="example-wrap margin-sm-0 col-md-12">
+          <h4 class="example-title">Nuevamente la nueva clave</h4>
+          <div class="form-group">
+            <input type="password" class="form-control guardar" id="txtVerUsuarios_CambiarClave_Clave2">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success btn-lg btn-blockren"><i class="icon glyphicon glyphicon-floppy-disk"></i> Guardar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+
+verUsuarios();
+function verUsuarios()
+{
+  cargarUsuarios();
+
+  $(document).delegate('.btnVerUsuarios_CambiarClave', 'click', function() 
+  {
+    var objFilas = $(this).parent("td").parent("tr").find("td");
+   
+    $("#frmVerUsuarios_CambiarClave")[0].reset();
+
+    $("#txtVerUsuarios_CambiarClave_id").val($(objFilas[2]).text());
+    $("#lblVerUsuarios_CambiarClave_Nombre").text($(objFilas[4]).text());
+
+
+    $("#cntVerUsuarios_CambiarClave").modal("show");
+  });
+
+  $("#frmVerUsuarios_CambiarClave").on("submit", function(evento)
+    {
+      evento.preventDefault();
+      if ($("#txtVerUsuarios_CambiarClave_Clave").val() == "")
+      {
+        Mensaje("Error", "La clave no puede estar vacía", "danger"); 
+      } else
+      {
+        if ($("#txtVerUsuarios_CambiarClave_Clave").val() != $("#txtVerUsuarios_CambiarClave_Clave2").val())
+        {
+          Mensaje("Error", "Las claves no coinciden", "danger");
+        } else
+        {
+          $("#frmVerUsuarios_CambiarClave").generarDatosEnvio("txtVerUsuarios_CambiarClave_", function(datos)
+            {
+              $.post('../server/php/proyectos/configuracion/cambiarClave.php', {datos: datos}, function(data, textStatus, xhr) 
+              {
+                if (data == 1) 
+                {
+                  Mensaje("Hey", "La clave ha sido cambiada", "success");
+                  $("#cntVerUsuarios_CambiarClave").modal("hide");
+                } else
+                {
+                  Mensaje("Error", "No fue posible actualizar la clave, " + data, "danger");
+                }
+              });
+            });
+        }
+      }
+    });
+}
+
+function cargarUsuarios()
+{
+  $.post('../server/php/proyectos/configuracion/cargarUsuarios.php', {Usuario: Usuario.id}, function(data, textStatus, xhr) 
+  {
+    if (data != 0)
+    {
+      var tds = "";
+      $.each(data, function(index, val) 
+      {
+         tds += '<tr>';
+          tds += '<td><button class="btn btn-info"><i class="icon wb-edit"></i></button></td>';
+          tds += '<td><button class="btn btn-warning btnVerUsuarios_CambiarClave"><i class="icon wb-unlock"></i></button></td>';
+          tds += '<td>' + val.idLogin + '</td>';
+          tds += '<td>' + val.Usuario + '</td>';
+          tds += '<td>' + val.Nombre + '</td>';
+          tds += '<td>' + val.Correo + '</td>';
+          tds += '<td>' + val.Perfil + '</td>';
+          tds += '<td>' + val.Zonas + '</td>';
+          tds += '<td>' + val.Estado + '</td>';
+         tds += '</tr>';
+      });
+      $("#tblVerUsuarios").crearDataTable(tds);
+    }
+  }, "json");
+}
+
+</script>

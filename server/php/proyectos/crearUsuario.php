@@ -5,14 +5,15 @@
 
    $datos = json_decode($_POST['datos']);
 
-   $nombre = $datos->nombre;
-   $correo = $datos->correo;
-   $cargo = $datos->cargo;
-   $perfil = $datos->perfil;
-   $usuario = $datos->usuario;
-   $clave = $datos->clave;
-   $clave2 = $datos->clave2;
-   $empresa = "1";
+   $nombre = addslashes($datos->nombre);
+   $correo = addslashes($datos->correo);
+   $cargo = addslashes($datos->cargo);
+   $perfil = addslashes($datos->perfil);
+   $usuario = addslashes($datos->usuario);
+   $clave = addslashes($datos->clave);
+   $clave2 = addslashes($datos->clave2);
+   $empresa = addslashes($datos->empresa);;
+   $Zonas = addslashes($datos->Zonas);;
    
    $pClave = $datos->clave;
 
@@ -66,16 +67,32 @@
                   if ($nuevoId > 0)
                   {
                      
-                     $sql = "INSERT INTO datosusuarios (idLogin, Nombre, Correo) 
+                     $sql = "INSERT INTO datosusuarios (idLogin, Nombre, Correo, Cargo, idEmpresa) 
                               VALUES 
                               (
                                  '$nuevoId', 
                                  '$nombre', 
-                                 '$correo');";
+                                 '$correo',
+                                 '$cargo',
+                                 '$empresa');";
                         
                         $link->query(utf8_decode($sql));
 
                         echo $link->error . " " .$link->affected_rows;   
+
+                        $arrZonas = explode(",", $Zonas);
+                        $values = "";
+                        foreach ($arrZonas as $key => $value) 
+                        {
+                           if ($value <> "")
+                           {
+                              $values .= "($nuevoId, $value), ";
+                           }
+                        }
+                        $values = substr($values, 0, -2);
+
+                        $sql = "INSERT INTO login_has_delegaciones (idLogin,  idDelegacion) VALUES " . $values . ";";
+                        $link->query(utf8_decode($sql));
                         
 
                         $mensaje = "Buen Día, $nombre

@@ -93,6 +93,7 @@
           function()
           {
             infBasica_CargarDatos();
+            informe_TraerDatos();  
           });
 			});
     
@@ -145,7 +146,7 @@
         cargarModulo("obras/informe.html", "ASC de " + $("#txtTituloObra").val(), 
           function()
           {
-            informe_TraerDatos();  
+            
           });
 
       });
@@ -156,6 +157,10 @@
         cargarModulo("mesaDeCalidad/documental.html", "ASC de " + $("#txtTituloObra").val(), 
           function()
           {            
+            $.post('../server/php/proyectos/cargarActaAnterior.php', {idObra: $("#txtIdObra").val()}, function(data, textStatus, xhr) 
+            {
+              $("#txtInforme_ActaAnterior").val(data);
+            });
             
           });
 

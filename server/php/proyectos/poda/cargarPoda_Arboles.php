@@ -13,7 +13,7 @@
       $idVisita = "AND poda_OT_Programacion.idEstado > 1";
    } else
    {
-      $idVisita = "";
+      $idVisita = 0;
    }
 
    if ($idOT <> 0)

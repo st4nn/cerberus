@@ -7,32 +7,37 @@
                Login.idLogin,
                Login.Usuario,
                Login.Estado,
-               Login.idEmpresa,
+               DatosUsuarios.idEmpresa,
                DatosUsuarios.Nombre,
                DatosUsuarios.Correo,
-               DatosUsuarios.idPerfil,
-               login_has_zonas.idZona
+               Login.idPerfil,
+               group_concat(distinct login_has_delegaciones.idDelegacion separator ', ') AS Zonas
             FROM 
-               Login
-               INNER JOIN DatosUsuarios ON Login.idLogin = DatosUsuarios.idLogin
-               LEFT JOIN login_has_zonas ON Login.idLogin = login_has_zonas.idLogin
+               login AS Login
+               INNER JOIN datosusuarios AS DatosUsuarios ON Login.idLogin = DatosUsuarios.idLogin
+               INNER JOIN login_has_delegaciones ON login_has_delegaciones.idLogin = Login.idLogin
             WHERE 
-               Login.idLogin = $idUsuario";
+               Login.idLogin = $idUsuario
+            GROUP BY
+               Login.idLogin";
       
       $result = $link->query($sql);
 
       if ( $result->num_rows > 0)
       {
-         class Usuario
+         if(!class_exists('Usuario'))
          {
-            public $idLogin;
-            public $Usuario;
-            public $idEmpresa;
-            public $Nombre;
-            public $Correo;
-            public $idPerfil;
-            public $Estado;
-            public $Zonas;
+            class Usuario
+            {
+               public $idLogin;
+               public $Usuario;
+               public $idEmpresa;
+               public $Nombre;
+               public $Correo;
+               public $idPerfil;
+               public $Estado;
+               public $Zonas;
+            }
          }
          
          $idx = 0;
@@ -51,8 +56,7 @@
                $Usuarios->Correo = utf8_encode($row['Correo']);
                $Usuarios->idPerfil = utf8_encode($row['idPerfil']);
                $Usuarios->Estado = utf8_encode($row['Estado']);
-               //$Usuarios->Zonas[$idx] = utf8_encode($row['idZona']);
-               array_push($Usuarios->Zonas, utf8_encode($row['idZona']));
+               $Usuarios->Zonas = utf8_encode($row['Zonas']);
 
                $idx++;
             }

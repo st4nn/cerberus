@@ -8,6 +8,9 @@ $(document).ready(function() {
   if (Usuario == null || Usuario == undefined)
   {
     cerrarSesion();
+  } else
+  {
+    cargarDashboard();
   }
 });
 function aplicacion()
@@ -31,23 +34,8 @@ function aplicacion()
       evento.preventDefault();
       cargarModulo("obras/panel.html", "Panel de Obra");
     });
-
-  $(document).delegate(".inputControl", "change" ,function()
-    {
-      var contenedor = $(this).parent("span").parent("span").parent("div");
-      var texto = $(contenedor).find(".inputText");
-      var archivo = $(this).val();
-      archivo = archivo.split("\\");
-      archivo = archivo[(archivo.length - 1)];
-      $(texto).val(archivo);
-      var barra = $(contenedor).parent("form").find(".progress-bar");
-      var percentVal = '0%';
-      $(barra).width(percentVal);
-      $(barra).text(percentVal);
-    });
-
-  $('[data-plugin="datepicker"]').datepicker();
 }
+
 function cargarModulo(vinculo, titulo, callback)
 {
 	$("#txtCrearProyecto_idProyecto").val("");
@@ -86,7 +74,7 @@ function cargarModulo(vinculo, titulo, callback)
           tds += '</div>';
 
           $("#contenedorDeModulos").append(tds);
-          $.get(vinculo, function(data) 
+          $.get(vinculo + "?tmpId=" + obtenerPrefijo(), function(data) 
           {
             $("#" + nomModulo + " .panel").html(data);
             callback();
@@ -138,10 +126,15 @@ function Mensaje(Titulo, Mensaje, Tipo)
 }
 
 
-$.fn.crearDataTable = function(tds, callback)
+$.fn.crearDataTable = function(tds, callback, tdc)
 {
   if (callback === undefined)
     {callback = function(){};}
+
+  if (tdc === undefined)
+  {
+    tdc = "";
+  }
 
   var dtSpanish = {
     "sProcessing":     "Procesando...",
@@ -193,7 +186,13 @@ $.fn.crearDataTable = function(tds, callback)
         $(this).dataTable().fnDestroy();
     } 
 
-    if (tds =! undefined && tds != "")
+    if (tdc != undefined && tdc != "")
+    {
+      $(this).find("thead").find("tr").remove();
+      $("#" + idObj + " thead").append(tdc); 
+    }
+
+    if (tds != undefined && tds != "")
     {
       $(this).find("tbody").find("tr").remove();
       $("#" + idObj + " tbody").append(tds);
@@ -202,7 +201,109 @@ $.fn.crearDataTable = function(tds, callback)
   $(this).DataTable(options);
   callback();
 }
+function cargarDashboard()
+{
+  $(document).delegate(".inputControl", "change" ,function()
+    {
+      var contenedor = $(this).parent("span").parent("span").parent("div");
+      var texto = $(contenedor).find(".inputText");
+      var archivo = $(this).val();
+      archivo = archivo.split("\\");
+      archivo = archivo[(archivo.length - 1)];
+      $(texto).val(archivo);
+      var barra = $(contenedor).parent("form").find(".progress-bar");
+      var percentVal = '0%';
+      $(barra).width(percentVal);
+      $(barra).text(percentVal);
+    });
 
+  $('[data-plugin="datepicker"]').datepicker();
+  $('#inicio_Map').vectorMap({map: 'co_mill', 
+      backgroundColor: '#fff',
+      zoomAnimate: true,
+      zoomMin : 3,
+      regionStyle: {
+        initial: {
+          fill: $.colors("primary", 100)
+        },
+        hover: {
+          fill: $.colors("primary", 400)
+        },
+        selected: {
+          fill: $.colors("primary", 800)
+        },
+        selectedHover: {
+          fill: $.colors("primary", 500)
+        }
+      },
+      markerStyle : {
+        initial: {
+          fill: 'red',
+          stroke: '#505050',
+          "fill-opacity": 1,
+          "stroke-width": 1,
+          "stroke-opacity": 1,
+          r: 8
+        }
+      },
+      series: {regions: [{scale: {
+          red: '#ff0000',
+          green: '#00ff00',
+          blue : $.colors("primary", 600)
+        },
+        attribute: 'fill', values : 
+          {
+            'CO-BOY' : "blue", 
+            'CO-COR' : "blue", 
+            'CO-ATL' : "blue",
+            'CO-SUC' : "blue",
+            'CO-CHO' : "blue",
+            'CO-MAG' : "blue",
+            'CO-LAG' : "blue"
+          }
+        }]}
+    });
+
+  var objJVMap = $('#inicio_Map').vectorMap('get', 'mapObject');
+
+  objJVMap.setFocus({regions : ['CO-BOY', 'CO-COR', 'CO-ATL', 'CO-SUC', 'CO-CHO', 'CO-MAG', 'CO-LAG']});
+  $.post('../server/php/proyectos/dashboard/cargarDashboard_Mapa.php', {Usuario: Usuario.id}, function(data, textStatus, xhr) 
+  {
+    if (data != 0)
+    {
+      var markers = [];
+      $.each(data, function(index, val) 
+      {
+        markers.push({latLng: val.coordenadas.split(","), name: val.Nombre});
+      });
+
+      objJVMap.addMarkers(markers);
+    }
+    
+  }, "json");
+
+  $.post('../server/php/proyectos/dashboard/cargarNotificaciones.php', {Usuario: Usuario.id}, function(data, textStatus, xhr) 
+  {
+    if (data != 0)
+    {
+      var tds = "";
+      $.each(data, function(index, val) 
+      {
+        tds += '<li class="list-group-item">';
+          tds += '<div class="media">';
+            tds += '<div class="media-body">';
+              tds += '<h4 class="media-heading">';
+                tds += '<small class="pull-right">5m ago</small>';
+                tds += '<a class="name">Edward Fletcher</a> posted a new blog.';
+              tds += '</h4>';
+              tds += '<small>Today 5:50 pm - 12.04.2015</small>';
+            tds += '</div>';
+          tds += '</div>';
+        tds += '</li>';
+      });
+    }
+  }, "json");
+}
 function cargarPostes()
 {
   $("#lstPostes_Postes li").remove();
@@ -450,6 +551,15 @@ function infBasica_ValidarFechas()
                contactos[index]['Empresa'] = $(controlesContactos[3]).val();
             });
             contactos = JSON.stringify(contactos);  
+
+             $("#frmInforme_Complemento").generarDatosEnvio("txtInforme_", function(datos)
+              {
+                $.post('../server/php/proyectos/guardarCompInforme.php', {"datos" : datos, "idObra" : $("#txtIdObra").val()}, function(data, textStatus, xhr) 
+                {
+
+                });
+              });
+
             $.post('../server/php/proyectos/guardarInfBasica.php', 
               {
                 idObra : $("#txtIdObra").val(), 
@@ -1806,6 +1916,15 @@ function documental()
     abrirURL("../server/formatos/generarFormatoCalidad.php?id=" + $("#txtIdObra").val())
   });
 
+  $("#btnInforme_ActaAnterior").on("click", function(evento)
+  {
+    evento.preventDefault();
+    $.post('../server/php/proyectos/guardarActaAnterior.php', {Usuario: Usuario.id, idObra: $("#txtIdObra").val(), datos : $("#txtInforme_ActaAnterior").val()}, function(data, textStatus, xhr) 
+    {
+      Mensaje("Hey", "Dato enviado", "success");
+    });
+  });
+
   $("#frmDocumental_Archivos").ajaxForm(
   {
     beforeSend: function() 
@@ -1969,12 +2088,269 @@ function reportes()
     $("#cntReportes_Filtros").hide();
     $("#cntReportes_Opciones").hide();
 
-    var idTabla = $(this).attr("idOpcion");
 
-    $("#cntReportes_Tablas table").hide();
+    var idTabla = parseInt($(this).attr("idOpcion"));
+    var filtro = {Usuario: Usuario.id, fechaIni : $("#txtReporte_FechaIni").val(), fechaFin : $("#txtReporte_FechaFin").val()};
+
+    var table = {};
+    console.log(idTabla);
+    switch (idTabla)
+    {
+      case 9:
+        var tdc = "";
+
+            tdc += "<tr>";
+              tdc += '<th>Codigo Obra</th>';
+              tdc += '<th>Descripción</th>';
+              tdc += '<th>Area</th>';
+              tdc += '<th>Fecha Inicio Real</th>';
+              tdc += '<th>Fecha inicio Prev</th>';
+              tdc += '<th>Fecha Fin Real</th>';
+              tdc += '<th>Fecha Fin Prev</th>';
+              tdc += '<th>Desc Fech-fin</th>';
+              tdc += '<th>Tipo de Inspección</th>';
+              tdc += '<th>Delegación</th>';
+              tdc += '<th></th>';
+            tdc += "</tr>";
+        $("#tblReportes thead").append(tdc);
+
+        $.post('../server/php/proyectos/reportes/obras/InspeccionesPorDelegaciones.php', filtro, function(data, textStatus, xhr) 
+        {
+          if (data != 0)
+          {
+            var tds = "";
+            
+            $.each(data, function(index, val) 
+            {
+               tds += '<tr>';
+                tds += '<td>' + val.codigoObra + '</td>';
+                tds += '<td>' + val.Descipcion + '</td>';
+                tds += '<td>' + val.Area + '</td>';
+                tds += '<td>' + val.fechaInicio + '</td>';
+                tds += '<td>' + val.fechaInicioPrev + '</td>';
+                tds += '<td>' + val.fechaFinalizacion + '</td>';
+                tds += '<td>' + val.fechaFinalizacionPrev + '</td>';
+                tds += '<td>' + val.Desv + '</td>';
+                tds += '<td>' + val.tipoInspeccion + '</td>';
+                tds += '<td>' + val.Delegacion + '</td>';
+                tds += '<td></td>';
+               tds += '</tr>';
+            });
+
+            $("#tblReportes").crearDataTable(tds, function(){}, tdc);
+
+
+          } else
+          {
+            Mensaje("No hay datos para Mostrar");
+          }          
+        }, "json");
+      break;
+      case 10:
+        var tdc = "";
+
+            tdc += "<tr>";
+              tdc += '<th>Delegación</th>';
+              tdc += '<th>Mes</th>';
+              tdc += '<th>Previstas</th>';
+              tdc += '<th>Ejecutadas</th>';
+              tdc += '<th></th>';
+            tdc += "</tr>";
+        $("#tblReportes thead").append(tdc);
+
+        $.post('../server/php/proyectos/reportes/obras/avancePlanDeTrabajo.php', filtro, function(data, textStatus, xhr) 
+        {
+          if (data != 0)
+          {
+            var tds = "";
+            
+            $.each(data, function(index, val) 
+            {
+               tds += '<tr>';
+                tds += '<td>' + val.mes + '</td>';
+                tds += '<td>' + val.Delegacion + '</td>';
+                tds += '<td>' + val.cantP + '</td>';
+                tds += '<td>' + val.cantR + '</td>';
+                tds += '<td></td>';
+               tds += '</tr>';
+            });
+
+            $("#tblReportes").crearDataTable(tds, function(){}, tdc);
+
+
+          } else
+          {
+            Mensaje("No hay datos para Mostrar");
+          }          
+        }, "json");
+      break;
+      case 1:
+        var tdc = "";
+
+            tdc += "<tr>";
+              tdc += '<th>Resumen de Inspecciones de Seguridad en Obras</th>';
+              tdc += '<th>Mes</th>';
+              tdc += '<th>Cantidad</th>';
+              tdc += '<th></th>';
+            tdc += "</tr>";
+        $("#tblReportes thead").append(tdc);
+
+        $.post('../server/php/proyectos/reportes/obras/InspeccionesSeguridadObras.php', filtro, function(data, textStatus, xhr) 
+        {
+          if (data != 0)
+          {
+            var tds = "";
+            
+            $.each(data, function(index, val) 
+            {
+               tds += '<tr>';
+                tds += '<td>' + val.Mes + '</td>';
+                tds += '<td>' + val.Concepto + '</td>';
+                tds += '<td>' + val.cantidadInspeccionadas + '</td>';
+                tds += '<td></td>';
+               tds += '</tr>';
+            });
+
+            $("#tblReportes").crearDataTable(tds, function(){}, tdc);
+
+
+          } else
+          {
+            Mensaje("No hay datos para Mostrar");
+          }          
+        }, "json");
+      break;
+      case 2:
+        var tdc = "";
+
+            tdc += "<tr>";
+              tdc += '<th>Resumen de Inspecciones de Calidad en Obras</th>';
+              tdc += '<th>Mes</th>';
+              tdc += '<th>Cantidad</th>';
+              tdc += '<th></th>';
+            tdc += "</tr>";
+        $("#tblReportes thead").append(tdc);
+
+        $.post('../server/php/proyectos/reportes/obras/InspeccionesCalidadObras.php', filtro, function(data, textStatus, xhr) 
+        {
+          if (data != 0)
+          {
+            var tds = "";
+            
+            $.each(data, function(index, val) 
+            {
+               tds += '<tr>';
+                tds += '<td>' + val.Mes + '</td>';
+                tds += '<td>' + val.Concepto + '</td>';
+                tds += '<td>' + val.cantidadInspeccionadas + '</td>';
+                tds += '<td></td>';
+               tds += '</tr>';
+            });
+
+            $("#tblReportes").crearDataTable(tds, function(){}, tdc);
+
+
+          } else
+          {
+            Mensaje("No hay datos para Mostrar");
+          }          
+        }, "json");
+      break;
+      case 3:
+        var tdc = "";
+
+            tdc += "<tr>";
+              tdc += '<th>Mes</th>';
+              tdc += '<th>Delegación</th>';
+              tdc += '<th>Tipo de Obra</th>';
+              tdc += '<th>Vigilante</th>';
+              tdc += '<th>Criterio</th>';
+              tdc += '<th>Resultado</th>';
+              tdc += '<th>Tipo de Defecto</th>';
+              tdc += '<th>Cantidad</th>';
+              tdc += '<th></th>';
+            tdc += "</tr>";
+        $("#tblReportes thead").append(tdc);
+
+        $.post('../server/php/proyectos/reportes/obras/ResumenObrasInspeccionadasSeguridad.php', filtro, function(data, textStatus, xhr) 
+        {
+          if (data != 0)
+          {
+            var tds = "";
+            
+            $.each(data, function(index, val) 
+            {
+               tds += '<tr>';
+                tds += '<td>' + val.Mes + '</td>';
+                tds += '<td>' + val.Delegacion + '</td>';
+                tds += '<td>' + val.TipoObra + '</td>';
+                tds += '<td>' + val.Vigilante + '</td>';
+                tds += '<td>' + val.Criterio + '</td>';
+                tds += '<td>' + val.Resultado + '</td>';
+                tds += '<td>' + val.tipoDefecto + '</td>';
+                tds += '<td>' + val.Cantidad + '</td>';
+                tds += '<td></td>';
+               tds += '</tr>';
+            });
+
+            $("#tblReportes").crearDataTable(tds, function(){}, tdc);
+
+
+          } else
+          {
+            Mensaje("No hay datos para Mostrar");
+          }          
+        }, "json");
+      break;
+      case 4:
+        var tdc = "";
+
+            tdc += "<tr>";
+              tdc += '<th>Mes</th>';
+              tdc += '<th>Delegación</th>';
+              tdc += '<th>Tipo de Obra</th>';
+              tdc += '<th>Vigilante</th>';
+              tdc += '<th>Criterio</th>';
+              tdc += '<th>Resultado</th>';
+              tdc += '<th>Tipo de Defecto</th>';
+              tdc += '<th>Cantidad</th>';
+              tdc += '<th></th>';
+            tdc += "</tr>";
+        $("#tblReportes thead").append(tdc);
+
+        $.post('../server/php/proyectos/reportes/obras/ResumenObrasInspeccionadasCalidad.php', filtro, function(data, textStatus, xhr) 
+        {
+          if (data != 0)
+          {
+            var tds = "";
+            
+            $.each(data, function(index, val) 
+            {
+               tds += '<tr>';
+                tds += '<td>' + val.Mes + '</td>';
+                tds += '<td>' + val.Delegacion + '</td>';
+                tds += '<td>' + val.TipoObra + '</td>';
+                tds += '<td>' + val.Vigilante + '</td>';
+                tds += '<td>' + val.Criterio + '</td>';
+                tds += '<td>' + val.Resultado + '</td>';
+                tds += '<td>' + val.tipoDefecto + '</td>';
+                tds += '<td>' + val.Cantidad + '</td>';
+                tds += '<td></td>';
+               tds += '</tr>';
+            });
+
+            $("#tblReportes").crearDataTable(tds, function(){}, tdc);
+
+
+          } else
+          {
+            Mensaje("No hay datos para Mostrar");
+          }          
+        }, "json");
+      break;
+    }
+
     $("#lblReportes_Titulo").text($(this).text());
-
-    //$("#tblReporte_" + idTabla).show();
 
     $("#cntReportes_Tablas img").hide();
     $("#imgReportes_" + idTabla).show();
@@ -2033,20 +2409,6 @@ function informe()
   {
     evento.preventDefault();
 
-    $("#frmInforme_Complemento").generarDatosEnvio("txtInforme_", function(datos)
-      {
-        $.post('../server/php/proyectos/guardarCompInforme.php', {"datos" : datos, "idObra" : $("#txtIdObra").val()}, function(data, textStatus, xhr) 
-        {
-          if (data == 1)
-          {
-            Mensaje("Hey", "Los datos han sido guardados")
-          }
-          else
-          {
-            Mensaje("Error", "Error");
-          }
-        });
-      });
   })
 }
 function informe_TraerDatos()
@@ -3109,4 +3471,51 @@ function vAgregarMarcador(datos, mapa, Marcadores, funcionClickMarcador)
       });
 
   }
+}
+
+
+function jsCrearUsuario()
+{
+  $("#txtCrearUsuario_perfil option").remove();
+  $.post('../server/php/proyectos/configuracion/cargarPerfiles.php', {Usuario: Usuario.id}, function(data, textStatus, xhr) 
+  {
+    if (data != 0 )
+    {
+      var tds = "";
+      $.each(data, function(index, val) 
+      {
+         tds += '<option value="' + val.id + '">' + val.Nombre + '</option>';
+      });
+      $("#txtCrearUsuario_perfil").append(tds);
+    }
+  }, "json");
+
+  $("#cntCrearUsuario_Zonas div").remove();
+  $.post('../server/php/proyectos/configuracion/cargarDelegaciones.php', {Usuario: Usuario.id}, function(data, textStatus, xhr) 
+  {
+    if (data != 0 )
+    {
+      var tds = "";
+      $.each(data, function(index, val) 
+      {
+        tds += '<div class="col-md-4">';
+         tds += '<div class="checkbox-custom checkbox-primary">';
+            tds += '<input type="checkbox" idDelegacion="' + val.id + '"id="chkCrearUsuario_' + val.id + '">';
+            tds += '<label for="chkCrearUsuario_' + val.id + '">' + val.Nombre + '</label>';
+          tds += '</div>';
+        tds += '</div>';
+      });
+      $("#cntCrearUsuario_Zonas").append(tds);
+    }
+  }, "json");
+
+  $("#btnCrearUsuario_ZonasNinguna").on("click", function()
+    {
+      $("#cntCrearUsuario_Zonas input[type=checkbox]").prop("checked", false);
+    });
+
+  $("#btnCrearUsuario_ZonasTodas").on("click", function()
+    {
+      $("#cntCrearUsuario_Zonas input[type=checkbox]").prop("checked", true);
+    });
 }

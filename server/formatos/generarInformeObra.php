@@ -52,7 +52,7 @@
 		confEstadosObra.Nombre AS estadoObra
 	FROM 
 		obras_InformacionBasica
-		INNER JOIN msc ON obras_InformacionBasica.idObra = msc.idObra
+		LEFT JOIN msc ON obras_InformacionBasica.idObra = msc.idObra
 		INNER JOIN datosusuarios ON datosusuarios.idLogin = obras_InformacionBasica.idResponsable
 		LEFT JOIN confTiposObra ON confTiposObra.idTipoObra = obras_InformacionBasica.idTipoObra
 		INNER JOIN obras ON obras.idObra = obras_InformacionBasica.idObra
@@ -170,16 +170,13 @@
 
 	$pdf->SetXY(95,$posY);
 
-	if ($tmpResult->num_rows > 0)
-	{
-		$pdf->Cell(29,$lineas, "$" . number_format($tmpRow['Presupuesto'], 2, ",", "."),1,0,'L', 1);
-		$pdf->Cell(29,$lineas, "$" . number_format($tmpRow['CosteRepTrabajo'], 2, ",", ".") ,1,0,'L', 1);
-		$pdf->Cell(29,$lineas, "$" . number_format($tmpRow['CosteRealTrabajo'], 2, ",", ".") ,1,0,'L', 1);
-		
-		$pdf->Cell(14,$lineas,$desv . " %",1,1,'C', 1);
+	$pdf->Cell(29,$lineas, "$" . number_format($tmpRow['Presupuesto'], 2, ",", "."),1,0,'L', 1);
+	$pdf->Cell(29,$lineas, "$" . number_format($tmpRow['CosteRepTrabajo'], 2, ",", ".") ,1,0,'L', 1);
+	$pdf->Cell(29,$lineas, "$" . number_format($tmpRow['CosteRealTrabajo'], 2, ",", ".") ,1,0,'L', 1);
+	
+	$pdf->Cell(14,$lineas,$desv . " %",1,1,'C', 1);
 
-		mysqli_free_result($tmpResult);
-	}
+	mysqli_free_result($tmpResult);
 
 	$pdf->Line(30, $posY, 160, $posY);	
 	$pdf->Line(30, ($posY + $lineas), 160, ($posY + $lineas));	
@@ -224,7 +221,6 @@
 	$numPostesRevisados = $tmpRow['Cantidad'];
 
 
-
 	$sql = "SELECT 
 				COUNT(DISTINCT resultadoauditoria.codigoNC) AS Cantidad 
 			FROM 
@@ -240,29 +236,13 @@
 				AND ((msc_Resultado.Clasificacion <> 'No Aplica'
 				AND msc_Resultado.Clasificacion <> 'Defecto de Terceros') OR msc_Resultado.Clasificacion IS NULL)";
 
-
 	$tmpResult = $link->query($sql);
 	$tmpRow = $tmpResult->fetch_assoc();
 	$numNC = $tmpRow['Cantidad'];
 
-	if ($numPostes > 0)
-	{
-		$tmpPorcentajeRevision = number_format($numPostesRevisados * 100/$numPostes, 2, ",", ".");
-	} else
-	{
-		$tmpPorcentajeRevision = 0;
-	}
-
-	if ($numPostesRevisados > 0)
-	{
-		$tmpPorcentajeObservaciones = number_format($numPostesObservaciones * 100/$numPostesRevisados, 2, ",", ".");
-	} else
-	{
-		$tmpPorcentajeObservaciones = 0;
-	}
-
+	mysql_free_result($tmpResult);
 	
-	$texto = "La presente auditoria se realizó efectuando revisiones a los trabajos que se encuentran en estado  " . $row['estadoObra'] . ", en total se revisaron " . $numPostesRevisados . "  de " . $numPostes . " elementos intervenidos, es decir se revisó en un " . $tmpPorcentajeRevision . "% la obra, de los " . $numPostesRevisados . " postes revisados se encontraron " . $numPostesObservaciones . " postes con observación, es decir un " . $tmpPorcentajeObservaciones . "% de estructuras con observaciones, para un total de " . $numNC . " Observaciones.";
+	$texto = "La presente auditoria se realizó efectuando revisiones a los trabajos que se encuentran en estado  " . $row['estadoObra'] . ", en total se revisaron " . $numPostesRevisados . "  de " . $numPostes . " elementos intervenidos, es decir se revisó en un " . number_format($numPostesRevisados * 100/$numPostes, 2, ",", ".") . "% la obra, de los " . $numPostesRevisados . " postes revisados se encontraron " . $numPostesObservaciones . " postes con observación, es decir un " . number_format($numPostesObservaciones * 100/$numPostesRevisados, 2, ",", ".") . "% de estructuras con observaciones, para un total de " . $numNC . " Observaciones.";
 	$pdf->Multicell(0,4,$texto ,0,'J');
 
 	$pdf->Ln();
@@ -296,6 +276,7 @@
 
 	if ($numPostesObservaciones > 0)
 	{
+		$pdf->AddPage();
 
 		$pdf->Ln();
 		$pdf->SetFont('Arial','',$tamanioFuente);

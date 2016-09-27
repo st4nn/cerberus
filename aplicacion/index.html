@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="../assets/vendor/bootstrap-touchspin/bootstrap-touchspin.css">
   <link rel="stylesheet" href="../assets/vendor/jquery-selective/jquery-selective.css">
   <link rel="stylesheet" href="../assets/examples/css/apps/calendar.css">
+
   <link rel='stylesheet' href='../assets/vendor/jt-timepicker/jquery-timepicker.css'>
 
   <!--Plugins For File Upload-->
@@ -62,6 +63,8 @@
 
   <!-- Page -->
   <link rel="stylesheet" href="../assets/examples/css/dashboard/v1.css">
+
+  <link rel="stylesheet" href="../assets/vendor/jvectormap/jquery-jvectormap.css">
 
   <!-- Plugins For Alertify -->
   <link rel="stylesheet" href="../assets/vendor/alertify-js/alertify.css">
@@ -209,7 +212,7 @@
                   <i class="icon wb-settings" aria-hidden="true"></i>
                 </a>
                 <a href="javascript:void(0)" role="menuitem">
-                    All notifications
+                    Todas las Notificaciones
                   </a>
               </li>
             </ul>
@@ -395,6 +398,12 @@
               </ul>
             </li>
             <li class="site-menu-category"><small>Admin</small></li>
+            <li class="site-menu-item">
+              <a vinculo="Inicio" href="javascript:void(0)" class="lnkMenuBar_Item">
+                <i class="site-menu-icon wb-chat-working" aria-hidden="true"></i>
+                <span class="site-menu-title">Notificaciones</span>
+              </a>
+            </li>
             <li class="site-menu-item has-sub">
               <a href="javascript:void(0)">
                 <i class="site-menu-icon wb-user" aria-hidden="true"></i>
@@ -403,7 +412,7 @@
               </a>
               <ul class="site-menu-sub">
                 <li class="site-menu-item">
-                  <a vinculo="layouts/menu-collapsed.html" href="javascript:void(0)" class="lnkMenuBar_Item">
+                  <a vinculo="usuarios/verUsuarios.html" href="javascript:void(0)" class="lnkMenuBar_Item">
                     <i class="site-menu-icon " aria-hidden="true"></i>
                     <span class="site-menu-title">Ver Usuarios</span>
                   </a>
@@ -412,18 +421,6 @@
                   <a vinculo="usuarios/crearUsuario.html" href="javascript:void(0)" class="lnkMenuBar_Item">
                     <i class="site-menu-icon " aria-hidden="true"></i>
                     <span class="site-menu-title">Crear Usuarios</span>
-                  </a>
-                </li>
-                <li class="site-menu-item">
-                  <a vinculo="layouts/menu-collapsed.html" href="javascript:void(0)" class="lnkMenuBar_Item">
-                    <i class="site-menu-icon " aria-hidden="true"></i>
-                    <span class="site-menu-title">Ver Perfiles</span>
-                  </a>
-                </li>
-                <li class="site-menu-item">
-                  <a vinculo="layouts/menu-collapsed.html" href="javascript:void(0)" class="lnkMenuBar_Item">
-                    <i class="site-menu-icon " aria-hidden="true"></i>
-                    <span class="site-menu-title">Crear Perfil</span>
                   </a>
                 </li>
               </ul>
@@ -495,15 +492,32 @@
   <div id="contenedorDeModulos">
     <div id="modulo_Inicio" class="page Modulo">
       <div class="page-header">
-          <div>
-            <div class="page-main">
-              <div class="page-content calendar-container padding-horizontal-30 container-fluid">
-                <div class="panel">
-                  <div class="padding-30" id="calendar"></div>
-                </div>
+        <div class="panel">
+          <div class="panel-body">
+            <div class="col-md-6">
+              <div class="example padding-10">
+                <h4>Últimos dos meses</h4>
+                <div id="inicio_Map" class="height-400" ></div>
               </div>
             </div>
+            <div class="col-md-6 col-xs-12 masonry-item">
+              <!-- Panel Daily Feed -->
+              <div class="panel" id="daily-feed">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Últimas Notificaciones
+                    <span class="pull-right label label-round label-info"><span>0</span> Pendientes</span>
+                  </h3>
+                </div>
+                <div class="panel-body">
+                  <ul id="inicio_Notificaciones" class="list-group list-group-dividered list-group-full">
+                  </ul>
+                  <button type="button" class="btn btn-block btn-primary"><i class="icon wb-chevron-down margin-right-5" aria-hidden="true"></i>Ver Mas</button>
+                </div>
+              </div>
+              <!-- End Panel Daily Feed -->
+            </div>
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -555,7 +569,6 @@
 
   <script src="../assets/js/app.js"></script>
   <!-- Scripts For Calendar -->
-  <script src="../assets/examples/js/apps/calendar.js"></script>
   <!--Scripts From File Upload-->
   <script src="../assets/vendor/blueimp-tmpl/tmpl.js"></script>
   <script src="../assets/vendor/blueimp-canvas-to-blob/canvas-to-blob.js"></script>
@@ -619,6 +632,9 @@
 
   <script src="../assets/js/components/bPopup.js"></script>
   <script src="../assets/js/components/jquery-scrollto.js"></script>
+
+  <script src="../assets/vendor/jvectormap/jquery-jvectormap.min.js"></script>
+  <script src="../assets/vendor/jvectormap/maps/jquery-jvectormap-co-mill.js"></script>
   
   <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
   <script src="../assets/vendor/gmaps/gmaps.js"></script>
