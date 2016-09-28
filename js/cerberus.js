@@ -218,6 +218,8 @@ function cargarDashboard()
     });
 
   $('[data-plugin="datepicker"]').datepicker();
+
+
   $('#inicio_Map').vectorMap({map: 'co_mill', 
       backgroundColor: '#fff',
       zoomAnimate: true,
@@ -282,25 +284,37 @@ function cargarDashboard()
     
   }, "json");
 
-  $.post('../server/php/proyectos/dashboard/cargarNotificaciones.php', {Usuario: Usuario.id}, function(data, textStatus, xhr) 
+  $.post('../server/php/proyectos/dashboard/cargarNotificaciones.php', {Usuario: Usuario.id, Inicio : 0, Fin: 10}, function(data, textStatus, xhr) 
   {
     if (data != 0)
     {
+      $("#lblInicio_Notificaciones").text(data.Cantidad)
       var tds = "";
       $.each(data, function(index, val) 
       {
-        tds += '<li class="list-group-item">';
-          tds += '<div class="media">';
-            tds += '<div class="media-body">';
-              tds += '<h4 class="media-heading">';
-                tds += '<small class="pull-right">5m ago</small>';
-                tds += '<a class="name">Edward Fletcher</a> posted a new blog.';
-              tds += '</h4>';
-              tds += '<small>Today 5:50 pm - 12.04.2015</small>';
+        if (index != "Cantidad")
+        {
+          tds += '<li class="list-group-item">';
+            tds += '<div class="media">';
+              tds += '<div class="media-body">';
+                tds += '<h4 class="media-heading">';
+                  tds += '<small class="pull-right">' + calcularTiempoPublicacion(val.fechaCargue) + '</small>';
+                  console.log();
+                  if (val.Nombre != "")
+                  {
+                    tds += '<a class="name">' + val.Nombre + '</a> envió un mensaje.<br>';  
+                  }
+                  tds += val.Mensaje;
+                tds += '</h4>';
+                tds += '<small>' + val.fechaCargue + '</small>';
+                
+              tds += '</div>';
             tds += '</div>';
-          tds += '</div>';
-        tds += '</li>';
+          tds += '</li>';
+        }
       });
+
+      $("#cntInicio_Notificaciones").append(tds);
     }
   }, "json");
 }
@@ -3518,4 +3532,52 @@ function jsCrearUsuario()
     {
       $("#cntCrearUsuario_Zonas input[type=checkbox]").prop("checked", true);
     });
+}
+
+function calcularTiempoPublicacion(fecha)
+{
+    fecha = new Date(fecha.replace(" ", "T") + "Z");
+    var fechaActual = new Date();
+    
+    var tiempo = fecha.getTime();
+    var tiempoActual = fechaActual.getTime();
+
+    var diferencia = tiempoActual-tiempo;
+
+    diferencia = parseInt(((diferencia/1000)/60)-300);
+
+    var respuesta = "";
+    if (diferencia < 2)
+    {
+      respuesta = "hace un momento";
+    } else
+    {
+      if (diferencia < 60)
+      {
+        respuesta = "hace " + diferencia + " minutos";
+      } else
+      {
+          if (diferencia < 120)
+          {
+            respuesta = "hace " + 1 + " hora";
+          } else
+          {
+            if (diferencia < 1440)
+            {
+              respuesta = "hace " + parseInt(diferencia/60) + " horas";
+            } else
+            {
+              if (diferencia < 43200)
+              {
+                respuesta = "hace " + parseInt(diferencia/60/24) + " dias";
+              } else
+              {
+                respuesta = "hace " + parseInt(diferencia/60/24/30) + " meses";
+              }
+            }
+          }
+      }
+    }
+
+    return respuesta;
 }

@@ -3,34 +3,59 @@
   include("../datosUsuario.php"); 
    $link = Conectar();
 
-   $idUsuario = $_POST['Usuario'];
+   $idUsuario = addslashes($_POST['Usuario']);
+  if (empty($_POST["Inicio"]))
+  {
+    $inicio = 0;
+  } else
+  {
+    $inicio = $_POST["Inicio"];
+  }
+
+  if (empty($_POST["Fin"]))
+  {
+    $fin = 30;
+  } else
+  {
+    $fin = $_POST["Fin"];
+  }
+
    $Usuario = datosUsuario($idUsuario);
 
-   /*$Perfil = "";
+   $sql = "SELECT COUNT(*) AS Cantidad FROM 
+               Notificaciones
+            WHERE 
+              Notificaciones.idReceptor = '" . $Usuario->idLogin . "'
+              OR Notificaciones.idRPerfil = '" . $Usuario->idPerfil . "'
+              OR Notificaciones.idRZona IN (" . $Usuario->Zonas . ");";
 
-   if ($Usuario['idPerfil'] <> 1)
-   {
-      $Perfil = " WHERE confEmpresas.id = '" . $Usuario['idEmpresa'] . "' ";
-   }*/
+    $result = $link->query($sql);
+    $fila =  $result->fetch_array(MYSQLI_ASSOC);
+
+    $Cantidad = $fila['Cantidad'];
 
    $sql = "SELECT    
-                DISTINCT coordenadas,
-                obras.Nombre
+                Notificaciones.Mensaje,
+                Notificaciones.fechaCargue,
+                datosusuarios.Nombre
             FROM 
-               resultadoauditoria
-               INNER JOIN obras ON resultadoauditoria.idObra = obras.idObra
+               Notificaciones
+               LEFT JOIN datosusuarios ON datosusuarios.idLogin = Notificaciones.idEmisor
             WHERE 
-              coordenadas IS NOT NULL
-              AND coordenadas <> ''
-            GROUP BY
-              obras.Nombre;";
-
+              Notificaciones.idReceptor = '" . $Usuario->idLogin . "'
+              OR Notificaciones.idRPerfil = '" . $Usuario->idPerfil . "'
+              OR Notificaciones.idRZona IN (" . $Usuario->Zonas . ")
+            ORDER BY 
+              Notificaciones.fechaCargue DESC
+          LIMIT $inicio, $fin;";
+                
    $result = $link->query($sql);
 
    $idx = 0;
-   if ( $result->num_rows > 0)
-   {
+   
       $Resultado = array();
+      $Resultado['Cantidad'] = $Cantidad;
+
       while ($row = mysqli_fetch_assoc($result))
       {
          $Resultado[$idx] = array();
@@ -42,8 +67,5 @@
       }
          mysqli_free_result($result);  
          echo json_encode($Resultado);
-   } else
-   {
-      echo 0;
-   }
+   
 ?>
