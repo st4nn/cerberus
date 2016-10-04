@@ -1,6 +1,5 @@
 var Usuario = null;
 var Markers = [];
-var lastMarker = null;
 
 $(document).ready(function() {
 	aplicacion();
@@ -126,7 +125,7 @@ function Mensaje(Titulo, Mensaje, Tipo)
 }
 
 
-$.fn.crearDataTable = function(tds, callback, tdc)
+$.fn.crearDataTable = function(tds, callback, tdc, sdom)
 {
   if (callback === undefined)
     {callback = function(){};}
@@ -134,6 +133,11 @@ $.fn.crearDataTable = function(tds, callback, tdc)
   if (tdc === undefined)
   {
     tdc = "";
+  }
+
+  if (sdom === undefined)
+  {
+    sdom = '<"dt-panelmenu clearfix"lf><"clear">Tt<"dt-panelfooter clearfix"ip>';
   }
 
   var dtSpanish = {
@@ -171,7 +175,7 @@ $.fn.crearDataTable = function(tds, callback, tdc)
           [10, 25, 50, -1],
           [10, 25, 50, "Todos"]
         ],
-        "sDom": '<"dt-panelmenu clearfix"lf><"clear">Tt<"dt-panelfooter clearfix"ip>',
+        "sDom": sdom,
         "oTableTools": {
           "sSwfPath": "../assets/vendor/datatables-tabletools/swf/copy_csv_xls_pdf.swf"
         },
@@ -299,7 +303,6 @@ function cargarDashboard()
               tds += '<div class="media-body">';
                 tds += '<h4 class="media-heading">';
                   tds += '<small class="pull-right">' + calcularTiempoPublicacion(val.fechaCargue) + '</small>';
-                  console.log();
                   if (val.Nombre != "")
                   {
                     tds += '<a class="name">' + val.Nombre + '</a> envió un mensaje.<br>';  
@@ -2107,7 +2110,6 @@ function reportes()
     var filtro = {Usuario: Usuario.id, fechaIni : $("#txtReporte_FechaIni").val(), fechaFin : $("#txtReporte_FechaFin").val()};
 
     var table = {};
-    console.log(idTabla);
     switch (idTabla)
     {
       case 9:
@@ -2624,39 +2626,6 @@ function poda_Panel()
     $("#cntPoda_Panel_CrearOt").modal("show");
   });
 
-  $("#btnPoda_Panel_CapaForestal").on("click", function()
-  {
-    cargarModulo("poda/capaForestal.html", "Capa Forestal", function()
-      {
-        $("#modulo_poda_capaForestal_html h1.page-title").text("Capa Forestal " + $("#txtPoda_CircuitoNombre").val());
-        
-        $("#cntPoda_CapaForestal_Capas div").remove();
-        poda_LimpiarMapa();
-
-        $.post('../server/php/proyectos/poda/cargarCapasPoda.php', {Usuario : Usuario.id, idCircuito :  $("#txtPoda_Circuito").val()}, function(data, textStatus, xhr) 
-        {
-          var tds = "";
-          if (data != 0)
-          {
-            tds = "<div><h5>Capas Cargadas</h5></div>"
-            $.each(data, function(index, val) 
-            {
-              tds += '<div class="margin-left-15">';
-                tds += '<div class="checkbox-custom checkbox-success">';
-                  tds += '<input type="checkbox" id="txtPoda_CapaForestal_lChk' + val.fecha_levanta + '" fecha="' + val.fecha_levanta + '">';
-                  tds += '<label for="txtPoda_CapaForestal_lChk' + val.fecha_levanta + '">' + val.fecha_levanta + ' (' + val.Cantidad + ' Arboles)</label>';
-                tds += '</div>';
-              tds += '</div>';
-            });
-          } else
-          {
-            tds = '<div><h5>No hay capas cargadas al sistema</h5></div>';
-          }
-          $("#cntPoda_CapaForestal_Capas").prepend(tds);
-        }, "json");
-      });
-  });
-
   $("#frmPoda_CrearOT").on("submit", function(evento)
     {
       evento.preventDefault();
@@ -2668,7 +2637,6 @@ function poda_Panel()
           {
             var tds = "";
             datos = JSON.parse(datos);
-            console.log(datos);
             tds += '<tr>';
               tds += '<td><button class="btn btn-warning btnPoda_Panel_AbrirOT" title="Abrir OT" idOT="' + data + '"><i class="icon wb-eye"></i> </button></td>';
               tds += '<td>' + datos.NumeroInterno + '</td>';
@@ -2722,7 +2690,6 @@ function poda_LimpiarMapa()
   $("#cntPoda_CapaForestal_Capas input[type='checkbox']").prop("checked", false);
   $("#cntPoda_Programacion_Capas input[type=checkbox]").prop("checked", false);
   Markers = [];
-  lastMarker = null;
 }
 function poda_capaForestal()
 {
@@ -2947,9 +2914,24 @@ function poda_PanelOT()
   $("#btnPanelPoda_Programacion").on("click", function()
   {
     $("#txtPoda_Programacion_Programados").val("");
-    var titulo = "Programación de OT " + $("#txtPoda_PanelOT_CrearOt_NumeroInterno").val() + " en Circuito " + $("#txtPoda_CircuitoNombre").val();
-    cargarModulo("poda/Programacion.html", titulo, function()
+    var titulo = "OT " + $("#txtPoda_PanelOT_CrearOt_NumeroInterno").val() + " en Circuito " + $("#txtPoda_CircuitoNombre").val();
+    cargarModulo("poda/programacion.html", titulo, function()
     {
+        var objMenu = $("#toggleMenubar").find("i.unfolded");
+        if (objMenu.length > 0)
+        {
+          $("#toggleMenubar a").trigger('click');
+        }
+
+      $("#modulo_poda_programacion_html .page-header").remove();
+      var altoModulo = $("#modulo_poda_programacion_html").height();
+      var altoMapa = $("#cntPoda_Programacion_Mapa").height();
+      if (altoMapa <= 0)
+      {
+        $("#cntPoda_Programacion_Mapa").css("height", altoModulo);
+        $("#cntPoda_Programacion_MapaOpciones").css("height", altoModulo);
+      }
+
       poda_iniciarMapa(null, null, "#cntPoda_Programacion_Mapa");
 
       $("#cntPoda_Programacion_Capas div").remove();
@@ -2963,7 +2945,7 @@ function poda_PanelOT()
             tds = "<div><h5>Capas Cargadas</h5></div>"
             $.each(data, function(index, val) 
             {
-              tds += '<div class="margin-left-15">';
+              tds += '<div class="col-md-4">';
                 tds += '<div class="checkbox-custom checkbox-success">';
                   tds += '<input type="checkbox" id="txtPoda_Programacion_lChk' + val.fecha_levanta + '" fecha="' + val.fecha_levanta + '">';
                   tds += '<label for="txtPoda_Programacion_lChk' + val.fecha_levanta + '">' + val.fecha_levanta + ' (' + val.Cantidad + ' Arboles)</label>';
@@ -3004,6 +2986,131 @@ function poda_Programacion()
   poda_Programacion_AgregarMarcador();
 
   $("#tblPoda_Programacion").crearDataTable("");
+
+  $(document).delegate('.btnPoda_VolverAProgramacion', 'click', function(event) 
+  {
+    var titulo = "OT " + $("#txtPoda_PanelOT_CrearOt_NumeroInterno").val() + " en Circuito " + $("#txtPoda_CircuitoNombre").val();
+    cargarModulo("poda/programacion.html", titulo); 
+  });
+
+  $("#btnPoda_Programacion_AgregarArbol").on("click", function()
+  {
+    var tmpTexto = $("#lblUbicacionModulo").text();
+    cargarModulo("poda/agregarArbol.html", tmpTexto, function()
+      {
+        $("#frmPoda_AgregarArbol")[0].reset();
+        $("#txtPoda_AgregarArbol_btnVolver_Vinculo").val("poda/programacion.html");
+        $("#txtPoda_AgregarArbol_btnVolver_Texto").val(tmpTexto);
+
+        GMaps.geolocate(
+        {
+          success: function(position)
+          {
+            podaAgregarArbol_Map.setCenter(position.coords.latitude, position.coords.longitude);
+            if (podaAgregarArbol_Marker == null)
+            {
+              podaAgregarArbol_Marker = podaAgregarArbol_Map.addMarker({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+                 draggable:true,
+                 dragend: function(e) {
+                  $("#txtPoda_AgregarArbol_Longitud").val(e.latLng.lng());
+                  $("#txtPoda_AgregarArbol_Latitud").val(e.latLng.lat());
+                }
+              });
+              $("#txtPoda_AgregarArbol_Longitud").val(position.coords.longitude);
+              $("#txtPoda_AgregarArbol_Latitud").val(position.coords.latitude);
+            } else
+            {
+              podaAgregarArbol_Marker.setPosition({lat : position.coords.latitude, lng : position.coords.longitude});
+            }
+          },
+          error: function(error){
+            alert('Geolocation failed: ' + error.message);
+          },
+          not_supported: function(){
+            alert("Your browser does not support geolocation");
+          }
+        });
+      });
+  });
+
+  $("#btnPoda_Programacion_EditarArbol").on("click", function()
+  {
+    var tmpTexto = $("#lblUbicacionModulo").text();
+    var idArbol = $(this).attr("idArbol");
+
+    cargarModulo("poda/agregarArbol.html", tmpTexto, function()
+      {
+        $("#txtPoda_AgregarArbol_btnVolver_Vinculo").val("poda/programacion.html");
+        $("#txtPoda_AgregarArbol_btnVolver_Texto").val(tmpTexto);
+        
+        $.post('../server/php/proyectos/poda/cargarPoda_Arbol.php', {Usuario: Usuario.id, idArbol : idArbol}, function(data, textStatus, xhr) 
+        {
+          var tLat = 0;
+          var tLng = 0;
+          $.each(data, function(index, val) 
+          {
+            tLat = parseFloat(val.latitud.replace(",", "."));
+            tLng = parseFloat(val.longitud.replace(",", "."));
+             $("#txtPoda_AgregarArbol_idArbol").val(val.idArbol);
+             $("#txtPoda_AgregarArbol_Corregimiento").val(val.correg);
+             $("#txtPoda_AgregarArbol_Matricula").val(val.matricula);
+             $("#txtPoda_AgregarArbol_NombreComun").val(val.nombre_comun);
+             $("#txtPoda_AgregarArbol_Especie").val(val.especie);
+             $("#txtPoda_AgregarArbol_Familia").val(val.familia);
+             
+             $("#txtPoda_AgregarArbol_Longitud").val(tLng);
+             $("#txtPoda_AgregarArbol_Latitud").val(tLat);
+
+              if (podaAgregarArbol_Marker == null)
+              {
+                podaAgregarArbol_Marker = podaAgregarArbol_Map.addMarker({
+                  lat: tLat,
+                  lng: tLng,
+                   draggable:true,
+                   dragend: function(e) {
+                    $("#txtPoda_AgregarArbol_Longitud").val(e.latLng.lng());
+                    $("#txtPoda_AgregarArbol_Latitud").val(e.latLng.lat());
+                  }
+                });
+              } else
+              {
+                podaAgregarArbol_Marker.setPosition({lat : tLat, lng : tLng});
+              }
+              podaAgregarArbol_Map.setCenter(tLat, tLng);
+              podaAgregarArbol_Map.setZoom(17);
+
+
+             $("#txtPoda_AgregarArbol_circunf_cap").val(val.diametro_ap);
+             $("#txtPoda_AgregarArbol_DiametroCopa").val(val.diametro_copa);
+             $("#txtPoda_AgregarArbol_Altura").val(val.altura);
+             $("#txtPoda_AgregarArbol_EstadoFisico").val(val.estado_fisico);
+             $("#txtPoda_AgregarArbol_EstadoFito").val(val.estado_fito);
+             $("#txtPoda_AgregarArbol_Tratamiento").val(val.tratmiento);
+             $("#txtPoda_AgregarArbol_NivelAfectacion").val(val.nivel_afectacion);
+             $("#txtPoda_AgregarArbol_Tension").val(val.tension);
+             $("#txtPoda_AgregarArbol_Observaciones").val(val.observacion);
+
+          });
+        }, "json");
+      });
+  });
+
+  $("#btnPoda_Programacion_VisitaPrevia").on("click", function()
+  {
+    var tmpTexto = $("#lblUbicacionModulo").text();
+    cargarModulo("poda/visitaPrevia.html", tmpTexto, function()
+      {
+        $("#txtPoda_AgregarArbol_btnVolver_Vinculo").val("poda/programacion.html");
+        $("#txtPoda_AgregarArbol_btnVolver_Texto").val(tmpTexto);
+        var pPrefijo = obtenerPrefijo();
+        $("#txtPoda_VisitaPrevia_Programacion_NumeroInterno").val(pPrefijo);
+        $("#lblPoda_VisitaPrevia_Programacion_NumeroInterno").text(pPrefijo);
+      });
+  });
+
+  
   
   $("#btnPoda_Programacion_LimpiarMapa").on("click", function()
     {
@@ -3015,13 +3122,29 @@ function poda_Programacion()
     var id = $(this).attr("idArbol");
      $(".btnPoda_Programacion_VerMarker").removeClass('btn-warning');
      $(this).addClass('btn-warning');
+     $("#cntPoda_Programacion_MapaOpciones").show();
+
+     $("#btnPoda_Programacion_EditarArbol").attr("idArbol", id);
+
+     var objFila = $(this).parent("td").parent("tr").find("td");
+     $("#lblPoda_Programacion_MapaOpciones_NombreComun").text($(objFila[4]).text());
+     $("#lblPoda_Programacion_MapaOpciones_Matricula").text($(objFila[3]).text());
+     $("#lblPoda_Programacion_MapaOpciones_fechaLevantamiento").text($(objFila[6]).text());
+     $("#lblPoda_Programacion_MapaOpciones_Especie").text($(objFila[5]).text());
+     $("#lblPoda_Programacion_MapaOpciones_Estado").text($(objFila[15]).text());
+
     podaMap.setCenter(Markers[id].getPosition().lat(), Markers[id].getPosition().lng(), function()
       {
-        
-        if (lastMarker != null)
+        if (Markers[0] == null)
         {
-          console.log(lastMarker);
-          Markers[lastMarker.idArbol].setIcon({url : lastMarker.icono});
+            Markers[0] = podaMap.addMarker({
+              lat: Markers[id].getPosition().lat(),
+              lng: Markers[id].getPosition().lng(),
+              icon : '../assets/images/icons/tree_Selected.png'
+            });
+        } else
+        {
+          Markers[0].setPosition({lat : Markers[id].getPosition().lat(), lng: Markers[id].getPosition().lng()});
         }
 
         
@@ -3034,13 +3157,14 @@ function poda_Programacion()
         {
           tmpIcon = Markers[id].icon;
         }
-
-        lastMarker = {idArbol : id , icono : tmpIcon};
-
+        
+        $("#imgPoda_Programacion_MapaOpciones_Icono").attr("src", tmpIcon);
+        
         $('#modulo_poda_Programacion_html .page-title').ScrollTo();
-        Markers[id].setIcon({url : "../assets/images/icons/tree_Selected.png"});
         podaMap.setZoom(24);
       });
+
+    
   });
 
   $("#cnt_Poda_Programacion_OpcionesMapa button").on("click", function()
@@ -3145,11 +3269,12 @@ function poda_Programacion()
 
                 tds.push([
                         val.idArbol,
-                        '<div class=""><div class="col-xs-6 margin-5"><input type="checkbox" idArbol="' + val.idArbol + '"class="newSwitchery btnPoda_Programacion_Seleccionar" ' + checked + ' data-plugin="switchery" data-color="#3aa99e"></div> <div class="col-xs-6 margin-5"><button idArbol="' + val.idArbol + '" class="btn btn-info btnPoda_Programacion_VerMarker"><i class="icon wb-eye"></i> </button></div></div>',
-                        val.fecha_levanta,
+                        '<input type="checkbox" idArbol="' + val.idArbol + '"class="newSwitchery btnPoda_Programacion_Seleccionar" ' + checked + ' data-plugin="switchery" data-color="#3aa99e"></div> <div class="col-xs-6 margin-5">',
+                        '<button idArbol="' + val.idArbol + '" class="btn btn-info btnPoda_Programacion_VerMarker"><i class="icon wb-eye"></i> </button>',
                         val.matricula,
                         val.nombre_comun,
                         val.especie,
+                        val.fecha_levanta,
                         val.familia,
                         val.longitud,
                         val.latitud,
@@ -3157,11 +3282,16 @@ function poda_Programacion()
                         val.diametro_copa,
                         val.altura,
                         val.estado_fisico,
-                        val.estado_fito
+                        val.estado_fito,
+                        val.Estado
                       ]);
 
             });
               t.rows.add(tds).draw( false );
+
+              $("#tblPoda_Programacion_length").remove();
+              $("#tblPoda_Programacion_filter").remove();
+              $("#tblPoda_Programacion_wrapper .DTTT").remove();
 
               iniciarSwitchery();
 
@@ -3254,6 +3384,7 @@ function poda_Programacion()
         
     }
   }
+
 }
 
 function iniciarSwitchery(callback)
@@ -3401,11 +3532,16 @@ var marcadores_Poda_VisitaPrevia = [];
 
 function poda_VisitaPrevia_Programacion()
 {
-  map_Poda_VisitaPrevia = vIniciarMapa("", "", "#cntPoda_Visitaprevia_Programacion_Mapa");
+  //map_Poda_VisitaPrevia = vIniciarMapa("", "", "#cntPoda_Visitaprevia_Programacion_Mapa");
+  
 }
-function vIniciarMapa(Lat, Lon, contenedor)
+function vIniciarMapa(Lat, Lon, contenedor, fClick)
 {
   var objMapa = null;
+  if (fClick === undefined)
+  {
+    fClick = function(){};
+  }
   if (typeof GMaps == "undefined")
   {
     $("#cntNoConformidades_Ubicacion").slideUp();
@@ -3424,6 +3560,7 @@ function vIniciarMapa(Lat, Lon, contenedor)
         el: contenedor,
         lat : Lat,
         lng : Lon,
+        click : fClick,
         zoomControl: true,
         zoomControlOpt: {
           style: "SMALL",
@@ -3580,4 +3717,21 @@ function calcularTiempoPublicacion(fecha)
     }
 
     return respuesta;
+}
+
+var podaAgregarArbol_Map = null;
+var podaAgregarArbol_Marker = null;
+function poda_AgregarArbol()
+{
+  $(".btnPoda_AgregarArbol_Volver").on("click", function()
+  {
+    cargarModulo($("#txtPoda_AgregarArbol_btnVolver_Vinculo").val(), $("#txtPoda_AgregarArbol_btnVolver_Texto").val());
+  });
+
+  podaAgregarArbol_Map = vIniciarMapa("", "", "#cntAgregarArbol_Mapa", function(e)
+    {
+      podaAgregarArbol_Marker.setPosition({lat : e.latLng.lat(), lng: e.latLng.lng()});
+      $("#txtPoda_AgregarArbol_Longitud").val(e.latLng.lng());
+      $("#txtPoda_AgregarArbol_Latitud").val(e.latLng.lat());
+    });
 }

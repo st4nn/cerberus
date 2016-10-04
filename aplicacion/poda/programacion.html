@@ -5,53 +5,125 @@
   <div class="panel-body">
     
     <div class="col-md-12">
-      <div class="col-md-3">
+      <div class="col-md-12" style="display: block;overflow-y: auto;">
         <div class="col-md-12">
-          <div id="cntPoda_Programacion_Capas" class="height-450" style="display: block;overflow-y: auto;">
+          <div id="cntPoda_Programacion_Capas" class="row" style="display: block;overflow-y: auto;">
           </div>
-          <button class="btn btn-danger btn-block" id="btnPoda_Programacion_LimpiarMapa"><i class="icon fa-eraser"></i> Limpiar Mapa</button>
+          <div class="margin-top-20 margin-bottom-10 padding-10 bg-blue-grey-200 row">
+            <div class="col-md-5">
+              <div class="col-md-6">
+                <button class="btn btn-primary btn-block text-left" id="btnPoda_Programacion_AgregarArbol"><i class="icon fa-plus-circle"></i> Agregar Arbol</button>
+              </div>
+              <div class="col-md-6">
+                <button class="btn btn-danger btn-block text-left" id="btnPoda_Programacion_LimpiarMapa"><i class="icon fa-eraser"></i> Limpiar Mapa</button>
+              </div>
+            </div>
+            <div class="col-md-7">
+              <div class="col-md-4">
+                <button id="btnPoda_Programacion_ProgramarTodos" class="btn btn-primary btn-block text-left"><i class="icon wb-check"></i> Programar Toda la Página</button>
+              </div>
+              <div class="col-md-4">
+                <button id="btnPoda_Programacion_DescartarTodos" class="btn btn-danger btn-block text-left"><i class="icon wb-close"></i> Descartar Toda la Página</button>
+              </div>
+              <div class="col-md-4">
+                <button id="btnPoda_Programacion_Guardar" class="btn btn-success btn-block text-left"><i class="icon fa-floppy-o"></i> Guardar Programación</button>
+              </div>
+            </div>
+          </div>
         </div>     
       </div>
-      <div class="col-md-9">
-        <div class="col-md-12 bg-teal-600 padding-3">
-          <div class="height-500" id="cntPoda_Programacion_Mapa"></div>
+      <div class="col-md-12 row margin-top-20">
+        <div class="col-md-5 col-xs-6">
+          <table id="tblPoda_Programacion" class="table table-hover dataTable table-striped width-full dtr-inline bg-white" style="display: block;overflow-x: auto;">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th></th>
+                <th></th>
+                <th>matricula</th>
+                <th>nombre_comun</th>
+                <th>especie</th>
+                <th>fecha_levanta</th>
+                <th>familia</th>
+                <th>longitud</th>
+                <th>latitud</th>
+                <th>diametro_ap</th>
+                <th>diametro_copa</th>
+                <th>altura</th>
+                <th>estado_fisico</th>
+                <th>estado_fito</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+
+          </table>
         </div>
+        <div class="col-md-7 col-xs-6">
+          <div class="col-md-12 bg-teal-600 padding-3">
+              <div id="cntPoda_Programacion_MapaOpciones" class="col-md-3 pull-right bg-blue-grey-100 padding-5 hide">
+                <div class="widget widget-shadow">
+                  <div class="widget-header cover overlay height-100">
+                    <div class="overlay-panel overlay-background overlay-top">
+                      <div class="row">
+                          <div id="lblPoda_Programacion_MapaOpciones_NombreComun" class="font-size-20 white">Nombre Comun</div>
+                          <div id="lblPoda_Programacion_MapaOpciones_Matricula" class="font-size-14 grey-400">Matricula</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="widget-body padding-horizontal-30 padding-vertical-20" style="height:calc(100% - 250px);">
+                    <div style="position:relative;padding-left:110px;">
+                      <a class="avatar avatar-100 bg-white img-bordered" href="javascript:void(0)" style="position:absolute;top:-50px;left:0;">
+                        <img id="imgPoda_Programacion_MapaOpciones_Icono" src="../assets/portraits/2.jpg" alt="">
+                      </a>
+                      <!--
+                      <div class="margin-bottom-20">
+                        <div class="font-size-10">Levantamiento</div>
+                        <div id="lblPoda_Programacion_MapaOpciones_fechaLevantamiento" class="font-size-14"></div>
+                      </div>
+                      -->
+                    </div>
+                    <div class="row margin-top-50">
+                      <br><br>
+                      <div class="font-size-10">Levantamiento</div>
+                      <div id="lblPoda_Programacion_MapaOpciones_fechaLevantamiento" class="font-size-14"></div>
+                    </div>
+                    <p>
+                      <blockquote id="lblPoda_Programacion_MapaOpciones_Especie" class="cover-quote vertical-align-middle font-size-18"></blockquote>
+                    </p>
+                    <div id="lblPoda_Programacion_MapaOpciones_Estado" class="font-size-14"></div>
+                  </div>
+                  <div class="widget-footer text-center bg-white padding-horizontal-30 padding-vertical-20 height-100">
+                    <div class="row no-space">
+                      <div class="col-md-12">
+                        <button id="btnPoda_Programacion_EditarArbol" idArbol="0" class="btn btn-warning btn-block"> Editar Datos</button>
+                        <button id="btnPoda_Programacion_VisitaPrevia" class="btn btn-success btn-block"> Visita Previa</button>
+                        <button id="btnPoda_Programacion_Observaciones" class="btn btn-info btn-block"> Observaciones</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <div class="" id="cntPoda_Programacion_Mapa">
+              
+            </div>
+          </div>
+        </div>
+        
       </div>
+
+
+      
+
+
+
+
       <input id="txtPoda_Programacion_Programados" type="hidden">
-
-      <div class="col-md-12 margin-top-30">
-        <button id="btnPoda_Programacion_ProgramarTodos" class="btn btn-warning"><i class="icon wb-check"></i> Programar Toda la Página</button>
-        <button id="btnPoda_Programacion_DescartarTodos" class="btn btn-danger"><i class="icon wb-close"></i> Descartar Toda la Página</button>
-        <button id="btnPoda_Programacion_Guardar" class="btn btn-success"><i class="icon fa-floppy-o"></i> Guardar Programación</button>
-      </div>
-      <div class="col-md-12 margin-top-20">
-        <table id="tblPoda_Programacion" class="table table-hover dataTable table-striped width-full dtr-inline" style="display: block;overflow-x: auto;">
-          <thead>
-            <tr>
-              <th>id</th>
-              <th></th>
-              <th>fecha_levanta</th>
-              <th>matricula</th>
-              <th>nombre_comun</th>
-              <th>especie</th>
-              <th>familia</th>
-              <th>longitud</th>
-              <th>latitud</th>
-              <th>diametro_ap</th>
-              <th>diametro_copa</th>
-              <th>altura</th>
-              <th>estado_fisico</th>
-              <th>estado_fito</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-
-        </table>
-      </div>      
     </div>
   </div>
   <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnPoda_VolverAlPanelOT">Volver al Panel</button>
 </div>
+
     <!-- End Page -->
 <script type="text/javascript">
     jQuery(document).ready(function() {       

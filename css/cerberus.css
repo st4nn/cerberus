@@ -60,3 +60,11 @@
 	max-height: 230px;
 	overflow: scroll;
 }
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: .4em;
+    background-color: #cbcbcb
+}
+::-webkit-scrollbar-thumb {
+    background-color: #3a7ac5
+}

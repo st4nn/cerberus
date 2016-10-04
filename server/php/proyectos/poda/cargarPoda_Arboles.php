@@ -13,12 +13,15 @@
       $idVisita = "AND poda_OT_Programacion.idEstado > 1";
    } else
    {
-      $idVisita = 0;
+      $idVisita = "";
    }
 
+   $tIdOt = "";
    if ($idOT <> 0)
    {
+      $tIdOt = "AND poda_OT_Programacion.idOT = '$idOT'";
       $idOT = "AND poda_OT.idOT = '$idOT'";
+
    } else
    {
       $idOT = "";
@@ -49,13 +52,17 @@
             poda_CapaForestal.tratmiento,
             poda_CapaForestal.nivel_afectacion,
             poda_CapaForestal.tension,
-            poda_OT_Programacion.idEstado
+            poda_OT_Programacion.idEstado,
+            confPoda_Estado.Nombre AS Estado
          FROM 
             poda_CapaForestal
-            LEFT JOIN poda_OT_Programacion ON poda_CapaForestal.idArbol = poda_OT_Programacion.idArbol 
+            LEFT JOIN poda_OT_Programacion ON poda_CapaForestal.idArbol = poda_OT_Programacion.idArbol $tIdOt
             LEFT JOIN poda_OT ON poda_OT_Programacion.idOT = poda_OT.idOT $idOT
+            LEFT JOIN confPoda_Estado ON confPoda_Estado.id = poda_OT_Programacion.idEstado
          WHERE 
-            poda_CapaForestal.idCircuito = '$idCircuito' $fecha $idVisita";
+            poda_CapaForestal.idCircuito = '$idCircuito' $fecha $idVisita
+         GROUP BY
+            poda_CapaForestal.idArbol";
 
    $result = $link->query($sql);
 

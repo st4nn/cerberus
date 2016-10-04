@@ -1,0 +1,198 @@
+  <!-- Page -->
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnPoda_AgregarArbol_Volver">Volver</button>
+  <input id="txtPoda_AgregarArbol_btnVolver_Vinculo" type="hidden">
+  <input id="txtPoda_AgregarArbol_btnVolver_Texto" type="hidden">
+  <div class="panel-body">
+    <div class="panel">
+      <div class="panel-heading">
+        <h4 class="panel-title">Crear Arbol</h4>
+      </div>
+      <div class="panel-body container">
+      <form id="frmPoda_AgregarArbol" role="form">
+        <input type="hidden" class="guardar" id="txtPoda_AgregarArbol_idArbol" value="0">
+        <div class="col-md-6 row">
+          <div class="example-wrap margin-sm-0 col-md-12">
+            <div class="margin-5">
+              <h4 class="example-title">Corregimiento</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_AgregarArbol_Corregimiento">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">Matricula</h4>
+                <div class="form-group">
+                  <input type="text" class="form-control guardar" id="txtPoda_AgregarArbol_Matricula">
+                </div>
+              </div>
+            </div>
+
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">Nombre Comun</h4>
+                <div class="form-group">
+                  <input type="text" class="form-control guardar" id="txtPoda_AgregarArbol_NombreComun">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">Especie</h4>
+                <div class="form-group">
+                  <input type="text" class="form-control guardar" id="txtPoda_AgregarArbol_Especie">
+                </div>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">Familia</h4>
+                <div class="form-group">
+                  <input type="text" class="form-control guardar" id="txtPoda_AgregarArbol_Familia">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">circunf_cap</h4>
+                <div class="form-group">
+                  <input type="text" class="form-control guardar" id="txtPoda_AgregarArbol_circunf_cap">
+                </div>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">Diametro Copa</h4>
+                <div class="form-group">
+                  <input type="text" class="form-control guardar" id="txtPoda_AgregarArbol_DiametroCopa">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">Altura</h4>
+                <div class="form-group">
+                  <input type="text" class="form-control guardar" id="txtPoda_AgregarArbol_Altura">
+                </div>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">Estado Fisico</h4>
+                <div class="form-group">
+                  <select type="text" class="form-control guardar" id="txtPoda_AgregarArbol_EstadoFisico">
+                    <option value="BU">Bueno</option>
+                    <option value="RE">Regular</option>
+                    <option value="RE">Malo</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12-row">
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">Estado Fitosanitario</h4>
+                <div class="form-group">
+                  <select type="text" class="form-control guardar" id="txtPoda_AgregarArbol_EstadoFito">
+                    <option value="BU">Bueno</option>
+                    <option value="RE">Regular</option>
+                    <option value="RE">Malo</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">Tratamiento</h4>
+                <div class="form-group">
+                  <select type="text" class="form-control guardar" id="txtPoda_AgregarArbol_Tratamiento">
+                    <option value="NIG">Ninguno</option>
+                    <option value="PEX">Poda Exhaustiva</option>
+                    <option value="PLG">Poda Ligera</option>
+                    <option value="TAL">Tala</option>
+                    <option value="TRA">Traslado</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">Nivel Afectación</h4>
+                <div class="form-group">
+                  <select type="text" class="form-control guardar" id="txtPoda_AgregarArbol_NivelAfectacion">
+                    <option value="ALT">Alta</option>
+                    <option value="MED">Media</option>
+                    <option value="BAJ">Baja</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="example-wrap margin-sm-0 col-md-6">
+              <div class="margin-5">
+                <h4 class="example-title">Tensión</h4>
+                <div class="form-group">
+                  <input type="text" class="form-control guardar" id="txtPoda_AgregarArbol_Tension">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 row">
+          <div class="col-md-12 row padding-3 bg-orange-800">
+            <div id="cntAgregarArbol_Mapa" class="height-400">
+              
+            </div>
+          </div>
+          <div class="example-wrap margin-sm-0 col-xs-6">
+            <div class="margin-5">
+              <h4 class="example-title">Latitud</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_AgregarArbol_Latitud" style="border:none; background: transparent;" readonly="true">
+              </div>
+            </div>
+          </div>
+          <div class="example-wrap margin-sm-0 col-xs-6">
+            <div class="margin-5">
+              <h4 class="example-title">Longitud</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_AgregarArbol_Longitud" style="border:none; background: transparent;" readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-material floating col-md-12">
+          <textarea class="form-control guardar" rows="3" id="txtPoda_AgregarArbol_Observaciones"></textarea>
+          <label class="floating-label">Observaciones:</label>
+        </div>
+        <div class="col-md-12">
+          <button class="btn btn-success btn-lg btn-blockren"><i class="icon glyphicon glyphicon-floppy-disk"></i> Guardar</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnPoda_AgregarArbol_Volver">Volver</button>
+</div>
+
+
+    <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+        poda_AgregarArbol();
+      });
+
+</script>

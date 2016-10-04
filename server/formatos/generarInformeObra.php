@@ -283,6 +283,8 @@
 		$pdf->Cell(0,5,'El resumen de las no conformidades detectadas se puede observar en la siguiente tabla.',0,1,'L', 0);
 		$pdf->Ln();
 
+		$totalLin40;
+
 		$sql = "SELECT 
 					resultadoauditoria.Criterio AS 'Criterio',
 	               resultadoauditoria.codigoNC AS 'Codigo',
@@ -366,9 +368,10 @@
 				$pdf->SetFont('Arial','',$tamanioFuente - 3);
 				$pdf->SetFillColor(229, 243, 255);
 			}
+			$totalLin40 = $totalLin40 + $tmpRow['Cantidad'];
 	    }
 	    $pdf->SetX(157);
-	    $pdf->Cell(15, 5,$numPostesObservaciones,1,0,'R');
+	    $pdf->Cell(15, 5,$totalLin40,1,0,'R');
 	    $pdf->Cell(15, 5,'100%',1,0,'R');
 	}
 

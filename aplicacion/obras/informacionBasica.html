@@ -4,7 +4,7 @@
   <div class="panel-body">
     <form id="frmInformacionBasica">
       <div class="col-md-2 pull-right">
-    	<button type="submit" class="btn btn-floating btn-success btnInformacionBasica_Guardar"><i class="icon glyphicon glyphicon-floppy-disk" aria-hidden="true"></i></button>
+    	<button type="submit" class="btn btn-floating btn-success"><i class="icon glyphicon glyphicon-floppy-disk" aria-hidden="true"></i></button>
       </div>
       <div class="col-md-12">
         <div class="form-group form-material col-md-4">
@@ -72,7 +72,7 @@
         <textarea class="form-control guardar" rows="3" id="txtInformacionBasica_Comentarios"></textarea>
         <label class="floating-label">Observaciones:</label>
       </div>
-      <form id="frmInforme_Complemento" class="col-md-12 row">
+      <div id="frmInforme_Complemento" class="col-md-12 row">
         <div class="col-md-4">
           <h4 class="example-title">Presupuesto</h4>
           <div class="form-group">
@@ -93,9 +93,10 @@
             <input type="text" class="form-control guardar" id="txtInforme_CosteRealTrabajo">
           </div>
         </div>
+        <!--
         <button type="submit" class="btn btn-success"><i class="icon fa-floppy-o"></i> Guardar</button>
-        <br><br>
-      </form>
+        <br><br>-->
+      </div>
       <div class="form-group col-md-12">
           <h4>Contactos</h4>
           <button type="button" id="btnInformacionBasica_AgregarContacto" class="btn btn-warning"><i class="icon wb-plus" aria-hidden="true"></i> Agregar</button>
@@ -105,7 +106,7 @@
           </div>
       </div>
       <div class="col-md-2 pull-left">
-      	<button class="btn btn-success btn-lg btn-block btnInformacionBasica_Guardar"><i class="icon glyphicon glyphicon-floppy-disk"></i>Guardar</button>
+      	<button  class="btn btn-success btn-lg btn-block"><i class="icon glyphicon glyphicon-floppy-disk"></i>Guardar</button>
       </div>
     </form>
   </div>
