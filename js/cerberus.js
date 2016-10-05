@@ -2579,6 +2579,8 @@ function poda_VerCircuitos()
 
         $("#tblPoda_Panel_Ot tbody tr").remove();
 
+        poda_Panel_CargarMunicipios();
+
         $.post('../server/php/proyectos/poda/cargarOTs.php', {Usuario: Usuario.id, Circuito : $("#txtPoda_Circuito").val()}, function(data, textStatus, xhr) 
         {
           if (data != 0)
@@ -2610,6 +2612,21 @@ function poda_Panel()
     cargarModulo("poda/verCircuitos.html", "Circuitos");
     $("#txtPoda_Circuito").val(0);
   });
+
+  $("#btnPoda_Panel_Circuito_Guardar").on("click", function()
+    {
+      $.post('../server/php/proyectos/poda/crearMunicipio_Circuito.php', {Usuario : Usuario.id, idMunicipio : $("#txtPoda_Panel_Circuito_Municipio").val(), idCircuito : $("#txtPoda_Circuito").val()},
+      function(data)
+      {
+        if (data == 1)
+        {
+          Mensaje("Hey", "El municipio fue actualizado", "success");
+        } else
+        {
+          Mensaje("Hey", "Hubo un error y los cambios no se guardaron", "danger");
+        }
+      });
+    });
 
   $(document).delegate('.btnPoda_VolverAlPanelPoda', 'click', function(event) 
   {
@@ -2676,6 +2693,26 @@ function poda_Panel()
   {
     cargarModulo("poda/panel.html", "Panel de Poda, Circuito " + $("#txtPoda_CircuitoNombre").val());
   });
+}
+
+function poda_Panel_CargarMunicipios()
+{
+  $("#txtPoda_Panel_Circuito_Municipio option").remove();
+  var tds = '<option value="0">Seleccione una opción</option>';
+  var idOpcion = 0;
+  $.post('../server/php/proyectos/poda/cargarMunicipios_Circuito.php', {Usuario: Usuario.id, idCircuito : $("#txtPoda_Circuito").val()}, function(data, textStatus, xhr) 
+    {
+      if (data != 0)
+      {
+        $.each(data, function(index, val) 
+        {
+           tds += '<option value="' + val.id + '">' + val.Nombre + '</option>';
+           idOpcion = val.idMunicipio;
+        });
+      }
+      $("#txtPoda_Panel_Circuito_Municipio").append(tds);
+      $("#txtPoda_Panel_Circuito_Municipio").val(idOpcion);
+    }, "json");
 }
 
 var podaMap = null;
@@ -2999,6 +3036,7 @@ function poda_Programacion()
     cargarModulo("poda/agregarArbol.html", tmpTexto, function()
       {
         $("#frmPoda_AgregarArbol")[0].reset();
+        $("#txtPoda_AgregarArbol_idArbol").val(0);
         $("#txtPoda_AgregarArbol_btnVolver_Vinculo").val("poda/programacion.html");
         $("#txtPoda_AgregarArbol_btnVolver_Texto").val(tmpTexto);
 
@@ -3018,12 +3056,12 @@ function poda_Programacion()
                   $("#txtPoda_AgregarArbol_Latitud").val(e.latLng.lat());
                 }
               });
-              $("#txtPoda_AgregarArbol_Longitud").val(position.coords.longitude);
-              $("#txtPoda_AgregarArbol_Latitud").val(position.coords.latitude);
             } else
             {
               podaAgregarArbol_Marker.setPosition({lat : position.coords.latitude, lng : position.coords.longitude});
             }
+            $("#txtPoda_AgregarArbol_Longitud").val(position.coords.longitude);
+            $("#txtPoda_AgregarArbol_Latitud").val(position.coords.latitude);
           },
           error: function(error){
             alert('Geolocation failed: ' + error.message);
@@ -3062,6 +3100,8 @@ function poda_Programacion()
              
              $("#txtPoda_AgregarArbol_Longitud").val(tLng);
              $("#txtPoda_AgregarArbol_Latitud").val(tLat);
+
+             $("#txtPoda_AgregarArbol_Ubicacion").val(val.ubicacion);
 
               if (podaAgregarArbol_Marker == null)
               {
@@ -3308,83 +3348,84 @@ function poda_Programacion()
     }
   });
 
-  function poda_Programacion_AgregarMarcador(datos)
+
+}
+
+function poda_Programacion_AgregarMarcador(datos)
+{
+  if (datos === undefined)
   {
-    if (datos === undefined)
-    {
-      datos = {};
-    }
-    var idArbol = datos.idArbol || 0;
-    var fecha_levanta = datos.fecha_levanta || 0;
-
-    var nombre_comun = datos.nombre_comun || "";
-    var matricula = datos.matricula || "";
-    var familia = datos.familia || "";
-    var especie = datos.especie || "";
-
-    var diametro_ap = datos.diametro_ap || "";
-    var diametro_copa = datos.diametro_copa || "";
-    var altura = datos.altura || "";
-    var estado_fisico = datos.estado_fisico || "";
-    var estado_fito = datos.estado_fito || "";
-    var tratamiento = datos.tratmiento || "";
-    var nivel_afectacion = datos.nivel_afectacion || "";
-    var tension = datos.tension || "";
-    var lat = datos.latitud || "";
-    var lon = datos.longitud || "";
-
-    if (lat != "" && lon != "")
-    {
-      lat = lat.replace(",", ".");
-      lon = lon.replace(",", ".");
-      
-      var contenido = "";
-      contenido += '<div idArbol="' + idArbol + '" levantamiento="' + fecha_levanta + '" class="cntPoda_Programacion_DialogMarker">';
-        contenido += '<h4><strong>' + nombre_comun + '</strong> <small>(' +  matricula + ')</small></h4>';
-        contenido += '<h5><small>' +  familia + '</small></h5>';
-        contenido += '<h6><small>Especie:</small> <strong>' + especie + '</strong></h6>';
-        contenido += '<div class="col-md-12">';
-          contenido += '<div class="col-md-6">';
-            contenido += '<h6><small>Diametro Ap:</small> <strong>' + diametro_ap + '</strong></h6>';
-            contenido += '<h6><small>Diametro Copa:</small> <strong>' + diametro_copa + '</strong></h6>';
-            contenido += '<h6><small>Altura:</small> <strong>' + altura + '</strong></h6>';
-            contenido += '<h6><small>Estado Fisico:</small> <strong>' + estado_fisico + '</strong></h6>';
-          contenido += '</div>';
-          contenido += '<div class="col-md-6">';
-            contenido += '<h6><small>Estado Fitologico:</small> <strong>' + estado_fito + '</strong></h6>';
-            contenido += '<h6><small>Tratamiento:</small> <strong>' + tratamiento+ '</strong></h6>';
-            contenido += '<h6><small>Nivel Afectación:</small> <strong>' + nivel_afectacion + '</strong></h6>';
-            contenido += '<h6><small>Tensión:</small> <strong>' + tension + '</strong></h6>';
-          contenido += '</div>';
-        contenido += '</div>';
-              /*contenido += '<div class="col-md-12 margin-5">';
-                contenido += '<button class="btn btn-success margin-5" title="obj"> <i class="icon glyphicon-ok-sign"></i> Programar</button>';
-                contenido += '<button class="btn btn-warning margin-5"> <i class="icon glyphicon-remove"></i> Desagendar</button>';
-                contenido += '<button class="btn btn-danger margin-5"> <i class="icon glyphicon-trash"></i> Borrar</button>';
-              contenido += '</div>';*/
-      contenido += '</div>';
-
-      var iconosArbol = ["tree_green.png", "tree_green.png", "tree_Programado.png", "tree_Visitado.png", "tree_Intervenido.png", "tree_Revisado.png", "tree_Conforme.png", "tree_NoConforme.png", "tree_Liquidado.png"];;
-
-      if (datos.idEstado == "" || datos.idEstado < 2)
-      {
-        datos.idEstado = 0;
-      }
-
-      Markers[idArbol] = podaMap.addMarker({
-          lat: lat,
-          lng: lon,
-          icon : '../assets/images/icons/' + iconosArbol[datos.idEstado],
-          infoWindow: {
-            content: contenido
-          }
-        });
-
-
-        
-    }
+    datos = {};
   }
+  var idArbol = datos.idArbol || 0;
+  var fecha_levanta = datos.fecha_levanta || 0;
 
+  var nombre_comun = datos.nombre_comun || "";
+  var matricula = datos.matricula || "";
+  var familia = datos.familia || "";
+  var especie = datos.especie || "";
+
+  var diametro_ap = datos.diametro_ap || "";
+  var diametro_copa = datos.diametro_copa || "";
+  var altura = datos.altura || "";
+  var estado_fisico = datos.estado_fisico || "";
+  var estado_fito = datos.estado_fito || "";
+  var tratamiento = datos.tratmiento || "";
+  var nivel_afectacion = datos.nivel_afectacion || "";
+  var tension = datos.tension || "";
+  var lat = datos.latitud || "";
+  var lon = datos.longitud || "";
+
+  if (lat != "" && lon != "")
+  {
+    lat = lat.replace(",", ".");
+    lon = lon.replace(",", ".");
+    
+    var contenido = "";
+    contenido += '<div idArbol="' + idArbol + '" levantamiento="' + fecha_levanta + '" class="cntPoda_Programacion_DialogMarker">';
+      contenido += '<h4><strong>' + nombre_comun + '</strong> <small>(' +  matricula + ')</small></h4>';
+      contenido += '<h5><small>' +  familia + '</small></h5>';
+      contenido += '<h6><small>Especie:</small> <strong>' + especie + '</strong></h6>';
+      contenido += '<div class="col-md-12">';
+        contenido += '<div class="col-md-6">';
+          contenido += '<h6><small>Diametro Ap:</small> <strong>' + diametro_ap + '</strong></h6>';
+          contenido += '<h6><small>Diametro Copa:</small> <strong>' + diametro_copa + '</strong></h6>';
+          contenido += '<h6><small>Altura:</small> <strong>' + altura + '</strong></h6>';
+          contenido += '<h6><small>Estado Fisico:</small> <strong>' + estado_fisico + '</strong></h6>';
+        contenido += '</div>';
+        contenido += '<div class="col-md-6">';
+          contenido += '<h6><small>Estado Fitologico:</small> <strong>' + estado_fito + '</strong></h6>';
+          contenido += '<h6><small>Tratamiento:</small> <strong>' + tratamiento+ '</strong></h6>';
+          contenido += '<h6><small>Nivel Afectación:</small> <strong>' + nivel_afectacion + '</strong></h6>';
+          contenido += '<h6><small>Tensión:</small> <strong>' + tension + '</strong></h6>';
+        contenido += '</div>';
+      contenido += '</div>';
+            /*contenido += '<div class="col-md-12 margin-5">';
+              contenido += '<button class="btn btn-success margin-5" title="obj"> <i class="icon glyphicon-ok-sign"></i> Programar</button>';
+              contenido += '<button class="btn btn-warning margin-5"> <i class="icon glyphicon-remove"></i> Desagendar</button>';
+              contenido += '<button class="btn btn-danger margin-5"> <i class="icon glyphicon-trash"></i> Borrar</button>';
+            contenido += '</div>';*/
+    contenido += '</div>';
+
+    var iconosArbol = ["tree_green.png", "tree_green.png", "tree_Programado.png", "tree_Visitado.png", "tree_Intervenido.png", "tree_Revisado.png", "tree_Conforme.png", "tree_NoConforme.png", "tree_Liquidado.png"];;
+
+    if (datos.idEstado == "" || datos.idEstado < 2)
+    {
+      datos.idEstado = 0;
+    }
+
+    Markers[idArbol] = podaMap.addMarker({
+        lat: lat,
+        lng: lon,
+        icon : '../assets/images/icons/' + iconosArbol[datos.idEstado],
+        infoWindow: {
+          content: contenido
+        }
+      });
+
+
+      
+  }
 }
 
 function iniciarSwitchery(callback)
@@ -3733,5 +3774,82 @@ function poda_AgregarArbol()
       podaAgregarArbol_Marker.setPosition({lat : e.latLng.lat(), lng: e.latLng.lng()});
       $("#txtPoda_AgregarArbol_Longitud").val(e.latLng.lng());
       $("#txtPoda_AgregarArbol_Latitud").val(e.latLng.lat());
+    });
+
+  $("#frmPoda_AgregarArbol").on("submit", function(evento)
+    {
+      evento.preventDefault();
+      $("#frmPoda_AgregarArbol").generarDatosEnvio("txtPoda_AgregarArbol_", function(datos)
+      {
+        $.post('../server/php/proyectos/poda/crearArbol.php', {Usuario : Usuario.id, idCircuito : $("#txtPoda_Circuito").val(),  datos: datos}, function(data, textStatus, xhr) 
+        {
+          if (isNaN(data))
+          {
+            Mensaje("Error", data, "danger");
+          } else
+          {
+            if (data != 0)
+            {
+              if (data != $("#txtPoda_AgregarArbol_idArbol").val())
+              {
+                $("#txtPoda_AgregarArbol_idArbol").val(data);
+                var fecha_levanta = obtenerFecha().substr(0, 10).replace(/-/g, "");
+                if ($("#txtPoda_Programacion_lChk" + fecha_levanta).length == 0)
+                {
+                  var tds = '<div class="col-md-4">';
+                    tds += '<div class="checkbox-custom checkbox-success">';
+                      tds += '<input type="checkbox" id="txtPoda_Programacion_lChk' + fecha_levanta + '" fecha="' + fecha_levanta + '">';
+                      tds += '<label for="txtPoda_Programacion_lChk' + fecha_levanta + '">' + fecha_levanta + ' (' + 1 + ' Arboles)</label>';
+                    tds += '</div>';
+                  tds += '</div>';
+                  $("#cntPoda_Programacion_Capas").append(tds);
+                } else
+                {
+                  var objFila = $('#txtPoda_Programacion_lChk' + fecha_levanta).parent("div").find("label");
+                  var objNumero = $(objFila).text().replace(fecha_levanta + ' (', "");
+                  objNumero = objNumero.replace(' Arboles)', "");
+                  objNumero = parseInt(objNumero) + 1;
+                  $(objFila).text(fecha_levanta + ' (' + objNumero + ' Arboles)');
+
+                  if ($('#txtPoda_Programacion_lChk' + fecha_levanta).is(":checked"))
+                  {
+                    var t = $("#tblPoda_Programacion").DataTable();
+                    var tds = [];
+
+                    datos = JSON.parse(datos);
+                    var objVal = {idArbol : data, matricula : datos['Matricula'], nombre_comun : datos.NombreComun, especie : datos.Especie, fecha_levanta : fecha_levanta, familia : datos.Familia, longitud : datos.Longitud, latitud : datos.Latitud, diametro_ap : datos.circunf_cap, diametro_copa : datos.DiametroCopa, altura: datos.Altura, estado_fisico : datos.EstadoFisico, estado_fito : datos.EstadoFito, idEstado : 0, tratamiento : datos.Tratamiento, nivel_afectacion : datos.NivelAfectacion, tension : datos.Tension};
+
+                    poda_Programacion_AgregarMarcador(objVal);
+
+                    tds.push([
+                            objVal.idArbol,
+                            '<input type="checkbox" idArbol="' + data + '"class="newSwitchery btnPoda_Programacion_Seleccionar" data-plugin="switchery" data-color="#3aa99e"></div> <div class="col-xs-6 margin-5">',
+                            '<button idArbol="' + data + '" class="btn btn-info btnPoda_Programacion_VerMarker"><i class="icon wb-eye"></i> </button>',
+                            objVal.matricula,
+                            objVal.nombre_comun,
+                            objVal.especie,
+                            objVal.fecha_levanta,
+                            objVal.familia,
+                            objVal.longitud,
+                            objVal.latitud,
+                            objVal.diametro_ap,
+                            objVal.diametro_copa,
+                            objVal.altura,
+                            objVal.estado_fisico,
+                            objVal.estado_fito,
+                            ""
+                          ]);
+
+                    t.rows.add(tds).draw( false );
+                    iniciarSwitchery();
+                  }
+                }
+
+              } 
+            }
+            Mensaje("Hey", "Los datos del Arbol han sido ingresados", "success");
+          }
+        });
+      }); 
     });
 }
