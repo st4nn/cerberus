@@ -97,7 +97,13 @@ $.fn.generarDatosEnvio = function(restricciones, callback)
     {
       if (!$(val).hasClass('tt-hint'))
       {
-        datos[$(val).attr("id").replace(restricciones, "")] = $(val).val();
+        if ($(val).attr("type") == "checkbox")
+        {
+          datos[$(val).attr("id").replace(restricciones, "")] = $(val).is(":checked");
+        } else
+        {
+          datos[$(val).attr("id").replace(restricciones, "")] = $(val).val();
+        }
       }
     }
   });
@@ -1977,7 +1983,7 @@ function documental()
                 tds += '<div class="media">';
                   tds += '<div class="media-left">';
                     tds += '<a class="avatar" href="javascript:void(0)">';
-                      tds += '<img src="../assets/images/icons/' + ext.toLowerCase() + '.png" alt=""></a>';
+                      tds += '<img src="../assets/images/fileIcons/' + ext.toLowerCase() + '.png" alt=""></a>';
                   tds += '</div>';
                   tds += '<div class="media-body">';
                     tds += '<h4 class="media-heading">';
@@ -2068,7 +2074,7 @@ function documental_cargar(form, contenedor, pRuta)
                   tds2 += '<div class="media">';
                     tds2 += '<div class="media-left">';
                       tds2 += '<a class="avatar" href="javascript:void(0)">';
-                        tds2 += '<img src="../assets/images/icons/' + ext.toLowerCase() + '.png" alt=""></a>';
+                        tds2 += '<img src="../assets/images/fileIcons/' + ext.toLowerCase() + '.png" alt=""></a>';
                     tds2 += '</div>';
                     tds2 += '<div class="media-body">';
                       tds2 += '<h4 class="media-heading">';
@@ -2917,7 +2923,7 @@ function poda_Documental()
                 tds += '<div class="media">';
                   tds += '<div class="media-left">';
                     tds += '<a class="avatar" href="javascript:void(0)">';
-                      tds += '<img src="../assets/images/icons/' + ext.toLowerCase() + '.png" alt=""></a>';
+                      tds += '<img src="../assets/images/fileIcons/' + ext.toLowerCase() + '.png" alt=""></a>';
                   tds += '</div>';
                   tds += '<div class="media-body">';
                     tds += '<h4 class="media-heading">';
@@ -3139,14 +3145,18 @@ function poda_Programacion()
 
   $("#btnPoda_Programacion_VisitaPrevia").on("click", function()
   {
+    var idArbol = $(this).attr("idArbol");
     var tmpTexto = $("#lblUbicacionModulo").text();
     cargarModulo("poda/visitaPrevia.html", tmpTexto, function()
       {
+        $("#txtPoda_VisitaPrevia_Programacion_idArbol").val(idArbol);
+        $("#txtPoda_VisitaPrevia_Programacion_idOt").val($("#txtPoda_PanelOT_CrearOt_idOT").val());
         $("#txtPoda_AgregarArbol_btnVolver_Vinculo").val("poda/programacion.html");
         $("#txtPoda_AgregarArbol_btnVolver_Texto").val(tmpTexto);
         var pPrefijo = obtenerPrefijo();
         $("#txtPoda_VisitaPrevia_Programacion_NumeroInterno").val(pPrefijo);
         $("#lblPoda_VisitaPrevia_Programacion_NumeroInterno").text(pPrefijo);
+        documental_cargar($("#frmPoda_VisitaPrevia_Archivos"), $("#cntPoda_VisitaPrevia_Archivos"), "poda/" + $("#txtPoda_Circuito").val() + "/"  + $("#txtPoda_PanelOT_CrearOt_NumeroInterno").val() + "/Visita_Previa/" + $("#txtPoda_VisitaPrevia_Programacion_idArbol").val());
       });
   });
 
@@ -3165,6 +3175,8 @@ function poda_Programacion()
      $("#cntPoda_Programacion_MapaOpciones").show();
 
      $("#btnPoda_Programacion_EditarArbol").attr("idArbol", id);
+     $("#btnPoda_Programacion_VisitaPrevia").attr("idArbol", id);
+     $("#btnPoda_Programacion_Observaciones").attr("idArbol", id);
 
      var objFila = $(this).parent("td").parent("tr").find("td");
      $("#lblPoda_Programacion_MapaOpciones_NombreComun").text($(objFila[4]).text());
@@ -3201,7 +3213,7 @@ function poda_Programacion()
         $("#imgPoda_Programacion_MapaOpciones_Icono").attr("src", tmpIcon);
         
         $('#modulo_poda_Programacion_html .page-title').ScrollTo();
-        podaMap.setZoom(24);
+        podaMap.setZoom(18);
       });
 
     
@@ -3573,8 +3585,77 @@ var marcadores_Poda_VisitaPrevia = [];
 
 function poda_VisitaPrevia_Programacion()
 {
-  //map_Poda_VisitaPrevia = vIniciarMapa("", "", "#cntPoda_Visitaprevia_Programacion_Mapa");
+  $("#frmPoda_VisitaPrevia_Archivos").ajaxForm(
+  {
+    beforeSend: function() 
+    {
+        var percentVal = '0%';
+        $("#txtPoda_VisitaPrevia_ArchivosProgreso").width(percentVal);
+        $("#txtPoda_VisitaPrevia_ArchivosProgreso").text(percentVal);
+    },
+    uploadProgress: function(event, position, total, percentComplete) {
+        
+        var percentVal = percentComplete + '%';
+        $("#txtPoda_VisitaPrevia_ArchivosProgreso").width(percentVal);
+        $("#txtPoda_VisitaPrevia_ArchivosProgreso").text(percentVal);
+    },
+    success: function() {
+        var percentVal = '100%';
+        $("#txtPoda_VisitaPrevia_ArchivosProgreso").width(percentVal);
+        $("#txtPoda_VisitaPrevia_ArchivosProgreso").text(percentVal);
+    },
+    complete: function(xhr) {
+      var respuesta = xhr.responseText;
+      if (respuesta.substring(0, 11) == "../archivos")
+          {
+            var tds = "";
+            arrNomArchivo = respuesta.split("$$");
+            arrNomArchivo = arrNomArchivo[0];
+            var arrArchivo = arrNomArchivo.split("/");
+            var arrExt = arrArchivo[arrArchivo.length - 1].split(".");
+            var nomArchivo = arrArchivo[arrArchivo.length - 1];
+            var ext = arrExt[arrExt.length - 1];
+
+              tds += '<li class="list-group-item">';
+                tds += '<div class="media">';
+                  tds += '<div class="media-left">';
+                    tds += '<a class="avatar" href="javascript:void(0)">';
+                      tds += '<img src="../assets/images/fileIcons/' + ext.toLowerCase() + '.png" alt=""></a>';
+                  tds += '</div>';
+                  tds += '<div class="media-body">';
+                    tds += '<h4 class="media-heading">';
+                      tds += '<a class="name" href="' + arrNomArchivo.replace("../", "../server/") + '" target="_blank">' + nomArchivo + '</a>';
+                      tds += '<a class="btn btn-danger pull-right btnDocumental_ArchivosEliminar"><i class="icon wb-trash"> </i></a>';
+                    tds += '</h4>';
+                  tds += '</div>';
+                tds += '</div>';
+              tds += '</li>';
+
+            $("#cntPoda_VisitaPrevia_Archivos").append(tds);
+          } else
+          {
+            Mensaje("Error","Hubo un Error, " + respuesta, "danger");
+          }
+     }
+  }); 
   
+  $("#frmPoda_VisitaPrevia_Programacion_Formato").on("submit", function(evento)
+  {
+    evento.preventDefault();
+    $("#frmPoda_VisitaPrevia_Programacion_Formato").generarDatosEnvio("txtPoda_VisitaPrevia_Programacion_", function(datos)
+      {
+        $.post('../server/php/proyectos/poda/crearVisitaPrevia_Dato.php', {datos : datos}, function(data, textStatus, xhr) 
+        {
+          if (isNaN(data))
+          {
+            Mensaje("Error", data, "danger");
+          } else
+          {
+            Mensaje("Hey", "Los datos de han sido ingresados", "success");
+          } 
+        });
+      });
+  });
 }
 function vIniciarMapa(Lat, Lon, contenedor, fClick)
 {
@@ -3853,3 +3934,4 @@ function poda_AgregarArbol()
       }); 
     });
 }
+

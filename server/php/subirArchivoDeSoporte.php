@@ -2,7 +2,12 @@
 
 $Carpeta = $_GET['Ruta'];
 
-$idObj = $_POST["txtAuditoria_Soporte_idObj"];
+$idObj = "";
+
+if (!empty($_POST["txtAuditoria_Soporte_idObj"]))
+{
+    $idObj = $_POST["txtAuditoria_Soporte_idObj"];
+}
 
 $targetDir = "../archivos/" . $Carpeta;
 

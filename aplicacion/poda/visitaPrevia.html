@@ -9,22 +9,23 @@
           <h4 class="modal-title">Crear Visita</h4>
         </div>
         <div class="modal-body">
-          <div class="col-md-12 row padding-top-10">
+          <div class="col-md-12 row padding-top-10  bg-grey-200">
             <div class="example-wrap margin-sm-0 col-md-4">
               <div class="margin-5">
                 <h4 class="example-title">Numero Interno</h4>
                 <div class="form-group">
                   <div id="lblPoda_VisitaPrevia_Programacion_NumeroInterno" class="well well-sm well-info">123</div>
                   <input id="txtPoda_VisitaPrevia_Programacion_NumeroInterno" type="hidden" class="form-control guardar">
-                  <input id="txtPoda_VisitaPrevia_Programacion_idVisita" type="hidden" class="form-control guardar">
+                  <input id="txtPoda_VisitaPrevia_Programacion_idOt" type="hidden" class="form-control guardar">
+                  <input id="txtPoda_VisitaPrevia_Programacion_idArbol" type="hidden" class="form-control guardar">
                 </div>
               </div>
             </div>
             <div class="example-wrap margin-sm-0 col-md-8">
               <div class="margin-5">
-                <h4 class="example-title">Aviso <small>Diligenciar el campo con el aviso para casos de poda no planificada, para el caso de planificada colocar no aplica NA</small></h4>
+                <h4 class="example-title">Aviso <br><small>Diligenciar el campo con el aviso para casos de poda no planificada, para el caso de planificada colocar no aplica NA</small></h4>
                 <div class="form-group">
-                  <input type="text" class="form-control guardar" id="txtPoda_PanelVisitaPrevia_CrearOt_Fecha">
+                  <input type="text" class="form-control guardar" id="txtPoda_VisitaPrevia_Programacion_Aviso">
                 </div>
               </div>
             </div>
@@ -186,7 +187,7 @@
               </div>
             </div>
 
-            <div class="col-md-6 row">
+            <div class="col-md-6 row bg-grey-200">
               <div class="col-md-12">
                 <div class="margin-10">
                   <div class="panel panel-bordered panel-dark">                    
@@ -227,32 +228,8 @@
               </div>
             </div>
           </div>
-          
-          <div class="col-md-12 row bg-grey-200">
-            <div class="col-md-6 row">
-              <div class="col-md-12">
-                <div class="margin-10">
-                  <div class="panel panel-bordered panel-dark">                    
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Registro Camara</h3>
-                    </div>
-                    <div class="panel-body">
-                      <div class="ribbon ribbon-corner ribbon-reverse ribbon-bottom">
-                        <span class="ribbon-inner"><i class="icon wb-small-point" aria-hidden="true"></i></span>
-                      </div>
-                      <div class="col-md-6 col-xs-6">
-                        <button class="btn btn-success"><i class="icon fa-camera"></i> Antes</button>
-                      </div>
-                      <div class="col-md-6 col-xs-6">
-                        <button class="btn btn-success"><i class="icon fa-camera"></i> Después</button>
-                      </div>
-                    </div>
-                  </div>    
-                </div>
-              </div>
-            </div>
 
-            <div class="col-md-6 row">
+            <div class="col-md-12 row bg-grey-200">
               <div class="col-md-12">
                 <div class="margin-10">
                   <div class="panel panel-bordered panel-dark">                    
@@ -271,7 +248,6 @@
                 </div>
               </div>
             </div>
-          </div>
           <!--
 
           <div class="example-wrap margin-sm-0 col-md-6">
@@ -293,7 +269,51 @@
           </div>
         </div>
       </form>
-    </div>
+      <div class="col-md-12 row bg-grey-200">
+        <div class="col-md-12">
+          <div class="margin-10">
+            <div class="panel panel-bordered panel-dark">                    
+              <div class="panel-heading">
+                <h3 class="panel-title">Registro Camara</h3>
+              </div>
+              <div class="panel-body">
+                <div class="ribbon ribbon-corner ribbon-reverse ribbon-bottom">
+                  <span class="ribbon-inner"><i class="icon wb-small-point" aria-hidden="true"></i></span>
+                </div>
+                <div class="col-md-10 margin-top-20">
+                  <h4 class="example-title">Agregar Archivos</h4>
+                  <div class="col-md-10">
+                    <h5 class="example-title">Cargar Archivo</h5>
+                    <form class="form-group" id="frmPoda_VisitaPrevia_Archivos" action="" method="post" enctype="multipart/form-data">
+                      <div class="input-group input-group-file">
+                        <input type="text" class="form-control inputText" readonly="">
+                        <span class="input-group-btn">
+                          <span class="btn btn-success btn-file">
+                            <i class="icon wb-more-horizontal" aria-hidden="true"></i>
+                            Buscar
+                            <input type="file" name="archivo" class="inputControl">
+                          </span>
+                          <button type="submit" class="btn btn-success">
+                            <i class="icon wb-upload" aria-hidden="true"></i> Subir
+                          </button>
+                        </span>
+                      </div>
+                      <div class="progress progress-lg">
+                        <div id="txtPoda_VisitaPrevia_ArchivosProgreso" class="progress-bar progress-bar-success" style="width: 0%;" role="progressbar"></div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-md-10">
+                    <ul id="cntPoda_VisitaPrevia_Archivos" class="list-group list-group-dividered list-group-full">
+                          
+                        </ul>
+                  </div>
+                </div>
+              </div>
+            </div>    
+          </div>
+        </div>
+      </div>
   </div>
   <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnPoda_VolverAProgramacion">Volver</button>
 </div>
