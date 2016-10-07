@@ -1,0 +1,141 @@
+  <!-- Page -->
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnPoda_VolverAlPanelOT">Volver al Panel</button>
+  <div class="panel-body">
+    <form id="frmPoda_VisitaPlanificacion">
+      <input type="hidden" class="form-control guardar" id="txtPoda_VisitaPlanificacion_idOt">
+      <input type="hidden" class="form-control guardar" id="txtPoda_VisitaPlanificacion_Prefijo">
+      <div class="panel panel-bordered panel-dark col-md-12">
+        <div class="panel-heading">
+          <h3 class="panel-title">PUNTOS DE CONTROL VISITA DE PLANIFICACIÓN</h3>
+        </div>
+        <div class="panel-body">
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="margin-5">
+              <h4 class="example-title">Fecha</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_VisitaPlanificacion_Fecha">
+              </div>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="margin-5">
+              <h4 class="example-title">Tipo de Red</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_VisitaPlanificacion_TipoDeRed">
+              </div>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="margin-5">
+              <h4 class="example-title">Ubicacion</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_VisitaPlanificacion_Ubicacion">
+              </div>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="margin-5">
+              <h4 class="example-title">Subestación</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_VisitaPlanificacion_Subestacion">
+              </div>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="margin-5">
+              <h4 class="example-title">Empresa</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_VisitaPlanificacion_Empresa">
+              </div>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="margin-5">
+              <h4 class="example-title">Brigada</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_VisitaPlanificacion_Brigada">
+              </div>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-12">
+            <div class="margin-5">
+              <h4 class="example-title">Supervisor</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_VisitaPlanificacion_Supervisor">
+              </div>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="margin-5">
+              <h4 class="example-title">Descargo</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_VisitaPlanificacion_Descargo">
+              </div>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="margin-5">
+              <h4 class="example-title">Nombre Brigada</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_VisitaPlanificacion_NombreBrigada">
+              </div>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="margin-5">
+              <h4 class="example-title">Hora Inicio</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_VisitaPlanificacion_HoraInicio">
+              </div>
+            </div>
+          </div>
+
+          <div class="example-wrap margin-sm-0 col-md-6">
+            <div class="margin-5">
+              <h4 class="example-title">Hora Fin</h4>
+              <div class="form-group">
+                <input type="text" class="form-control guardar" id="txtPoda_VisitaPlanificacion_HoraFin">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <table id="tblVisitaPlanificacion_Items" class="table col-md-12 table-striped">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Descripción</th>
+              <th>Cumple</th>
+              <th>No Cumple</th>
+              <th>No Aplica</th>
+              <th>Observaciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="col-md-2 pull-left">
+      	<button type="submit" class="btn btn-success btn-lg btn-block"><i class="icon glyphicon glyphicon-floppy-disk"></i>Guardar</button>
+      </div>
+    </form>
+  </div>
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnPoda_VolverAlPanelOT">Volver al Panel</button>
+</div>
+    <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+        poda_visitaPlanificacion();
+      });
+
+</script>

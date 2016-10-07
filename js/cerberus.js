@@ -3004,12 +3004,44 @@ function poda_PanelOT()
     });
   })
 
-  $("#btnPanelPoda_VisitaPrevia").on("click", function()
+  $("#btnPanelPoda_VisitaPlanificacion").on("click", function()
   {
-    var titulo = "Visita Previa de OT " + $("#txtPoda_PanelOT_CrearOt_NumeroInterno").val() + " en Circuito " + $("#txtPoda_CircuitoNombre").val();
-    cargarModulo("poda/panelVisitaPrevia.html", titulo, function()
+    var titulo = "OT " + $("#txtPoda_PanelOT_CrearOt_NumeroInterno").val() + " en Circuito " + $("#txtPoda_CircuitoNombre").val();
+    cargarModulo("poda/VisitaPlanificacion.html", titulo, function()
     {
-      
+      $("#frmPoda_VisitaPlanificacion")[0].reset();
+      $("#txtPoda_VisitaPlanificacion_idOt").val($("#txtPoda_PanelOT_CrearOt_idOT").val());
+      $("#txtPoda_VisitaPlanificacion_Prefijo").val(obtenerPrefijo());
+      $.post('../server/php/proyectos/poda/cargarVisitaPlanificacion.php', {Usuario : Usuario.id, idOt : $("#txtPoda_VisitaPlanificacion_idOt").val()}, 
+        function(data, textStatus, xhr) 
+        {
+           if (typeof(data) == "object")
+            {
+              var tds = "";
+
+              $.each(data.datos, function(index, val) 
+              {
+                if ($("#txtPoda_VisitaPlanificacion_" + index).length > 0)
+                {
+                  $("#txtPoda_VisitaPlanificacion_" + index).val(val);
+                }
+              });              
+
+              var objItems = {};
+              $.each(data.items, function(index, val) 
+              {
+                objItems = $("#tblVisitaPlanificacion_Items input[type=radio][idItem=" + val.idPuntoControl + "][value='" + val.Resultado + "']");
+                $(objItems).trigger('click');
+                $("#txtPoda_VisitaPlanificacion_Observaciones_Item_" + val.idPuntoControl).val(val.Observaciones);
+              });
+            } else
+            {
+              if (data != 0)
+              {
+                Mensaje("Error", data, "danger");
+              } 
+            }
+        }, "json");
     });
   })
 
@@ -3019,9 +3051,80 @@ function poda_PanelOT()
   });
 }
 
-function poda_VisitaPrevia()
+function poda_visitaPlanificacion()
 {
+  $.post('../server/php/proyectos/poda/cargarPuntosDeControl.php', {Usuario : Usuario.id, Categoria :  "Planificación"}, function(data, textStatus, xhr) 
+  {
+    $("#tblVisitaPlanificacion_Items tbody tr").remove();
+    if (typeof(data) == "object")
+    {
+        var tds = "";
 
+        $.each(data, function(index, val) 
+        {
+           tds += '<tr>';
+            tds += '<td>' + val.Codigo + '</td>'; 
+            tds += '<td>' + val.Nombre + '</td>'; 
+            tds += '<td class="bg-blue-grey-300 text-center">'; 
+              tds += '<div class="radio-custom radio-primary">';
+                tds += '<input type="radio" id="optVisitaPrevia_' + val.Codigo +'_Si" idItem="' + val.id + '" value="Cumple" name="optVisicaPrevia_' + val.Codigo + '">';
+                tds += '<label for="optVisitaPrevia_' + val.Codigo +'_Si"></label>';
+              tds += '</div>';
+            tds += '</td>'; 
+            tds += '<td class="bg-blue-grey-300 text-center">'; 
+              tds += '<div class="radio-custom radio-primary">';
+                tds += '<input type="radio" id="optVisitaPrevia_' + val.Codigo +'_No" idItem="' + val.id + '" value="No Cumple" name="optVisicaPrevia_' + val.Codigo + '">';
+                tds += '<label for="optVisitaPrevia_' + val.Codigo +'_No"></label>';
+              tds += '</div>';
+            tds += '</td>'; 
+            tds += '<td class="bg-blue-grey-300 text-center">'; 
+              tds += '<div class="radio-custom radio-primary">';
+                tds += '<input type="radio" id="optVisitaPrevia_' + val.Codigo +'_NA" idItem="' + val.id + '" value="No Aplica" name="optVisicaPrevia_' + val.Codigo + '" checked>';
+                tds += '<label for="optVisitaPrevia_' + val.Codigo +'_NA"></label>';
+              tds += '</div>';
+            tds += '</td>'; 
+            tds += '<td><input id="txtPoda_VisitaPlanificacion_Observaciones_Item_' + val.id + '" type="text" class="form-control col-md-12 guardar"></td>'; 
+           tds += '</tr>';
+        });
+
+        $("#tblVisitaPlanificacion_Items tbody").append(tds);
+    } else
+    {
+      if (data != 0)
+      {
+        Mensaje("Error", data, "danger");
+      } else
+      {
+        Mensaje("Error", "No hay especies configuradas", "danger");
+      }
+    }
+  }, "json");
+
+  $("#frmPoda_VisitaPlanificacion").on("submit", function(evento)
+    {
+      evento.preventDefault(); 
+      $("#frmPoda_VisitaPlanificacion").generarDatosEnvio("txtPoda_VisitaPlanificacion_", function(datos)
+        {
+          var objItems = $("#tblVisitaPlanificacion_Items input[type=radio]:checked");
+
+            var datosItems = {};
+
+            $.each(objItems, function(index, val) 
+            {
+              datosItems[$(val).attr("idItem")] = {};
+              datosItems[$(val).attr("idItem")]['Resultado'] = $(val).val();
+              datosItems[$(val).attr("idItem")]['Observaciones'] = $("#txtPoda_VisitaPlanificacion_Observaciones_Item_" + $(val).attr("idItem")).val();
+            });
+            datosItems = JSON.stringify(datosItems);  
+
+            $.post('../server/php/proyectos/poda/crearVisitaPlanificacion.php', {Usuario : Usuario.id, datos : datos, items : datosItems}, 
+              function(data, textStatus, xhr) 
+              {
+                
+                
+              });
+        });
+    });
 }
 
 function poda_Programacion()
@@ -3149,6 +3252,7 @@ function poda_Programacion()
     var tmpTexto = $("#lblUbicacionModulo").text();
     cargarModulo("poda/visitaPrevia.html", tmpTexto, function()
       {
+        $("#frmPoda_VisitaPrevia_Programacion_Formato")[0].reset();
         $("#txtPoda_VisitaPrevia_Programacion_idArbol").val(idArbol);
         $("#txtPoda_VisitaPrevia_Programacion_idOt").val($("#txtPoda_PanelOT_CrearOt_idOT").val());
         $("#txtPoda_AgregarArbol_btnVolver_Vinculo").val("poda/programacion.html");
@@ -3157,6 +3261,42 @@ function poda_Programacion()
         $("#txtPoda_VisitaPrevia_Programacion_NumeroInterno").val(pPrefijo);
         $("#lblPoda_VisitaPrevia_Programacion_NumeroInterno").text(pPrefijo);
         documental_cargar($("#frmPoda_VisitaPrevia_Archivos"), $("#cntPoda_VisitaPrevia_Archivos"), "poda/" + $("#txtPoda_Circuito").val() + "/"  + $("#txtPoda_PanelOT_CrearOt_NumeroInterno").val() + "/Visita_Previa/" + $("#txtPoda_VisitaPrevia_Programacion_idArbol").val());
+
+        $.post('../server/php/proyectos/poda/cargarDatoVisitaPrevia.php', {Usuario: Usuario.id, idArbol : idArbol, idOt: $("#txtPoda_PanelOT_CrearOt_idOT").val()}, function(data, textStatus, xhr) 
+        {
+          if (typeof(data) == "object")
+          {
+              var tds = "<option value=''>Seleccione una </option>";
+
+              $.each(data, function(index, val) 
+              {
+                 $("#lblPoda_VisitaPrevia_Programacion_NumeroInterno").text(val.Prefijo);
+                 $("#txtPoda_VisitaPrevia_Programacion_NumeroInterno").val(val.Prefijo);
+
+                 $.each(val, function(indice, dato) 
+                 {
+                    if ($("#txtPoda_VisitaPrevia_Programacion_" + indice).length > 0)
+                    {
+                      $("#txtPoda_VisitaPrevia_Programacion_" + indice).val(dato);
+                      if ($("#txtPoda_VisitaPrevia_Programacion_" + indice).attr("type") == "checkbox")
+                      {
+                        $("#txtPoda_VisitaPrevia_Programacion_" + indice).prop("checked", dato);
+                      }
+                    }
+                 });
+
+              });
+
+              $("#txtPoda_VisitaPrevia_Programacion_TipoEspecie").append(tds);
+            
+          } else
+          {
+            if (data != 0)
+            {
+              Mensaje("Error", data, "danger");
+            }
+          }
+        }, "json");
       });
   });
 
@@ -3585,6 +3725,57 @@ var marcadores_Poda_VisitaPrevia = [];
 
 function poda_VisitaPrevia_Programacion()
 {
+  $.post('../server/php/proyectos/poda/cargarUnidadesConstrucctivas.php', {Usuario : Usuario.id}, function(data, textStatus, xhr) 
+  {
+    $("#txtPoda_VisitaPrevia_Programacion_UUCC option").remove();
+    if (typeof(data) == "object")
+    {
+        var tds = "<option value=''>Seleccione una </option>";
+
+        $.each(data, function(index, val) 
+        {
+           tds += '<option value="' + val.id + '">' + val.Nombre + '</option>';
+        });
+
+        $("#txtPoda_VisitaPrevia_Programacion_UUCC").append(tds);
+      
+    } else
+    {
+      if (data != 0)
+      {
+        Mensaje("Error", data, "danger");
+      } else
+      {
+        Mensaje("Error", "No hay especies configuradas", "danger");
+      }
+    }
+  }, "json");
+
+  $.post('../server/php/proyectos/poda/cargarEspecies.php', {Usuario : Usuario.id}, function(data, textStatus, xhr) 
+  {
+    $("#txtPoda_VisitaPrevia_Programacion_TipoEspecie option").remove();
+    if (typeof(data) == "object")
+    {
+        var tds = "<option value=''>Seleccione una </option>";
+
+        $.each(data, function(index, val) 
+        {
+           tds += '<option value="' + val.Nombre + '">' + val.Nombre + '</option>';
+        });
+
+        $("#txtPoda_VisitaPrevia_Programacion_TipoEspecie").append(tds);
+      
+    } else
+    {
+      if (data != 0)
+      {
+        Mensaje("Error", data, "danger");
+      } else
+      {
+        Mensaje("Error", "No hay especies configuradas", "danger");
+      }
+    }
+  }, "json");
   $("#frmPoda_VisitaPrevia_Archivos").ajaxForm(
   {
     beforeSend: function() 
@@ -3652,6 +3843,13 @@ function poda_VisitaPrevia_Programacion()
           } else
           {
             Mensaje("Hey", "Los datos de han sido ingresados", "success");
+            url = "../assets/images/icons/tree_Visitado.png";
+            if (!$(".btnPoda_Programacion_Seleccionar[idArbol=" + $("#txtPoda_VisitaPrevia_Programacion_idArbol").val() + "]").is(":checked"))
+            {
+              $(".btnPoda_Programacion_Seleccionar[idArbol=" + $("#txtPoda_VisitaPrevia_Programacion_idArbol").val() + "]").trigger('click');
+            }
+            Markers[$("#txtPoda_VisitaPrevia_Programacion_idArbol").val()].setIcon({url : url});
+            $(".btnPoda_Programacion_VerMarker[idArbol=" + $("#txtPoda_VisitaPrevia_Programacion_idArbol").val() + "]").trigger('click');
           } 
         });
       });
@@ -3934,4 +4132,3 @@ function poda_AgregarArbol()
       }); 
     });
 }
-

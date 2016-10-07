@@ -31,6 +31,7 @@
             Tet, 
             Otros, 
             Observaciones, 
+            UUCC, 
             Usuario
           ) VALUES (
             '" . addslashes($datos->NumeroInterno) . "', 
@@ -57,6 +58,7 @@
             '" . addslashes($datos->Tet) . "', 
             '" . addslashes($datos->Otros) . "', 
             '" . addslashes($datos->Observaciones) . "', 
+            '" . addslashes($datos->UUCC) . "', 
             '" . addslashes($datos->Usuario) . "') 
           ON DUPLICATE KEY UPDATE 
             Prefijo = VALUES(Prefijo), 
@@ -83,6 +85,7 @@
             Tet = VALUES(Tet), 
             Otros = VALUES(Otros), 
             Observaciones = VALUES(Observaciones), 
+            UUCC = VALUES(UUCC), 
             Usuario = VALUES(Usuario);";
 
   $result = $link->query(utf8_decode($sql));
