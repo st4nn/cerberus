@@ -227,7 +227,7 @@ function cargarDashboard()
       $(barra).text(percentVal);
     });
 
-  $('[data-plugin="datepicker"]').datepicker();
+  $('[data-plugin="datepicker"]').datepicker({'autoclose' : true});
 
 
   $('#inicio_Map').vectorMap({map: 'co_mill', 
@@ -541,13 +541,13 @@ function infBasica_ValidarFechas()
     });
 
 
-  $('#objInformacionBasica_FechaIni').datepicker();
+  $('#objInformacionBasica_FechaIni').datepicker({'autoclose' : true});
   $("#objInformacionBasica_FechaIni").on("changeDate", function(event) {
     $("#txtInformacionBasica_FechaIni").val($("#objInformacionBasica_FechaIni").datepicker('getFormattedDate'));
       infBasica_ValidarFechas();
   });
 
-  $('#objInformacionBasica_FechaFin').datepicker();
+  $('#objInformacionBasica_FechaFin').datepicker({'autoclose' : true});
   $("#objInformacionBasica_FechaFin").on("changeDate", function(event) {
     $("#txtInformacionBasica_FechaFin").val($("#objInformacionBasica_FechaFin").datepicker('getFormattedDate'));
       infBasica_ValidarFechas();
@@ -3006,44 +3006,33 @@ function poda_PanelOT()
 
   $("#btnPanelPoda_VisitaPlanificacion").on("click", function()
   {
-    var titulo = "OT " + $("#txtPoda_PanelOT_CrearOt_NumeroInterno").val() + " en Circuito " + $("#txtPoda_CircuitoNombre").val();
-    cargarModulo("poda/VisitaPlanificacion.html", titulo, function()
-    {
-      $("#frmPoda_VisitaPlanificacion")[0].reset();
-      $("#txtPoda_VisitaPlanificacion_idOt").val($("#txtPoda_PanelOT_CrearOt_idOT").val());
-      $("#txtPoda_VisitaPlanificacion_Prefijo").val(obtenerPrefijo());
-      $.post('../server/php/proyectos/poda/cargarVisitaPlanificacion.php', {Usuario : Usuario.id, idOt : $("#txtPoda_VisitaPlanificacion_idOt").val()}, 
-        function(data, textStatus, xhr) 
-        {
-           if (typeof(data) == "object")
-            {
-              var tds = "";
+    poda_PuntosDeControl_AbrirVisita("Planificación", "VISITA DE PLANIFICACIÓN");
+  });
 
-              $.each(data.datos, function(index, val) 
-              {
-                if ($("#txtPoda_VisitaPlanificacion_" + index).length > 0)
-                {
-                  $("#txtPoda_VisitaPlanificacion_" + index).val(val);
-                }
-              });              
+  $("#btnPanelPoda_VisitaEjecucion").on("click", function()
+  {
+    poda_PuntosDeControl_AbrirVisita("Ejecución", "VISITA DE EJECUCIÓN");
+  });
 
-              var objItems = {};
-              $.each(data.items, function(index, val) 
-              {
-                objItems = $("#tblVisitaPlanificacion_Items input[type=radio][idItem=" + val.idPuntoControl + "][value='" + val.Resultado + "']");
-                $(objItems).trigger('click');
-                $("#txtPoda_VisitaPlanificacion_Observaciones_Item_" + val.idPuntoControl).val(val.Observaciones);
-              });
-            } else
-            {
-              if (data != 0)
-              {
-                Mensaje("Error", data, "danger");
-              } 
-            }
-        }, "json");
-    });
-  })
+  $("#btnPanelPoda_VisitaEjecutados").on("click", function()
+  {
+    poda_PuntosDeControl_AbrirVisita("Ejecutados", "VISITA DE EJECUTADOS");
+  });
+
+  $("#btnPanelPoda_VisitaAcInstalacion").on("click", function()
+  {
+    poda_PuntosDeControl_AbrirVisita("AC Instalación", "VISITA AC INSTALACIÓN");
+  });
+
+  $("#btnPanelPoda_VisitaAcOperadores").on("click", function()
+  {
+    poda_PuntosDeControl_AbrirVisita("AC Operadores", "VISITA AC OPERADORES");
+  });
+
+  $("#btnPanelPoda_VisitaEjecucionAC").on("click", function()
+  {
+    poda_PuntosDeControl_AbrirVisita("Ejecución AC", "VISITA EJECUCIÓN AC");
+  });
 
   $(document).delegate(".btnPoda_VolverAlPanelOT", "click", function()
   {
@@ -3051,11 +3040,61 @@ function poda_PanelOT()
   });
 }
 
-function poda_visitaPlanificacion()
+function poda_PuntosDeControl()
 {
-  $.post('../server/php/proyectos/poda/cargarPuntosDeControl.php', {Usuario : Usuario.id, Categoria :  "Planificación"}, function(data, textStatus, xhr) 
+  $("#txtPoda_PuntosDeControl_Fecha").datepicker({'autoclose' : true});
+  
+  $("#txtPoda_PuntosDeControl_HoraInicio").timepicker({ 'scrollDefault': 'now' , 'step': 15, 'timeFormat': 'H:i:s' });
+  $("#txtPoda_PuntosDeControl_HoraFin").timepicker({ 'scrollDefault': 'now' , 'step': 15, 'timeFormat': 'H:i:s' });
+  
+  $("#frmPoda_PuntosDeControl").on("submit", function(evento)
+    {
+      evento.preventDefault(); 
+      $("#frmPoda_PuntosDeControl").generarDatosEnvio("txtPoda_PuntosDeControl_", function(datos)
+        {
+          var objItems = $("#tblPoda_PuntosDeControl_Items input[type=radio]:checked");
+
+            var datosItems = {};
+
+            $.each(objItems, function(index, val) 
+            {
+              datosItems[$(val).attr("idItem")] = {};
+              datosItems[$(val).attr("idItem")]['Resultado'] = $(val).val();
+              datosItems[$(val).attr("idItem")]['Observaciones'] = $("#txtPoda_PuntosDeControl_Observaciones_Item_" + $(val).attr("idItem")).val();
+            });
+            datosItems = JSON.stringify(datosItems);  
+
+            $.post('../server/php/proyectos/poda/crearPoda_PuntosDeControl.php', {Usuario : Usuario.id, datos : datos, items : datosItems}, 
+              function(data, textStatus, xhr) 
+              {
+                
+              });
+        });
+    });
+}
+
+function poda_PuntosDeControl_AbrirVisita(Etapa, Titulo)
+{
+  var titulo = "OT " + $("#txtPoda_PanelOT_CrearOt_NumeroInterno").val() + " en Circuito " + $("#txtPoda_CircuitoNombre").val();
+    cargarModulo("poda/puntosDeControl.html", titulo, function()
+    {
+      var fecha = obtenerFecha();
+      $("#frmPoda_PuntosDeControl")[0].reset();
+      $("#txtPoda_PuntosDeControl_Fecha").val(fecha.substr(0, 10));
+      $("#txtPoda_PuntosDeControl_HoraInicio").val(fecha.substr(11, 10));
+      $("#txtPoda_PuntosDeControl_HoraFin").val(fecha.substr(11, 10));
+      $("#txtPoda_PuntosDeControl_idOt").val($("#txtPoda_PanelOT_CrearOt_idOT").val());
+      $("#txtPoda_PuntosDeControl_Prefijo").val(obtenerPrefijo());
+      $("#txtPoda_PuntosDeControl_Etapa").val(Etapa);
+      $("#lblPoda_PuntosDeControl_Titulo").text(Titulo);
+      poda_PuntosDeControl_CargarFormulario($("#txtPoda_PuntosDeControl_Etapa").val());
+    });
+}
+function poda_PuntosDeControl_CargarFormulario(Etapa)
+{
+  $.post('../server/php/proyectos/poda/cargarPuntosDeControl.php', {Usuario : Usuario.id, Categoria :  Etapa}, function(data, textStatus, xhr) 
   {
-    $("#tblVisitaPlanificacion_Items tbody tr").remove();
+    $("#tblPoda_PuntosDeControl_Items tbody tr").remove();
     if (typeof(data) == "object")
     {
         var tds = "";
@@ -3067,27 +3106,58 @@ function poda_visitaPlanificacion()
             tds += '<td>' + val.Nombre + '</td>'; 
             tds += '<td class="bg-blue-grey-300 text-center">'; 
               tds += '<div class="radio-custom radio-primary">';
-                tds += '<input type="radio" id="optVisitaPrevia_' + val.Codigo +'_Si" idItem="' + val.id + '" value="Cumple" name="optVisicaPrevia_' + val.Codigo + '">';
-                tds += '<label for="optVisitaPrevia_' + val.Codigo +'_Si"></label>';
+                tds += '<input type="radio" id="optPoda_PuntosDeControl' + val.Codigo +'_Si" idItem="' + val.id + '" value="Cumple" name="optPoda_PuntosDeControl' + val.Codigo + '">';
+                tds += '<label for="optPoda_PuntosDeControl' + val.Codigo +'_Si"></label>';
               tds += '</div>';
             tds += '</td>'; 
             tds += '<td class="bg-blue-grey-300 text-center">'; 
               tds += '<div class="radio-custom radio-primary">';
-                tds += '<input type="radio" id="optVisitaPrevia_' + val.Codigo +'_No" idItem="' + val.id + '" value="No Cumple" name="optVisicaPrevia_' + val.Codigo + '">';
-                tds += '<label for="optVisitaPrevia_' + val.Codigo +'_No"></label>';
+                tds += '<input type="radio" id="optPoda_PuntosDeControl' + val.Codigo +'_No" idItem="' + val.id + '" value="No Cumple" name="optPoda_PuntosDeControl' + val.Codigo + '">';
+                tds += '<label for="optPoda_PuntosDeControl' + val.Codigo +'_No"></label>';
               tds += '</div>';
             tds += '</td>'; 
             tds += '<td class="bg-blue-grey-300 text-center">'; 
               tds += '<div class="radio-custom radio-primary">';
-                tds += '<input type="radio" id="optVisitaPrevia_' + val.Codigo +'_NA" idItem="' + val.id + '" value="No Aplica" name="optVisicaPrevia_' + val.Codigo + '" checked>';
-                tds += '<label for="optVisitaPrevia_' + val.Codigo +'_NA"></label>';
+                tds += '<input type="radio" id="optPoda_PuntosDeControl' + val.Codigo +'_NA" idItem="' + val.id + '" value="No Aplica" name="optPoda_PuntosDeControl' + val.Codigo + '" checked>';
+                tds += '<label for="optPoda_PuntosDeControl' + val.Codigo +'_NA"></label>';
               tds += '</div>';
             tds += '</td>'; 
-            tds += '<td><input id="txtPoda_VisitaPlanificacion_Observaciones_Item_' + val.id + '" type="text" class="form-control col-md-12 guardar"></td>'; 
+            tds += '<td><input id="txtPoda_PuntosDeControl_Observaciones_Item_' + val.id + '" type="text" class="form-control col-md-12 guardar"></td>'; 
            tds += '</tr>';
         });
 
-        $("#tblVisitaPlanificacion_Items tbody").append(tds);
+        $("#tblPoda_PuntosDeControl_Items tbody").append(tds);
+
+        $.post('../server/php/proyectos/poda/cargarPuntosDeControl_Diligenciados.php', {Usuario : Usuario.id, idOt : $("#txtPoda_PuntosDeControl_idOt").val(), Etapa : Etapa }, 
+          function(data, textStatus, xhr) 
+          {
+             if (typeof(data) == "object")
+              {
+                var tds = "";
+
+                $.each(data.datos, function(index, val) 
+                {
+                  if ($("#txtPoda_PuntosDeControl_" + index).length > 0)
+                  {
+                    $("#txtPoda_PuntosDeControl_" + index).val(val);
+                  }
+                });              
+
+                var objItems = {};
+                $.each(data.items, function(index, val) 
+                {
+                  objItems = $("#tblPoda_PuntosDeControl_Items input[type=radio][idItem=" + val.idPuntoControl + "][value='" + val.Resultado + "']");
+                  $(objItems).trigger('click');
+                  $("#txtPoda_PuntosDeControl_Observaciones_Item_" + val.idPuntoControl).val(val.Observaciones);
+                });
+              } else
+              {
+                if (data != 0)
+                {
+                  Mensaje("Error", data, "danger");
+                } 
+              }
+          }, "json");
     } else
     {
       if (data != 0)
@@ -3099,32 +3169,6 @@ function poda_visitaPlanificacion()
       }
     }
   }, "json");
-
-  $("#frmPoda_VisitaPlanificacion").on("submit", function(evento)
-    {
-      evento.preventDefault(); 
-      $("#frmPoda_VisitaPlanificacion").generarDatosEnvio("txtPoda_VisitaPlanificacion_", function(datos)
-        {
-          var objItems = $("#tblVisitaPlanificacion_Items input[type=radio]:checked");
-
-            var datosItems = {};
-
-            $.each(objItems, function(index, val) 
-            {
-              datosItems[$(val).attr("idItem")] = {};
-              datosItems[$(val).attr("idItem")]['Resultado'] = $(val).val();
-              datosItems[$(val).attr("idItem")]['Observaciones'] = $("#txtPoda_VisitaPlanificacion_Observaciones_Item_" + $(val).attr("idItem")).val();
-            });
-            datosItems = JSON.stringify(datosItems);  
-
-            $.post('../server/php/proyectos/poda/crearVisitaPlanificacion.php', {Usuario : Usuario.id, datos : datos, items : datosItems}, 
-              function(data, textStatus, xhr) 
-              {
-                
-                
-              });
-        });
-    });
 }
 
 function poda_Programacion()
