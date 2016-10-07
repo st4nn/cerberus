@@ -3046,7 +3046,7 @@ function poda_PuntosDeControl()
   
   $("#txtPoda_PuntosDeControl_HoraInicio").timepicker({ 'scrollDefault': 'now' , 'step': 15, 'timeFormat': 'H:i:s' });
   $("#txtPoda_PuntosDeControl_HoraFin").timepicker({ 'scrollDefault': 'now' , 'step': 15, 'timeFormat': 'H:i:s' });
-  
+
   $("#frmPoda_PuntosDeControl").on("submit", function(evento)
     {
       evento.preventDefault(); 
@@ -3193,6 +3193,31 @@ function poda_Programacion()
         $("#txtPoda_AgregarArbol_btnVolver_Vinculo").val("poda/programacion.html");
         $("#txtPoda_AgregarArbol_btnVolver_Texto").val(tmpTexto);
 
+        fObtenerCoordenadas(function(lat, lon, acu)
+          {
+            podaAgregarArbol_Map.setCenter(lat, lon);
+            if (podaAgregarArbol_Marker == null)
+            {
+              podaAgregarArbol_Marker = podaAgregarArbol_Map.addMarker({
+                lat: lat,
+                lng: lon,
+                 draggable:true,
+                 dragend: function(e) {
+                  $("#txtPoda_AgregarArbol_Longitud").val(e.latLng.lng());
+                  $("#txtPoda_AgregarArbol_Latitud").val(e.latLng.lat());
+                }
+              });
+            } else
+            {
+              podaAgregarArbol_Marker.setPosition({lat : position.coords.latitude, lng : position.coords.longitude});
+            }
+            $("#txtPoda_AgregarArbol_Longitud").val(lat);
+            $("#txtPoda_AgregarArbol_Latitud").val(lon);
+          }, function(err)
+          {
+            console.warn('ERROR(' + err.code + '): ' + err.message);
+          });
+        /*
         GMaps.geolocate(
         {
           success: function(position)
@@ -3222,7 +3247,7 @@ function poda_Programacion()
           not_supported: function(){
             alert("Your browser does not support geolocation");
           }
-        });
+        });*/
       });
   });
 
@@ -3342,6 +3367,101 @@ function poda_Programacion()
           }
         }, "json");
       });
+  });
+
+  $(document).delegate(".btnPoda_Observaciones_Comentario_Cancelar", 'click', function(evento)
+  {
+      evento.preventDefault();
+      $(this).parent("div").parent("form").slideUp();
+  });
+
+  $(document).delegate(".btnPoda_Observaciones_Comentario_Responder", 'click', function(evento)
+  {
+      evento.preventDefault();
+      var objForm = $(this).parent("div").parent("div").find("form");
+      console.log(objForm);
+      if ($(objForm).is(":visible"))
+      {
+        $(objForm).slideUp();
+      } else
+      {
+        $(objForm).slideDown();
+      }
+  });
+
+  
+
+  $(document).delegate('#cntPoda_Observaciones form', 'submit', function(evento) 
+    {
+      evento.preventDefault();
+      var vComentario = $(this).find("textarea").val();
+      var vIdRespuesta = $(this).attr("idRespuesta");
+      var obTextArea = $(this).find("textarea");
+
+      var datos = {
+          idOt : $("#txtPoda_PanelOT_CrearOt_idOT").val(),
+          idArbol : $("#txtPoda_Observaciones_Crear_idArbol").val(),
+          Usuario: Usuario.id,
+          Comentario : vComentario,
+          idRespuesta : vIdRespuesta
+        };
+
+      $.post('../server/php/proyectos/poda/crearComentario.php', datos, 
+        function(data, textStatus, xhr) 
+        {
+         if (!isNaN(data))
+         {
+          Mensaje("Hey", "Registro Ingresado", "success");
+          if (data > 0)
+          {
+            datos.id = data;
+            datos.fechaCargue = obtenerFecha();
+            datos.Nombre = Usuario.nombre;
+            $(obTextArea).val("");
+            Poda_Observaciones_Crear_AgregarFila(datos);
+          }
+         } else
+         {
+          Mensaje("Error", data, "danger");
+         }
+        });
+    });
+
+  $("#btnPoda_Programacion_Observaciones").on("click", function()
+  {
+    var idArbol = $(this).attr("idArbol");
+    $("#txtPoda_Observaciones_Crear_idArbol").val(idArbol);
+
+    $("#cntPoda_Observaciones").modal("show");
+    $("#cntPoda_Observaciones_Comentarios div").remove();
+    $.post('../server/php/proyectos/poda/cargarComentarios.php', {Usuario : Usuario.id, idOt : $("#txtPoda_PanelOT_CrearOt_idOT").val(), idArbol : idArbol}, function(data, textStatus, xhr) 
+    {
+      if (typeof(data) == "object")
+      {
+        $.each(data, function(index, val) 
+        {
+           Poda_Observaciones_Crear_AgregarFila(val);
+        });
+      } else
+      {
+        if (data != 0)
+        {
+          Mensaje("Error", data, "danger");
+        } else
+        {
+          var tds = "";
+          tds += '<div id="cntPoda_Observaciones_Comentarios_id0" class="comment media">'
+            tds += '<div class="comment-body media-body">'
+              tds += '<div class="comment-content">'
+                tds += '<p>Aún no hay Observaciones, pero puede ser el primero en comentar</p>'
+              tds += '</div>'
+            tds += '</div>'
+          tds += '</div>'
+          
+          $("#cntPoda_Observaciones_Comentarios").append(tds);
+        }
+      }
+    }, "json");
   });
 
   
@@ -3622,6 +3742,59 @@ function poda_Programacion_AgregarMarcador(datos)
 
       
   }
+}
+
+function Poda_Observaciones_Crear_AgregarFila(datos)
+{
+  $("#cntPoda_Observaciones_Comentarios_id0").remove();
+
+  var tds = "";
+  if (datos.idRespuesta == 0)
+  {
+    tds += '<div id="cntPoda_Observaciones_Comentarios_id' + datos.id + '" class="comment media">';
+      tds += '<div class="comment-body media-body">';
+        tds += '<a class="comment-author" href="javascript:void(0)">' + datos.Nombre + '</a>';
+        tds += '<div class="comment-meta">';
+          tds += '<span class="date">' + calcularTiempoPublicacion(datos.fechaCargue) + '</span>';
+        tds += '</div>';
+        tds += '<div class="comment-content">';
+          tds += '<p>' + datos.Comentario + '</p>';
+        tds += '</div>';
+
+        tds += '<div class="comment-actions">';
+          tds += '<a class="active btnPoda_Observaciones_Comentario_Responder" href="javascript:void(0)" role="button">Responder</a>';
+        tds += '</div>';
+        tds += '<div class="comments"></div>';
+        tds += '<form class="comment-reply hide" idRespuesta="' + datos.id + '" action="#" method="post">';
+          tds += '<div class="form-group">';
+            tds += '<textarea class="form-control" rows="5" placeholder="Comente Aquí"></textarea>';
+          tds += '</div>';
+          tds += '<div class="form-group">';
+            tds += '<button type="submit" class="btn btn-primary">Enviar</button>';
+            tds += '<button type="button" class="btn btn-link blue-grey-500 btnPoda_Observaciones_Comentario_Cancelar">Cancelar</button>';
+          tds += '</div>';
+        tds += '</form>';
+        
+      tds += '</div>';
+    tds += '</div>  ';
+
+    $("#cntPoda_Observaciones_Comentarios").prepend(tds);
+  } else
+  {
+    tds += '<div class="comment media margin-horizontal-30">';
+      tds += '<div class="comment-body media-body">';
+        tds += '<a class="comment-author" href="javascript:void(0)">' + datos.Nombre + '</a>';
+        tds += '<div class="comment-meta">';
+          tds += '<span class="date">' + calcularTiempoPublicacion(datos.fechaCargue) + '</span>';
+        tds += '</div>';
+        tds += '<div class="comment-content">';
+          tds += '<p>' + datos.Comentario + '</p>';
+        tds += '</div>';
+      tds += '</div>';
+    tds += '</div>';
+    $('#cntPoda_Observaciones_Comentarios_id' + datos.idRespuesta + ' .comments').append(tds);
+  }
+
 }
 
 function iniciarSwitchery(callback)
@@ -4175,4 +4348,31 @@ function poda_AgregarArbol()
         });
       }); 
     });
+}
+
+function fObtenerCoordenadas(callback, sierror)
+{
+  if (callback === undefined)
+    {callback = function(){};}
+
+if (sierror === undefined)
+    {sierror = function(){};}
+
+
+  var objCoordenadas ="";
+  navigator.geolocation.getCurrentPosition(
+    function(datos)
+    {
+      var lat = datos.coords.latitude;
+      var lon = datos.coords.longitude;
+      var accu = datos.coords.accuracy;
+
+      objCoordenadas =  lat + "," + lon + "#" + accu;
+      callback(lat, lon, accu);
+    }, 
+    function (error)
+    {
+      sierror(error);
+    });
+  return objCoordenadas;
 }
