@@ -65,7 +65,6 @@
                                        AND convert(msc_Resultado.codigoNC USING utf8) = resultadoauditoria.codigoNC
          WHERE
             obras.idObra > 0
-            AND (resultadoauditoria.Criterio LIKE 'Seguridad' OR resultadoauditoria.Criterio LIKE 'General')
             $where 
          GROUP BY delegaciones.Nombre,
                   obras.tipoObra,

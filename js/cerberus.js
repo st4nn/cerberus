@@ -2214,10 +2214,9 @@ function reportes()
         var tdc = "";
 
             tdc += "<tr>";
-              tdc += '<th>Resumen de Inspecciones de Seguridad en Obras</th>';
-              tdc += '<th>Mes</th>';
-              tdc += '<th>Cantidad</th>';
               tdc += '<th></th>';
+              tdc += '<th>Resumen de Inspecciones de Seguridad en Obras</th>';
+              tdc += '<th>Cantidad</th>';
             tdc += "</tr>";
         $("#tblReportes thead").append(tdc);
 
@@ -2226,15 +2225,16 @@ function reportes()
           if (data != 0)
           {
             var tds = "";
+            var idx = 0;
             
             $.each(data, function(index, val) 
             {
                tds += '<tr>';
-                tds += '<td>' + val.Mes + '</td>';
+                tds += '<td>' + idx + '</td>';
                 tds += '<td>' + val.Concepto + '</td>';
-                tds += '<td>' + val.cantidadInspeccionadas + '</td>';
-                tds += '<td></td>';
+                tds += '<td>' + val.Cantidad + '</td>';
                tds += '</tr>';
+               idx++;
             });
 
             $("#tblReportes").crearDataTable(tds, function(){}, tdc);
@@ -2250,10 +2250,9 @@ function reportes()
         var tdc = "";
 
             tdc += "<tr>";
-              tdc += '<th>Resumen de Inspecciones de Calidad en Obras</th>';
-              tdc += '<th>Mes</th>';
-              tdc += '<th>Cantidad</th>';
               tdc += '<th></th>';
+              tdc += '<th>Resumen de Inspecciones de Calidad en Obras</th>';
+              tdc += '<th>Cantidad</th>';
             tdc += "</tr>";
         $("#tblReportes thead").append(tdc);
 
@@ -2262,15 +2261,52 @@ function reportes()
           if (data != 0)
           {
             var tds = "";
+            var idx = 0;
+
+            $.each(data, function(index, val) 
+            {
+               tds += '<tr>';
+                tds += '<td>' + idx + '</td>';
+                tds += '<td>' + val.Concepto + '</td>';
+                tds += '<td>' + val.Cantidad + '</td>';
+               tds += '</tr>';
+               idx++;
+            });
+
+            $("#tblReportes").crearDataTable(tds, function(){}, tdc);
+
+
+          } else
+          {
+            Mensaje("No hay datos para Mostrar");
+          }          
+        }, "json");
+      break;
+      case 18:
+        var tdc = "";
+
+            tdc += "<tr>";
+              tdc += '<th></th>';
+              tdc += '<th>Concepto</th>';
+              tdc += '<th>Cantidad</th>';
+            tdc += "</tr>";
+        $("#tblReportes thead").append(tdc);
+
+        $.post('../server/php/proyectos/reportes/obras/AseguramientoObras.php', filtro, function(data, textStatus, xhr) 
+        {
+          if (data != 0)
+          {
+            var tds = "";
+            var idx = 0;
             
             $.each(data, function(index, val) 
             {
                tds += '<tr>';
-                tds += '<td>' + val.Mes + '</td>';
+                tds += '<td>' + idx + '</td>';
                 tds += '<td>' + val.Concepto + '</td>';
-                tds += '<td>' + val.cantidadInspeccionadas + '</td>';
-                tds += '<td></td>';
+                tds += '<td>' + val.Cantidad + '</td>';
                tds += '</tr>';
+               idx++;
             });
 
             $("#tblReportes").crearDataTable(tds, function(){}, tdc);
