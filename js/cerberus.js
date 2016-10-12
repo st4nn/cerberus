@@ -2106,13 +2106,15 @@ function reportes()
   $("#txtReporte_FechaIni").val(primerDia.getFullYear() + "-" + CompletarConCero(primerDia.getMonth() + 1, 2) + "-01");
   $("#txtReporte_FechaFin").val(ultimoDia.getFullYear() + "-" + CompletarConCero(ultimoDia.getMonth() + 1, 2) + "-" + CompletarConCero(ultimoDia.getDate(), 2));
 
-  $(".lnkReporte_Opcion").on("click", function()
+  $(".lnkReporte_Opcion, #btnReporte_Actualizar").on("click", function()
   {
+    var idOpcion = $(this).attr("idOpcion");
+    $("#btnReporte_Actualizar").attr("idOpcion", idOpcion);
     $("#cntReportes_Filtros").hide();
     $("#cntReportes_Opciones").hide();
 
 
-    var idTabla = parseInt($(this).attr("idOpcion"));
+    var idTabla = parseInt(idOpcion);
     var filtro = {Usuario: Usuario.id, fechaIni : $("#txtReporte_FechaIni").val(), fechaFin : $("#txtReporte_FechaFin").val()};
 
     var table = {};
@@ -2164,7 +2166,7 @@ function reportes()
 
           } else
           {
-            Mensaje("No hay datos para Mostrar");
+            Mensaje("Hey", "No hay datos para Mostrar", "danger");
           }          
         }, "json");
       break;
@@ -2372,7 +2374,10 @@ function reportes()
       break;
     }
 
-    $("#lblReportes_Titulo").text($(this).text());
+    if ($(this).text().trim() != "Buscar")
+    {
+      $("#lblReportes_Titulo").text($(this).text());
+    }
 
     $("#cntReportes_Tablas img").hide();
     $("#imgReportes_" + idTabla).show();

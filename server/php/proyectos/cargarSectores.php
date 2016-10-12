@@ -1,13 +1,24 @@
 <?php
   include("../conectar.php"); 
+  include("datosUsuario.php"); 
    $link = Conectar();
 
    $Usuario = addslashes($_POST['Usuario']);
+
+   $dUsuario = datosUsuario($Usuario);
+
+   $where = "";
+
+   if ($dUsuario->Zonas <> "")
+   {
+      $where = " WHERE sectores.idDelegacion IN (" . $dUsuario->Zonas . ") ";
+   }
    
    $sql = "SELECT
                *
             FROM
                sectores
+            $where
             ORDER BY
                sectores.Nombre";
 

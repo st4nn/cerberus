@@ -6,7 +6,7 @@
 
    $sql = "SELECT ActaAnterior FROM msc_CompInforme
             WHERE
-               msc_CompInforme.idObra = $idObra;";
+               msc_CompInforme.idObra = '$idObra';";
 
    $result = $link->query($sql);
 
@@ -21,10 +21,7 @@
          $Acta .= $row['ActaAnterior'];
       }
          mysqli_free_result($result);  
-   } else
-   {
-      echo "";
-   }
+   } 
 
    echo $Acta;
 ?>

@@ -1,10 +1,14 @@
 <?php
   include("../conectar.php"); 
+   include("datosUsuario.php"); 
    $link = Conectar();
 
    $Parametro = addslashes($_POST['Parametro']);
    $Fecha = addslashes($_POST['Fecha']);
    $Usuario = $_POST['Usuario'];
+
+   $dUsuario = datosUsuario($Usuario);
+
 
    $Parametro = str_replace(" ", "%", $Parametro);
    /*
@@ -27,6 +31,18 @@
                   OR delegaciones.Nombre LIKE '%$Parametro%') ";
    }
 
+   if ($dUsuario->Zonas <> "")
+   {
+      if ($Where <> "")
+      {
+         $Where .= " AND obras.idDelegacion IN (" . $dUsuario->Zonas . ") ";
+      } else
+      {
+         $Where = " obras.idDelegacion IN (" . $dUsuario->Zonas . ") ";
+      }
+   }
+
+
    if ($Fecha <> "")
    {
       if ($Where <> "")
@@ -46,6 +62,7 @@
          $Limit = "LIMIT 0, 30";
       }
    }
+
 
    $sql = "SELECT 
             obras.*, 

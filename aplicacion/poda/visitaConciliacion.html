@@ -1,0 +1,75 @@
+  <!-- Page -->
+<div class="panel">
+  <button type="button" class="btn btn-round btn-primary btn-pill-right btnPoda_VolverAProgramacion">Volver</button>
+  <input id="txtPoda_Circuito" type="hidden">
+  <div class="panel-body">
+    <div class="col-md-12">
+      <form id="frmPoda_VisitaPrevia_Programacion_Formato" class="form-horizontal" action="#" method="post" role="form">
+        <div class="modal-header">
+          <h4 class="modal-title">Conciliación</h4>
+        </div>
+        <div class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success btn-lg btn-blockren"><i class="icon glyphicon glyphicon-floppy-disk"></i> Guardar</button>
+          </div>
+        </div>
+      </form>
+      <div class="col-md-12 row bg-grey-200">
+        <div class="col-md-12">
+          <div class="margin-10">
+            <div class="panel panel-bordered panel-dark">                    
+              <div class="panel-heading">
+                <h3 class="panel-title">Registro Camara</h3>
+              </div>
+              <div class="panel-body">
+                <div class="ribbon ribbon-corner ribbon-reverse ribbon-bottom">
+                  <span class="ribbon-inner"><i class="icon wb-small-point" aria-hidden="true"></i></span>
+                </div>
+                <div class="col-md-10 margin-top-20">
+                  <h4 class="example-title">Agregar Archivos</h4>
+                  <div class="col-md-10">
+                    <h5 class="example-title">Cargar Archivo</h5>
+                    <form class="form-group" id="frmPoda_VisitaPrevia_Archivos" action="" method="post" enctype="multipart/form-data">
+                      <div class="input-group input-group-file">
+                        <input type="text" class="form-control inputText" readonly="">
+                        <span class="input-group-btn">
+                          <span class="btn btn-success btn-file">
+                            <i class="icon wb-more-horizontal" aria-hidden="true"></i>
+                            Buscar
+                            <input type="file" name="archivo" class="inputControl">
+                          </span>
+                          <button type="submit" class="btn btn-success">
+                            <i class="icon wb-upload" aria-hidden="true"></i> Subir
+                          </button>
+                        </span>
+                      </div>
+                      <div class="progress progress-lg">
+                        <div id="txtPoda_VisitaPrevia_ArchivosProgreso" class="progress-bar progress-bar-success" style="width: 0%;" role="progressbar"></div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-md-10">
+                    <ul id="cntPoda_VisitaPrevia_Archivos" class="list-group list-group-dividered list-group-full">
+                          
+                        </ul>
+                  </div>
+                </div>
+              </div>
+            </div>    
+          </div>
+        </div>
+      </div>
+  </div>
+  <button type="button" class="btn btn-round btn-primary btn-pill-left pull-right btnPoda_VolverAProgramacion">Volver</button>
+</div>
+
+    <!-- End Page -->
+<script type="text/javascript">
+    jQuery(document).ready(function() {       
+        poda_VisitaPrevia_Programacion();
+      });
+
+</script>

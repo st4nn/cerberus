@@ -2,10 +2,10 @@
 <div class="panel">
   <div class="panel-body container-fluid">
     <form autocomplete="off" id="frmReporte">
-      <div class="col-md-2">
+      <div class="col-md-2 text-right">
         <i> desde </i>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="input-group">
           <span class="input-group-addon">
             <i class="icon wb-calendar" aria-hidden="true"></i>
@@ -13,10 +13,10 @@
           <input type="text" class="form-control" id="txtReporte_FechaIni" data-plugin="datepicker" autocomplete="off">
         </div>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2 text-right">
         <i> hasta </i>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="input-group">
           <span class="input-group-addon">
             <i class="icon wb-calendar" aria-hidden="true"></i>
@@ -24,6 +24,11 @@
           <input type="text" class="form-control" id="txtReporte_FechaFin" data-plugin="datepicker" autocomplete="off">
         </div>
       </div>
+      
+      <div class="col-md-2">
+        <button id="btnReporte_Actualizar" idOpcion="0" type="button" class="btn btn-success"><i class="icon wb-search"></i> Buscar</button>
+      </div>
+      
     </form>
     <div class="col-md-12 margin-5">
       <div class="col-xs-4">

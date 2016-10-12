@@ -1,4 +1,5 @@
 <?php
+
    function datosUsuario($idUsuario)
    {
       $link = Conectar();
