@@ -23,6 +23,20 @@ $obras = "";
 $arrobras = array();
 $idx = 0;
 
+$Meses = array()
+    $Meses['ENERO'] = '01';
+    $Meses['FEBRERO'] = '02';
+    $Meses['MARZO'] = '03';
+    $Meses['ABRIL'] = '04';
+    $Meses['MAYO'] = '05';
+    $Meses['JUNIO'] = '06';
+    $Meses['JULIO'] = '07';
+    $Meses['AGOSTO'] = '08';
+    $Meses['SEPTIEMBRE'] = '09';
+    $Meses['OCTUBRE'] = '10';
+    $Meses['NOVIEMBRE'] = '11';
+    $Meses['DICIEMBRE'] = '12';
+
 $sql = "SELECT * FROM delegaciones";
 $result = $link->query(($sql));
 $Delegaciones = array();
@@ -69,13 +83,17 @@ foreach($data->sheets as $numeroHoja => $hoja)
                                 "'" . $hoja['cells'][$j][9] . "', " .
                                 "'" . $hoja['cells'][$j][4] . "', " .
                                 "'" . $Delegaciones[trim($hoja['cells'][$j][1])] . "', " .
-                                "'" . $hoja['cells'][$j][10] . "'), ";
+                                "'" . $hoja['cells'][$j][10] . "'," .
+                                "'" . date('Y') . $Meses[$hoja['cells'][$j][10]] . "-01'), ";
+
+
                             $arrobras[$j] = array();
                             $arrobras[$j]['codigoObra'] = $hoja['cells'][$j][8];
                             $arrobras[$j]['Nombre'] = $hoja['cells'][$j][9];
                             $arrobras[$j]['tipoObra'] = $hoja['cells'][$j][4];
                             $arrobras[$j]['Delegacion'] = $hoja['cells'][$j][1];
-                            $arrobras[$j]['mesInfo'] = $hoja['cells'][$j][10];
+                            $arrobras[$j]['mesInfo'] = $hoja['cells'][$j][10]
+                            $arrobras[$j]['mesInfoNum'] = date('Y') . $Meses[$hoja['cells'][$j][10]] . "-01";
                         } else
                         {
                             $contadorDeBlancos++;
@@ -104,13 +122,14 @@ if ($obras <> "")
 
     $numCreadas = $link->affected_rows;
     
-    $sql = "INSERT INTO obras (idObra, codigoObra, Nombre, tipoObra, idDelegacion, mesInfo) VALUES " . $obras . " 
+    $sql = "INSERT INTO obras (idObra, codigoObra, Nombre, tipoObra, idDelegacion, mesInfo, mesInfoNum) VALUES " . $obras . " 
                 ON DUPLICATE KEY UPDATE 
                     codigoObra = VALUES(codigoObra),
                     Nombre = VALUES(Nombre),
                     tipoObra = VALUES(tipoObra),
                     idDelegacion = VALUES(idDelegacion),
-                    mesInfo = VALUES(mesInfo);";
+                    mesInfo = VALUES(mesInfo),
+                    mesInfoNum = VALUES(mesInfoNum);";
 
     $result = $link->query($sql);
     $numActualizadas = $link->affected_rows;

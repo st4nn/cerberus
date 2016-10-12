@@ -2174,8 +2174,9 @@ function reportes()
         var tdc = "";
 
             tdc += "<tr>";
-              tdc += '<th>Delegación</th>';
+              tdc += '<th></th>';
               tdc += '<th>Mes</th>';
+              tdc += '<th>Delegación</th>';
               tdc += '<th>Previstas</th>';
               tdc += '<th>Ejecutadas</th>';
               tdc += '<th></th>';
@@ -2191,6 +2192,7 @@ function reportes()
             $.each(data, function(index, val) 
             {
                tds += '<tr>';
+               tds += '<td>' + val.mesNum + '</td>';
                 tds += '<td>' + val.mes + '</td>';
                 tds += '<td>' + val.Delegacion + '</td>';
                 tds += '<td>' + val.cantP + '</td>';
