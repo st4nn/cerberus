@@ -271,9 +271,22 @@
             {
               evento.preventDefault();
               var obj = $(this).parent("div").parent("div").parent("li");
-              $(obj).remove();
-              $("#lblPostes_NoNodos").text($("#lstPostes_Postes li").size());
-              calcularPostesSeleccionables();
+              var Codigo = $(this).attr("Codigo");
+
+              alertify.set({"labels" : {"ok" : "Si, Borrar", "cancel" : "No, Volver"}});
+              alertify.confirm("Confirma que desea borrar este elemento?", function (ev) 
+              {
+                if (ev)
+                {
+                  $.post('../server/php/proyectos/borrarPoste.php', {idObra: $("#txtIdObra").val(), Codigo : Codigo}, function(data, textStatus, xhr) 
+                  {
+
+                  });
+                  $(obj).remove();
+                  $("#lblPostes_NoNodos").text($("#lstPostes_Postes li").size());
+                  calcularPostesSeleccionables();
+                }
+              });
             });
 
             $("#btnPostes_TomarMuestra").on("click", function(evento)

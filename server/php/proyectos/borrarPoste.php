@@ -2,9 +2,10 @@
    include("../conectar.php"); 
    $link = Conectar();
 
-   $idProyecto = addslashes($_POST['idObra']);
+   $idObra = addslashes($_POST['idObra']);
+   $Codigo = addslashes($_POST['Codigo']);
 
-  $sql = "DELETE FROM obras WHERE idObra = '$idProyecto'";
+  $sql = "DELETE FROM postes WHERE Codigo = '$Codigo' AND idObra = '$idObra';";
 
   $result = $link->query($sql);
 

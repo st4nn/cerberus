@@ -26,9 +26,35 @@
           var f = new Date();
             f = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-01";
           $("#txtVerCronograma_Fecha").val(f);
-          $("#txtVerCronograma_Fecha").datepicker();
+          $("#txtVerCronograma_Fecha").datepicker({'autoclose' : true});
 
           verCronograma(); 
+
+          $(document).delegate('.btnVerCronograma_Borrar', 'click', function(event) 
+          {
+            event.preventDefault();
+
+            var obj = this;
+            var idObra = $(obj).attr("idObra");
+
+            alertify.set({"labels" : {"ok" : "Si, Borrar", "cancel" : "No, Volver"}});
+            alertify.confirm("Confirma que desea borrar esta Obra?", function (ev) 
+            {
+              if (ev)
+              {
+                $.post("../server/php/proyectos/borrarProyecto.php", {idObra: idObra}, function(data)
+                {
+                  if (data == 1)
+                  {
+                    $(obj).parent("div").parent("div").parent("div").remove();
+                  } else
+                  {
+                    Mensaje("Error", data);
+                  }
+                });
+              } 
+            });
+          });
 
           $("#btnVerCronograma_Actualizar").on("click", function(evento)
             {
@@ -62,7 +88,7 @@
                     tds += '<h6><small>Delegación: </small><strong>' + val.Delegacion + '</strong></h6>';
                     tds +='<div class="text-right">';
                       tds += '<button type="button" class="btn btn-icon btn-success margin-horizontal-20 btnVerCronograma_Abrir"><i class="icon wb-eye" aria-hidden="true"></i> Abrir</button>';
-                      tds += '<button type="button" class="btn btn-icon btn-danger btnVerCronograma_Borrar"><i class="icon wb-trash" aria-hidden="true"></i> Borrar</button>';
+                      tds += '<button type="button" class="btn btn-icon btn-danger btnVerCronograma_Borrar" idObra="' + val.idObra + '"><i class="icon wb-trash" aria-hidden="true"></i> Borrar</button>';
                     tds +='</div>';
                   tds += '</div>';
                 tds += '</div>';

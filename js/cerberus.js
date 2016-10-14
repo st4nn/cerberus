@@ -379,7 +379,7 @@ function agregarPoste(Codigo, Direccion, valor)
       tds += '<div class="media-body">';
         tds += '<h4 class="media-heading">' + /*Codigo*/"" + '</h4>';
         tds += '<small>' + Direccion + '</small>';
-        tds += '<button type="button" class="btn btn-icon btn-danger btn-round btnPostes_BorrarPoste"><i class="icon wb-trash" aria-hidden="true"></i></button>';
+        tds += '<button type="button" Codigo="' + Codigo + '" class="btn btn-icon btn-danger btn-round btnPostes_BorrarPoste"><i class="icon wb-trash" aria-hidden="true"></i></button>';
       tds += '</div>';
       tds += '<div class="media-right">';
       tds += '</div>';
