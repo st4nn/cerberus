@@ -42,7 +42,7 @@
                      INNER JOIN confPoda_PuntosControl ON confPoda_PuntosControl.id = poda_Resultado.idPuntoControl
                   WHERE 
                      poda_Resultado.idOt = '$idOt'
-                     AND confPoda_PuntosControl.Categoria = 'Planificación';";
+                     AND confPoda_PuntosControl.Categoria = '$Etapa';";
 
          $result = $link->query(utf8_decode($sql));
 

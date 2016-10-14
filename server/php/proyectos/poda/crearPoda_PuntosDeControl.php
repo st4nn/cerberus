@@ -39,7 +39,7 @@
             '" . addslashes($datos->NombreBrigada) . "', 
             '" . addslashes($datos->HoraInicio) . "', 
             '" . addslashes($datos->HoraFin) . "', 
-            '" . addslashes('$datos->Observaciones') . "', 
+            '" . addslashes($datos->Observaciones) . "', 
             '" . addslashes($datos->Usuario) . "') 
           ON DUPLICATE KEY UPDATE 
             idOt = VALUES(idOt), 

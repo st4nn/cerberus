@@ -3095,7 +3095,7 @@ function poda_PuntosDeControl()
       evento.preventDefault(); 
       $("#frmPoda_PuntosDeControl").generarDatosEnvio("txtPoda_PuntosDeControl_", function(datos)
         {
-          var objItems = $("#tblPoda_PuntosDeControl_Items input[type=radio]:checked");
+          var objItems = $("#cntPoda_PuntosDeControl_Items input[type=radio]:checked");
 
             var datosItems = {};
 
@@ -3137,39 +3137,92 @@ function poda_PuntosDeControl_CargarFormulario(Etapa)
 {
   $.post('../server/php/proyectos/poda/cargarPuntosDeControl.php', {Usuario : Usuario.id, Categoria :  Etapa}, function(data, textStatus, xhr) 
   {
-    $("#tblPoda_PuntosDeControl_Items tbody tr").remove();
+    $("#cntPoda_PuntosDeControl_Items div").remove();
     if (typeof(data) == "object")
     {
         var tds = "";
+        var tmpGrupo = "";
+        var objPrefijo = "";
+        var claseCollapsed = "";
+        var claseIn = " in";
 
         $.each(data, function(index, val) 
         {
-           tds += '<tr>';
-            tds += '<td>' + val.Codigo + '</td>'; 
-            tds += '<td>' + val.Nombre + '</td>'; 
-            tds += '<td class="bg-blue-grey-300 text-center">'; 
-              tds += '<div class="radio-custom radio-primary">';
-                tds += '<input type="radio" id="optPoda_PuntosDeControl' + val.Codigo +'_Si" idItem="' + val.id + '" value="Cumple" name="optPoda_PuntosDeControl' + val.Codigo + '">';
-                tds += '<label for="optPoda_PuntosDeControl' + val.Codigo +'_Si"></label>';
+          if (val.Grupo != tmpGrupo)
+          {
+            tmpGrupo = val.Grupo;
+            objPrefijo = obtenerPrefijo() + index;
+            if (index > 0)
+            {
+                      tds += '<tbody>';
+                    tds += '</table>';
+                  tds += '</div>';
+                tds += '</div>';
               tds += '</div>';
-            tds += '</td>'; 
-            tds += '<td class="bg-blue-grey-300 text-center">'; 
-              tds += '<div class="radio-custom radio-primary">';
-                tds += '<input type="radio" id="optPoda_PuntosDeControl' + val.Codigo +'_No" idItem="' + val.id + '" value="No Cumple" name="optPoda_PuntosDeControl' + val.Codigo + '">';
-                tds += '<label for="optPoda_PuntosDeControl' + val.Codigo +'_No"></label>';
+
+              claseCollapsed = " collapsed";
+              claseIn = "";
+            }
+
+            
+            tds += '<div class="panel">';
+              tds += '<div class="panel-heading"  role="tab">';
+                tds += '<a class="panel-title' + claseCollapsed + '" data-toggle="collapse" href="#cntPoda_PuntosDeControl_Item_' + objPrefijo + '" aria-expanded="true">';
+                  tds += val.Grupo
+                tds += '</a>';
               tds += '</div>';
-            tds += '</td>'; 
-            tds += '<td class="bg-blue-grey-300 text-center">'; 
-              tds += '<div class="radio-custom radio-primary">';
-                tds += '<input type="radio" id="optPoda_PuntosDeControl' + val.Codigo +'_NA" idItem="' + val.id + '" value="No Aplica" name="optPoda_PuntosDeControl' + val.Codigo + '" checked>';
-                tds += '<label for="optPoda_PuntosDeControl' + val.Codigo +'_NA"></label>';
-              tds += '</div>';
-            tds += '</td>'; 
-            tds += '<td><input id="txtPoda_PuntosDeControl_Observaciones_Item_' + val.id + '" type="text" class="form-control col-md-12 guardar"></td>'; 
-           tds += '</tr>';
+              tds += '<div class="panel-collapse collapse' + claseIn + '" id="cntPoda_PuntosDeControl_Item_' + objPrefijo + '" role="tabpanel">';
+                tds += '<div class="panel-body">';
+                  tds += '<table class="table col-md-12 table-striped">';
+                    tds += '<thead>';
+                      tds += '<tr>';
+                        tds += '<th>Item</th>';
+                        tds += '<th>Descripción</th>';
+                        tds += '<th>Cumple</th>';
+                        tds += '<th>No Cumple</th>';
+                        tds += '<th>No Aplica</th>';
+                        tds += '<th>Observaciones</th>';
+                      tds += '</tr>';
+                    tds += '</thead>';
+                    tds += '<tbody>';
+          }
+
+                     tds += '<tr>';
+                      tds += '<td>' + val.Codigo + '</td>'; 
+                      tds += '<td>' + val.Nombre + '</td>'; 
+                      tds += '<td class="bg-blue-grey-300 text-center">'; 
+                        tds += '<div class="radio-custom radio-primary">';
+                          tds += '<input type="radio" id="optPoda_PuntosDeControl' + val.Codigo +'_Si" idItem="' + val.id + '" value="Cumple" name="optPoda_PuntosDeControl' + val.Codigo + '">';
+                          tds += '<label for="optPoda_PuntosDeControl' + val.Codigo +'_Si"></label>';
+                        tds += '</div>';
+                      tds += '</td>'; 
+                      tds += '<td class="bg-blue-grey-300 text-center">'; 
+                        tds += '<div class="radio-custom radio-primary">';
+                          tds += '<input type="radio" id="optPoda_PuntosDeControl' + val.Codigo +'_No" idItem="' + val.id + '" value="No Cumple" name="optPoda_PuntosDeControl' + val.Codigo + '">';
+                          tds += '<label for="optPoda_PuntosDeControl' + val.Codigo +'_No"></label>';
+                        tds += '</div>';
+                      tds += '</td>'; 
+                      tds += '<td class="bg-blue-grey-300 text-center">'; 
+                        tds += '<div class="radio-custom radio-primary">';
+                          tds += '<input type="radio" id="optPoda_PuntosDeControl' + val.Codigo +'_NA" idItem="' + val.id + '" value="No Aplica" name="optPoda_PuntosDeControl' + val.Codigo + '" checked>';
+                          tds += '<label for="optPoda_PuntosDeControl' + val.Codigo +'_NA"></label>';
+                        tds += '</div>';
+                      tds += '</td>'; 
+                      tds += '<td><input id="txtPoda_PuntosDeControl_Observaciones_Item_' + val.id + '" type="text" class="form-control col-md-12 guardar"></td>'; 
+                     tds += '</tr>';
         });
 
-        $("#tblPoda_PuntosDeControl_Items tbody").append(tds);
+        if (tds != "")
+        {
+                    tds += '<tbody>';
+                  tds += '</table>';
+                tds += '</div';
+              tds += '</div>';
+            tds += '</div>';
+          tds += '</div>';
+        }
+
+        $("#cntPoda_PuntosDeControl_Items").append(tds);
 
         $.post('../server/php/proyectos/poda/cargarPuntosDeControl_Diligenciados.php', {Usuario : Usuario.id, idOt : $("#txtPoda_PuntosDeControl_idOt").val(), Etapa : Etapa }, 
           function(data, textStatus, xhr) 
@@ -3189,7 +3242,7 @@ function poda_PuntosDeControl_CargarFormulario(Etapa)
                 var objItems = {};
                 $.each(data.items, function(index, val) 
                 {
-                  objItems = $("#tblPoda_PuntosDeControl_Items input[type=radio][idItem=" + val.idPuntoControl + "][value='" + val.Resultado + "']");
+                  objItems = $("#cntPoda_PuntosDeControl_Items input[type=radio][idItem=" + val.idPuntoControl + "][value='" + val.Resultado + "']");
                   $(objItems).trigger('click');
                   $("#txtPoda_PuntosDeControl_Observaciones_Item_" + val.idPuntoControl).val(val.Observaciones);
                 });
@@ -3469,6 +3522,36 @@ function poda_Programacion()
          }
         });
     });
+  $("#btnPoda_Programacion_VisitaConciliacion").on("click", function()
+  {
+    var idArbol = $(this).attr("idArbol");
+
+     event.preventDefault();
+
+    var obj = this;
+
+    alertify.set({"labels" : {"ok" : "CONFORME", "cancel" : "NO CONFORME"}});
+    alertify.confirm("Como clasifica este elemento?", function (ev) 
+    {
+      if (ev)
+      {
+        var ruta = $(obj).parent("h4").find("[href]");
+        ruta = $(ruta).attr("href");
+        
+        $.post("../server/php/eliminarArchivo.php", {ruta: ruta}, function(data)
+        {
+          if (data == 1)
+          {
+            $(obj).parent("h4").parent("div").parent("div").parent("li").remove();
+          } else
+          {
+            Mensaje("Error", data);
+          }
+
+        })
+      } 
+    });
+  });
 
   $("#btnPoda_Programacion_Observaciones").on("click", function()
   {
@@ -3524,6 +3607,7 @@ function poda_Programacion()
      $("#btnPoda_Programacion_EditarArbol").attr("idArbol", id);
      $("#btnPoda_Programacion_VisitaPrevia").attr("idArbol", id);
      $("#btnPoda_Programacion_Observaciones").attr("idArbol", id);
+     $("#btnPoda_Programacion_VisitaConciliacion").attr("idArbol", id);
 
      var objFila = $(this).parent("td").parent("tr").find("td");
      $("#lblPoda_Programacion_MapaOpciones_NombreComun").text($(objFila[4]).text());
