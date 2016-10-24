@@ -5,40 +5,19 @@
 
    $idUsuario = $_POST['Usuario'];
    $Usuario = datosUsuario($idUsuario);
-   $Proceso = addslashes($_POST['Proceso']);
 
    $Perfil = "";
 
-   if ($Usuario->idPerfil <> 1)
-   {
-      $Perfil = " WHERE perfiles.id >= '" . $Usuario->idPerfil . "' ";
-   }
-
    if ($Usuario->idProceso <> 1)
    {
-      if ($Perfil == "")
-      {
-        $Perfil = " WHERE perfiles.idProceso = '" . $Usuario->idProceso . "' ";
-      } else
-      {
-        $Perfil .= " AND perfiles.idProceso = '" . $Usuario->idProceso . "' ";
-      }
-   } else
-   {
-      if ($Perfil == "")
-      {
-        $Perfil = " WHERE perfiles.idProceso = '" . $Proceso . "' ";
-      } else
-      {
-        $Perfil .= " AND perfiles.idProceso = '" . $Proceso . "' ";
-      }
+      $Perfil = " WHERE confProcesos.id = '" . $Usuario->idProceso . "' ";
    }
 
    $sql = "SELECT    
-                perfiles.idPerfil AS id,
-                perfiles.Nombre
+                confProcesos.id AS id,
+                confProcesos.Nombre
             FROM 
-               perfiles $Perfil;";
+               confProcesos $Perfil;";
 
    $result = $link->query($sql);
 

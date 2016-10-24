@@ -4291,8 +4291,8 @@ function vAgregarMarcador(datos, mapa, Marcadores, funcionClickMarcador)
 
 function jsCrearUsuario()
 {
-  $("#txtCrearUsuario_perfil option").remove();
-  $.post('../server/php/proyectos/configuracion/cargarPerfiles.php', {Usuario: Usuario.id}, function(data, textStatus, xhr) 
+  $("#txtCrearUsuario_proceso option").remove();
+  $.post('../server/php/proyectos/configuracion/cargarProcesos.php', {Usuario: Usuario.id}, function(data, textStatus, xhr) 
   {
     if (data != 0 )
     {
@@ -4301,9 +4301,27 @@ function jsCrearUsuario()
       {
          tds += '<option value="' + val.id + '">' + val.Nombre + '</option>';
       });
-      $("#txtCrearUsuario_perfil").append(tds);
+      $("#txtCrearUsuario_proceso").append(tds);
+      $("#txtCrearUsuario_proceso").trigger('change');
     }
   }, "json");
+
+  $("#txtCrearUsuario_proceso").on("change", function()
+  {
+      $("#txtCrearUsuario_perfil option").remove();
+      $.post('../server/php/proyectos/configuracion/cargarPerfiles.php', {Usuario: Usuario.id, Proceso: $("#txtCrearUsuario_proceso").val()}, function(data, textStatus, xhr) 
+      {
+        if (data != 0 )
+        {
+          var tds = "";
+          $.each(data, function(index, val) 
+          {
+             tds += '<option value="' + val.id + '">' + val.Nombre + '</option>';
+          });
+          $("#txtCrearUsuario_perfil").append(tds);
+        }
+      }, "json");
+  });
 
   $("#cntCrearUsuario_Zonas div").remove();
   $.post('../server/php/proyectos/configuracion/cargarDelegaciones.php', {Usuario: Usuario.id}, function(data, textStatus, xhr) 

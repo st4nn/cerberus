@@ -11,7 +11,7 @@
                         <input id="txtCrearUsuario_nombre" type="text" class="form-control guardar" placeholder="Nombre" required>
                       </div>
             </div>
-            <div class="col-md-8 form-group">
+            <div class="col-md-6 form-group">
                 <h4 class="example-title">Correo Electrónico</h4>
                 <div class="input-group input-group-icon">
                         <span class="input-group-addon">
@@ -30,12 +30,23 @@
                       </div>
             </div>
             <div class="col-md-6 form-group">
+                <h4 class="example-title">Proceso</h4>
+                <div class="input-group input-group-icon">
+                  <span class="input-group-addon">
+                    <span class="icon fa-briefcase" aria-hidden="true"></span>
+                  </span>
+                  <select id="txtCrearUsuario_proceso" class="form-control guardar" placeholder="Proceso" required>
+                    
+                  </select>
+                </div>
+            </div>
+            <div class="col-md-6 form-group">
                 <h4 class="example-title">Perfil</h4>
                 <div class="input-group input-group-icon">
                         <span class="input-group-addon">
                           <span class="icon fa-user-secret" aria-hidden="true"></span>
                         </span>
-                        <select id="txtCrearUsuario_perfil" class="form-control guardar" placeholder="Cargo" required>
+                        <select id="txtCrearUsuario_perfil" class="form-control guardar" placeholder="Perfil" required>
                           
                         </select>
                       </div>
@@ -88,7 +99,7 @@
                             <span class="icon fa-truck" aria-hidden="true"></span>
                           </span>
                           <select id="txtCrearUsuario_empresa" class="form-control guardar" placeholder="Empresa" required>
-                            <option>WSP COLOMBIA SAS</option>
+                            <option value="1">WSP COLOMBIA SAS</option>
                           </select>
               </div>
                     </div>

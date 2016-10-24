@@ -11,6 +11,7 @@
                DatosUsuarios.idEmpresa,
                DatosUsuarios.Nombre,
                DatosUsuarios.Correo,
+               DatosUsuarios.idProceso,
                Login.idPerfil,
                group_concat(distinct login_has_delegaciones.idDelegacion separator ', ') AS Zonas
             FROM 
@@ -36,6 +37,7 @@
                public $Nombre;
                public $Correo;
                public $idPerfil;
+               public $idProceso;
                public $Estado;
                public $Zonas;
             }
@@ -56,6 +58,7 @@
                $Usuarios->idEmpresa = utf8_encode($row['idEmpresa']);
                $Usuarios->Correo = utf8_encode($row['Correo']);
                $Usuarios->idPerfil = utf8_encode($row['idPerfil']);
+               $Usuarios->idProceso = utf8_encode($row['idProceso']);
                $Usuarios->Estado = utf8_encode($row['Estado']);
                $Usuarios->Zonas = utf8_encode($row['Zonas']);
 

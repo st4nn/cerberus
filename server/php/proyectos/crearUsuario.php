@@ -8,6 +8,7 @@
    $nombre = addslashes($datos->nombre);
    $correo = addslashes($datos->correo);
    $cargo = addslashes($datos->cargo);
+   $proceso = addslashes($datos->proceso);
    $perfil = addslashes($datos->perfil);
    $usuario = addslashes($datos->usuario);
    $clave = addslashes($datos->clave);
@@ -67,14 +68,15 @@
                   if ($nuevoId > 0)
                   {
                      
-                     $sql = "INSERT INTO datosusuarios (idLogin, Nombre, Correo, Cargo, idEmpresa) 
+                     $sql = "INSERT INTO datosusuarios (idLogin, Nombre, Correo, Cargo, idEmpresa, idProceso) 
                               VALUES 
                               (
                                  '$nuevoId', 
                                  '$nombre', 
                                  '$correo',
                                  '$cargo',
-                                 '$empresa');";
+                                 '$empresa',
+                                 '$proceso');";
                         
                         $link->query(utf8_decode($sql));
 
